@@ -1,4 +1,5 @@
 """Phase 0 verification: SPHEREx obscore rows covering M31 (RA/Dec from Sesame later)."""
+
 import collections
 import time
 import pyvo
@@ -17,7 +18,7 @@ WHERE CONTAINS(POINT('ICRS', {RA}, {DEC}), s_region) = 1
 """
 t0 = time.time()
 tab = svc.run_sync(q).to_table()
-print(f"rows={len(tab)}  query_time={time.time()-t0:.1f}s")
+print(f"rows={len(tab)}  query_time={time.time() - t0:.1f}s")
 print("collections:", collections.Counter(str(x) for x in tab["obs_collection"]))
 print("dataproduct_type:", collections.Counter(str(x) for x in tab["dataproduct_type"]))
 print("calib_level:", collections.Counter(int(x) for x in tab["calib_level"]))

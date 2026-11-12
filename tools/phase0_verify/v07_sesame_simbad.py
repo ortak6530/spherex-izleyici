@@ -1,4 +1,5 @@
 """Phase 0 verification: CDS Sesame name resolution and SIMBAD TAP object info."""
+
 import time
 import urllib.parse
 import urllib.request
@@ -16,15 +17,29 @@ def get(url, timeout=60):
 
 
 print("=== Sesame (XML, all resolvers: SIMBAD->NED->VizieR, -oxp, 'SNV') ===")
-for name in ["M31", "Betelgeuse", "WISE 0855", "WISE J085510.83-071442.5", "Orion Nebula", "3I/ATLAS",
-             "C/2025 N1", "Ceres", "xyznotanobject123"]:
+for name in [
+    "M31",
+    "Betelgeuse",
+    "WISE 0855",
+    "WISE J085510.83-071442.5",
+    "Orion Nebula",
+    "3I/ATLAS",
+    "C/2025 N1",
+    "Ceres",
+    "xyznotanobject123",
+]:
     url = "https://cds.unistra.fr/cgi-bin/nph-sesame/-oxp/SNV?" + urllib.parse.quote(name)
     try:
         st, ct, body, dt = get(url)
         root = ET.fromstring(body)
         out = []
         for res in root.iter("Resolver"):
-            ra, de, oname, otype = res.findtext("jradeg"), res.findtext("jdedeg"), res.findtext("oname"), res.findtext("otype")
+            ra, de, oname, otype = (
+                res.findtext("jradeg"),
+                res.findtext("jdedeg"),
+                res.findtext("oname"),
+                res.findtext("otype"),
+            )
             if ra:
                 out.append(f"{res.get('name')}: {oname} ra={ra} dec={de} otype={otype}")
             else:
@@ -43,16 +58,18 @@ JOIN ident AS i ON i.oidref = b.oid
 LEFT JOIN flux AS f ON f.oidref = b.oid AND f.filter IN ('V','K')
 WHERE i.id = 'M 31' OR i.id = '* alf Ori'
 """
-url = ("https://simbad.cds.unistra.fr/simbad/sim-tap/sync?" +
-       urllib.parse.urlencode({"REQUEST": "doQuery", "LANG": "ADQL", "FORMAT": "csv", "QUERY": adql}))
+url = "https://simbad.cds.unistra.fr/simbad/sim-tap/sync?" + urllib.parse.urlencode(
+    {"REQUEST": "doQuery", "LANG": "ADQL", "FORMAT": "csv", "QUERY": adql}
+)
 st, ct, body, dt = get(url)
 print(st, ct, f"{dt:.1f}s")
 print(body.decode("utf-8", "replace"))
 
 # Object type description table (for Turkish labels later)
 adql2 = "SELECT TOP 8 otype, label, description FROM otypedef WHERE otype IN ('G','*','BD*','Com','SN*','HII','RGB*','s*r')"
-url = ("https://simbad.cds.unistra.fr/simbad/sim-tap/sync?" +
-       urllib.parse.urlencode({"REQUEST": "doQuery", "LANG": "ADQL", "FORMAT": "csv", "QUERY": adql2}))
+url = "https://simbad.cds.unistra.fr/simbad/sim-tap/sync?" + urllib.parse.urlencode(
+    {"REQUEST": "doQuery", "LANG": "ADQL", "FORMAT": "csv", "QUERY": adql2}
+)
 try:
     st, ct, body, dt = get(url)
     print("otypedef:", st, f"{dt:.1f}s\n", body.decode("utf-8", "replace"))

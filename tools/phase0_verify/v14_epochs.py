@@ -1,5 +1,6 @@
 """Phase 0 feasibility: wavelength at M31 for every D4 exposure (header range-reads),
 pick one exposure per epoch at matching wavelength, download cutouts, compare ZODI and differences."""
+
 import collections
 import concurrent.futures as cf
 import io
@@ -29,6 +30,8 @@ def wave_wcs(hdr, hdul):
             del h[k]
     hdul[1].header = h
     return WCS(h, fobj=hdul, key="W")
+
+
 RA, DEC = 10.684708, 41.268750
 UA = {"User-Agent": "spherex-sky-tracker-phase0/0.1 (verification script)"}
 S = requests.Session()
@@ -72,28 +75,48 @@ def wavelength_at_target(row):
     lam_sip, _ = WCS(hdr, fobj=hdul, key="W").pixel_to_world_values(x, y)
     if abs(lam_sip - lam) > 1e-4:
         print(f"   NOTE {row['obs_id']}: W-WCS with SIP differs by {1e3 * (lam_sip - lam):+.2f} nm")
-    return dict(obs_id=str(row["obs_id"]), coll=str(row["obs_collection"]), t=float(row["t_min"]),
-                x=float(x), y=float(y), lam=float(lam), bw=float(bw), url=this, swcs=swcs.rsplit("/", 1)[-1],
-                epa=hdr.get("SPS_EPA"), version=None)
+    return dict(
+        obs_id=str(row["obs_id"]),
+        coll=str(row["obs_collection"]),
+        t=float(row["t_min"]),
+        x=float(x),
+        y=float(y),
+        lam=float(lam),
+        bw=float(bw),
+        url=this,
+        swcs=swcs.rsplit("/", 1)[-1],
+        epa=hdr.get("SPS_EPA"),
+        version=None,
+    )
 
 
 t0 = time.time()
 with cf.ThreadPoolExecutor(max_workers=8) as ex:
     rows = list(ex.map(wavelength_at_target, tab))
-print(f"computed {len(rows)} target wavelengths in {time.time()-t0:.1f}s; spectral_wcs files used:",
-      collections.Counter(r["swcs"] for r in rows))
+print(
+    f"computed {len(rows)} target wavelengths in {time.time() - t0:.1f}s; spectral_wcs files used:",
+    collections.Counter(r["swcs"] for r in rows),
+)
 
 for r in rows:
     r["epoch"] = Time(r["t"], format="mjd").strftime("%Y-%m")
 groups = collections.defaultdict(list)
 for r in rows:
-    key = {"2025-07": "E1 2025-07", "2025-08": "E1 2025-07", "2025-12": "E2 2025-12", "2026-01": "E2 2025-12",
-           "2026-07": "E3 2026-07", "2026-08": "E3 2026-07"}[r["epoch"]]
+    key = {
+        "2025-07": "E1 2025-07",
+        "2025-08": "E1 2025-07",
+        "2025-12": "E2 2025-12",
+        "2026-01": "E2 2025-12",
+        "2026-07": "E3 2026-07",
+        "2026-08": "E3 2026-07",
+    }[r["epoch"]]
     groups[key].append(r)
 for k in sorted(groups):
     lams = sorted(round(g["lam"], 3) for g in groups[k])
-    print(f"{k}: n={len(lams)} SPS_EPA={sorted(set(g['epa'] for g in groups[k]))} "
-          f"collections={collections.Counter(g['coll'] for g in groups[k])}\n   lambda@M31 (um): {lams}")
+    print(
+        f"{k}: n={len(lams)} SPS_EPA={sorted(set(g['epa'] for g in groups[k]))} "
+        f"collections={collections.Counter(g['coll'] for g in groups[k])}\n   lambda@M31 (um): {lams}"
+    )
 
 ref = min(groups["E1 2025-07"], key=lambda g: abs(g["lam"] - 2.44))
 picks = {"E1 2025-07": ref}
@@ -101,8 +124,10 @@ for k in ("E2 2025-12", "E3 2026-07"):
     picks[k] = min(groups[k], key=lambda g: abs(g["lam"] - ref["lam"]))
 print("\nPicked (closest wavelength to reference):")
 for k, p in picks.items():
-    print(f"  {k}: {p['obs_id']} {p['coll']} lambda={p['lam']:.4f} bw={p['bw']:.4f} dlam={p['lam']-ref['lam']:+.4f} "
-          f"det_xy=({p['x']:.0f},{p['y']:.0f})")
+    print(
+        f"  {k}: {p['obs_id']} {p['coll']} lambda={p['lam']:.4f} bw={p['bw']:.4f} dlam={p['lam'] - ref['lam']:+.4f} "
+        f"det_xy=({p['x']:.0f},{p['y']:.0f})"
+    )
 
 # Download cutouts and compare
 SIZE = 0.1
@@ -112,17 +137,27 @@ for k, p in picks.items():
     h = fits.open(io.BytesIO(r.content))
     cut[k] = h
     fl = h["FLAGS"].data
-    bad_bits = [h["FLAGS"].header[k2] for k2 in h["FLAGS"].header if k2.startswith("MP_") and k2 not in
-                ("MP_SOURCE", "MP_FULLSAMPLE", "MP_OUTLIER", "MP_OVERFLOW", "MP_TRANSIENT", "MP_DICHROIC")]
+    bad_bits = [
+        h["FLAGS"].header[k2]
+        for k2 in h["FLAGS"].header
+        if k2.startswith("MP_")
+        and k2
+        not in ("MP_SOURCE", "MP_FULLSAMPLE", "MP_OUTLIER", "MP_OVERFLOW", "MP_TRANSIENT", "MP_DICHROIC")
+    ]
     mask = np.zeros_like(fl, bool)
     for b in bad_bits:
         mask |= ((fl >> b) & 1).astype(bool)
     img, zod = h["IMAGE"].data, h["ZODI"].data
     src = ((fl >> h["FLAGS"].header["MP_SOURCE"]) & 1).astype(bool)
     bg = np.nanmedian(img[~mask & ~src]) if (~mask & ~src).any() else np.nan
-    print(f"\n{k}: shape={img.shape} MP_ keys={sorted(k2 for k2 in h['FLAGS'].header if k2.startswith('MP_'))}")
-    print(f"   masked(bad)={mask.mean():.1%} source-flag={src.mean():.1%} ZODI median={np.nanmedian(zod):.4f} "
-          f"IMAGE median={np.nanmedian(img):.3f} non-source bg={bg:.4f} MJy/sr  VERSION={h[0].header.get('VERSION')}")
+    print(
+        f"\n{k}: shape={img.shape} MP_ keys={sorted(k2 for k2 in h['FLAGS'].header if k2.startswith('MP_'))}"
+    )
+    print(
+        f"   masked(bad)={mask.mean():.1%} source-flag={src.mean():.1%} ZODI median={np.nanmedian(zod):.4f} "
+        f"IMAGE median={np.nanmedian(img):.3f} non-source bg={bg:.4f} MJy/sr  VERSION={h[0].header.get('VERSION')}"
+    )
+
 
 # Difference E2-E1 and E3-E1 on the native pixel grids is NOT valid (different rotation/position);
 # reproject onto E1 grid with nearest-neighbour via WCS for a quick look.
@@ -139,6 +174,7 @@ def reproject_nn(src_h, dst_h, layer):
     out[ok] = src_h[layer].data[sy[ok], sx[ok]]
     return out
 
+
 e1 = cut["E1 2025-07"]
 for k in ("E2 2025-12", "E3 2026-07"):
     a = e1["IMAGE"].data.astype(float)
@@ -148,10 +184,14 @@ for k in ("E2 2025-12", "E3 2026-07"):
     zsub = (b - zb) - (a - za)
     core = np.zeros_like(a, bool)
     cy, cx = np.array(a.shape) // 2
-    core[cy - 3:cy + 4, cx - 3:cx + 4] = True
+    core[cy - 3 : cy + 4, cx - 3 : cx + 4] = True
+
     def st(d):
         d2 = d[np.isfinite(d) & ~core]
         return f"median={np.median(d2):+.4f} std={np.std(d2):.4f}"
+
     print(f"\n{k} minus E1 (nearest-neighbour regrid, outside 7x7 core):")
-    print(f"   raw diff: {st(raw)} | ZODI-subtracted diff: {st(zsub)} | dZODI median={np.nanmedian(zb - za):+.4f}")
+    print(
+        f"   raw diff: {st(raw)} | ZODI-subtracted diff: {st(zsub)} | dZODI median={np.nanmedian(zb - za):+.4f}"
+    )
     print(f"   core (7x7) ratio later/E1: {np.nanmedian(b[core]) / np.nanmedian(a[core]):.4f}")

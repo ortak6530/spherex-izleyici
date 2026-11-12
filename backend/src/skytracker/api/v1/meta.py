@@ -18,6 +18,8 @@ def list_releases() -> dict:
                 "calib_family": r.calib_family,
                 "doi": r.doi or None,
                 "show_with_warning": r.show_with_warning,
+                "announced": r.announced,
+                "notice": r.notice or None if not r.announced else None,
                 "notes": r.notes,
             }
             for r in cfg.release

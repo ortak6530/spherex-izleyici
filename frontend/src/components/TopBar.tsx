@@ -25,10 +25,12 @@ function ReleaseBadge() {
   const extra = data?.releases
     .filter((r) => r.status === "active" && r.id !== data.default)
     .map((r) => r.label);
+  // "announcement pending" notes come from config (announced = false); one setting removes them
+  const notices = data?.releases.filter((r) => r.status === "active" && r.notice).map((r) => r.notice!) ?? [];
   return (
     <div className="hidden items-center gap-2 text-sm text-ink-300 xl:flex" aria-live="polite">
       <Database className="size-4 text-nebula-400" aria-hidden="true" />
-      <span>
+      <span title={notices.join(" ")}>
         {t("release.label")}:{" "}
         <strong className="font-medium text-ink-100">
           {error ? t("release.unavailable") : (label ?? t("release.loading"))}
@@ -40,6 +42,11 @@ function ReleaseBadge() {
             {t("release.lastUpdate")}: {data.last_update ?? t("release.never")}
           </>
         )}
+        {notices.map((n) => (
+          <span key={n} className="block text-xs text-warn-400">
+            {n}
+          </span>
+        ))}
       </span>
     </div>
   );

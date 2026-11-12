@@ -1,4 +1,5 @@
 """Tiny HTML-to-text helper for reading downloaded docs: prints text and links."""
+
 import html
 import re
 import sys

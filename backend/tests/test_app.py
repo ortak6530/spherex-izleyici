@@ -27,9 +27,12 @@ def test_security_headers(client):
 def test_releases_endpoint(client):
     body = client.get("/api/v1/meta/releases").json()
     ids = {r["id"]: r for r in body["releases"]}
-    assert body["default"] == "qr2"
-    assert ids["qr3"]["status"] == "active" and ids["qr3"]["show_with_warning"] is True
-    assert ids["dr1"]["status"] == "staged"  # not public yet; must not be used for searches
+    assert body["default"] == "dr1"
+    assert ids["dr1"]["status"] == "active" and ids["qr3"]["status"] == "active"
+    assert ids["qr2"]["status"] == "superseded"  # cached results readable, never searched
+    # announced=false -> the UI note; a single setting (announced = true) removes it
+    assert ids["dr1"]["announced"] is False and ids["dr1"]["notice"]
+    assert ids["qr3"]["notice"] is None
     assert body["last_update"] is None  # never invented
 
 

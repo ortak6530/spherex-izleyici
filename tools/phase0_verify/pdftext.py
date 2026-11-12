@@ -4,6 +4,7 @@ Usage: python -I pdftext.py <input.pdf> <output.txt>
 Handles: classic xref objects, object streams (ObjStm), FlateDecode, page tree order,
 ToUnicode CMaps (bfchar/bfrange), Tj/TJ/'/" operators, Form XObjects (one level of recursion).
 """
+
 import re
 import sys
 import zlib
@@ -19,10 +20,10 @@ def stream_of(body):
     m = re.search(rb"stream\r?\n", body)
     if not m:
         return None
-    raw = body[m.end():]
+    raw = body[m.end() :]
     end = raw.rfind(b"endstream")
     raw = raw[:end] if end >= 0 else raw
-    head = body[:m.start()]
+    head = body[: m.start()]
     if b"/FlateDecode" in head:
         try:
             return zlib.decompress(raw)
@@ -36,7 +37,7 @@ def stream_of(body):
 
 def dict_of(body):
     m = re.search(rb"stream\r?\n", body)
-    return body[:m.start()] if m else body
+    return body[: m.start()] if m else body
 
 
 # Expand object streams
@@ -51,7 +52,7 @@ for num, body in list(objs.items()):
         pairs = [(nums[i], nums[i + 1]) for i in range(0, 2 * n, 2)]
         for k, (onum, off) in enumerate(pairs):
             end = pairs[k + 1][1] if k + 1 < len(pairs) else len(s) - first
-            objs.setdefault(onum, s[first + off:first + end])
+            objs.setdefault(onum, s[first + off : first + end])
 
 
 def ref(body, key):
@@ -70,11 +71,11 @@ def resolve_dict(body, key):
     j = body.find(b"<<", i)
     depth, k = 0, j
     while k < len(body):
-        if body[k:k + 2] == b"<<":
+        if body[k : k + 2] == b"<<":
             depth += 1
             k += 2
             continue
-        if body[k:k + 2] == b">>":
+        if body[k : k + 2] == b">>":
             depth -= 1
             k += 2
             if depth == 0:
@@ -102,7 +103,9 @@ def parse_cmap(num):
             except ValueError:
                 pass
     for blk in re.findall(rb"beginbfrange(.*?)endbfrange", s, re.S):
-        for a, b, rest in re.findall(rb"<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>\s*(\[[^\]]*\]|<[0-9A-Fa-f]*>)", blk):
+        for a, b, rest in re.findall(
+            rb"<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>\s*(\[[^\]]*\]|<[0-9A-Fa-f]*>)", blk
+        ):
             lo, hi = int(a, 16), int(b, 16)
             if rest.startswith(b"["):
                 vals = re.findall(rb"<([0-9A-Fa-f]*)>", rest)
@@ -145,12 +148,12 @@ def lit(b):
         c = b[i]
         if c == 0x5C:
             i += 1
-            n = b[i:i + 1]
+            n = b[i : i + 1]
             esc = {b"n": b"\n", b"r": b"\r", b"t": b"\t", b"b": b"\b", b"f": b"\f"}
             if n in esc:
                 out += esc[n]
             elif n.isdigit():
-                o = re.match(rb"[0-7]{1,3}", b[i:i + 3]).group(0)
+                o = re.match(rb"[0-7]{1,3}", b[i : i + 3]).group(0)
                 out.append(int(o, 8) & 0xFF)
                 i += len(o) - 1
             elif n in (b"\r", b"\n"):
@@ -169,7 +172,7 @@ def decode(raw, font):
         return raw.decode("latin-1")
     s = []
     for i in range(0, len(raw) - width + 1, width):
-        code = int.from_bytes(raw[i:i + width], "big")
+        code = int.from_bytes(raw[i : i + width], "big")
         s.append(mp.get(code, ""))
     return "".join(s)
 
@@ -180,8 +183,13 @@ def run_content(stream, res_body, out, depth=0):
     font = ({}, 1)
     stack = []
     for t in TOK.findall(stream):
-        if t.startswith(b"(") or t.startswith(b"<") or t.startswith(b"/") or t in (b"[", b"]") or \
-                re.fullmatch(rb"[-+]?\d*\.?\d+", t):
+        if (
+            t.startswith(b"(")
+            or t.startswith(b"<")
+            or t.startswith(b"/")
+            or t in (b"[", b"]")
+            or re.fullmatch(rb"[-+]?\d*\.?\d+", t)
+        ):
             stack.append(t)
             continue
         op = t
@@ -198,7 +206,7 @@ def run_content(stream, res_body, out, depth=0):
                 i = len(stack) - 1 - stack[::-1].index(b"[")
             except ValueError:
                 i = len(stack)
-            for s in stack[i + 1:]:
+            for s in stack[i + 1 :]:
                 if s.startswith(b"("):
                     out.append(decode(lit(s), font))
                 elif s.startswith(b"<"):

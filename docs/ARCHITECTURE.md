@@ -345,6 +345,10 @@ Hata kodları: `NO_COVERAGE`, `UPSTREAM_UNAVAILABLE`, `UPSTREAM_BUSY`, `NAME_NOT
 
 ## 12. Faz planı (v0.2 — 32 saatlik takvim, teslim 15 Kasım 16:00)
 
+> **Güncelleme (12 Kasım akşamı, DECISIONS.md §4b):** Kesin kapsam **Cuma akşamına** kadar mevcut veriyle (QR2/QR3) bitecek. NASA yeni veriyi 13→14 Kasım gecesi yayınlayacak.
+> Yeni öncelik sırası: cisim–cisim > arayüzün tamamı > gözlem filtreleri > Excel > WebSocket > hesaplar > admin > asistan > Hubble↔Webb > DR1 hazırlığı (`enabled: false`, `tools/check_release.py`, `tools/prewarm.py`, `docs/NEW_DATA.md`) > cilalama.
+> Aşağıdaki tablo ilk plandır. Sıra yukarıdaki listeye göre uygulanır.
+
 `PROMPT1.md`'deki 10 fazlık plan, `DECISIONS.md`'deki öncelik sırasına göre 8 faza indirildi. Her faz sonunda: çalışan sürüm, commit ve Render'a yayın.
 
 | Faz | Süre | İçerik | Kabul |

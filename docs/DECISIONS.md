@@ -82,6 +82,63 @@
 - Anahtarlar sohbette istenmez. `.env` dosyasını kullanıcı doldurur.
 - Render'da sırlar panelden ortam değişkeni olarak girilir.
 
+## 4b. Güncel talimatlar (2026-11-12 akşam; çakışırsa bunlar geçerli)
+
+**A) Çalışma biçimi**
+- Dosya değişiklikleri yalnızca Edit/Write araçlarıyla yapılır. PowerShell ile dosya yeniden yazılmaz (`[System.IO.File]`, `.Replace`, `Set-Content`).
+- Komutlar mümkün olduğunca proje kökünden ve aynı biçimde çalıştırılır (izin hatırlama için).
+
+**B) Takvim**
+- NASA yeni veriyi (büyük olasılıkla DR1'in resmî yayını) **13 → 14 Kasım gecesi** yayınlayacak.
+- Kesin kapsamın tamamı **Cuma (14 Kasım) akşamına kadar** mevcut veriyle (QR2/QR3) bitecek, yayına alınacak ve test edilecek. Cumartesiye yeni özellik bırakılmaz. Teslim: 15 Kasım 16:00.
+- **Öncelik sırası:** cisim–cisim karşılaştırması > arayüzün tamamı > gözlem filtreleri > Excel > WebSocket > hesaplar (EmailJS) > admin paneli > asistan > Hubble↔Webb > DR1 hazırlığı > cilalama.
+
+**C) Yeni veriye hazırlık**
+- DR1, sürüm ayarına `enabled: false` olarak eklenir. S3'teki DR1 dosyalarıyla yalnızca geliştirme ortamında okuma, kesit, bayrak (MSKN/MSKM/MSKD) ve kalibrasyon testleri yapılır. Sitede herkese açık gösterilmez.
+- `docs/NEW_DATA.md`: yeni sürüm (QR/DR) ya da farklı biçimde veri geldiğinde adım adım kılavuz (ayar ekleme, doğrulama, önbellek temizleme, demo testi, yayın).
+- `tools/check_release.py <sürüm>`: TAP koleksiyonunu, S3 klasörünü ve örnek kareyi kontrol eder. Başlık, bayrak ve uzantı biçimini bilinen sürümlerle karşılaştırıp farkları raporlar. Demo cisimlerinde karşılaştırma testi yapıp sonucun beklenenle uyuşup uyuşmadığını yazar (M31: değişim yok; Barnard ve 3I/ATLAS: hareket var).
+- `tools/prewarm.py`: demo cisimlerinin (M31, M42, WISE 0855, Barnard, 3I/ATLAS) görüntülerini, karşılaştırmalarını ve Hubble/Webb önizlemelerini önceden hesaplayıp önbelleğe alır.
+- Sürüm açma/kapama ve varsayılan sürüm yalnızca ayardan yapılır. Admin panelinde "veri sürümleri" bölümü ve "önbelleği yenile" düğmesi bulunur.
+- Yeni veri beklenmedik biçimde gelirse sistem çökmez, eski sürümle çalışmaya devam eder.
+
+**D) Gözlem filtreleri** (kesin kapsam, arayüzden sonra)
+- Gözlem listesi tarih aralığına, veri sürümüne (QR2/QR3/DR1) ve dalga boyu aralığına (µm) göre süzülebilir. Filtreler Excel çıktısına da uygulanır.
+- Görüntünün altında küçük bir "veri kalitesi" satırı: maskelenen piksel oranı ve uygulanan düzeltmeler (bayrak, kalibrasyon, ZODI).
+
+**E) Cilalama** (Cuma, kesin kapsamdan sonra)
+1. Konum ölçümü için doymuş/maskeli merkez piksellerini dışarıda bırakan PSF uydurma (Barnard'da ölçülen yön 341°, beklenen ~356°).
+2. Sonuçta beklenen yön de gösterilir. Görüntüde beklenen ve ölçülen konum için iki ayrı işaret.
+3. Maskeli (gri) pikseller için açıklama: "Gri: güvenilmez/maskelenmiş piksel".
+4. Görüntüleyici büyütülür, sol boşluk kullanılır.
+5. Sonuç kutusunun başında halk için sade bir özet ve uyum işareti (ör. "1 yılda 11,5″ kaydı — bilinen hareketle uyumlu ✓").
+6. Görüntüleyicide "Yumuşatılmış / Ham pikseller" seçeneği. Halk için varsayılan yumuşatılmış; ölçümler her zaman ham veriyle yapılır.
+7. Asistan SSS'sine "Görüntü neden pikselli?" sorusu: SPHEREx'in 6,2″/piksel ölçeği, tüm gökyüzünü 102 renkte tarama amacı, Hubble/Webb ile fark.
+8. Galaksi arka planının ince ayarı.
+
+## 4c. DR1 geçişi (2026-11-12 akşamı)
+
+**Olay:** IRSA, DR1'i (`spherex_dr1`) TAP ve SIA2'ye aldı ve QR2'yi bu servislerden kaldırdı. M31'de QR2 için 0 satır dönüyor; DR1'de 226, QR3'te 136 satır var. DR1 dosyaları ve kesitleri IBE'de çalışıyor (yalnızca dizin listesi 404). QR2 dosyaları doğrudan URL ile hâlâ açılıyor. IRSA'nın SPHEREx sayfası DR1'i henüz duyurmuyor.
+
+**Karar (kullanıcı):** Varsayılan **DR1 + QR3** (ikisi de R7 kalibrasyonu). QR2 `superseded`: önbellekteki sonuçlar okunur, yeni aramada kullanılmaz. Arayüzde "resmî duyuru bekleniyor" notu gösterilir. IRSA duyurunca `config/releases.toml` dosyasında DR1 için `announced = true` yapmak notu kaldırmaya yeter.
+
+**Barnard D5, DR1 → QR3** (2025-08-25 → 2026-09-22, 393 gün, aynı PA): ölçülen kayma **12,50″ (2,04 piksel), yön 347°**; SIMBAD öz hareketinden beklenen **11,18″ (1,82 piksel)**, yön ~356°. Fark 0,22 piksel. Δλ = 5 nm (bant genişliğinin 0,14'ü). Farklı sürüm uyarısı yok, çünkü iki görüntü de R7 kalibrasyonunda.
+
+**`tools/check_release.py dr1` raporu (2026-11-12 21:07 UTC):**
+
+- Ayar: status=active, announced=False, calib_family=R7, SIA koleksiyonları=['spherex_dr1']
+- TAP (M31 konumu) koleksiyon satırları: spherex_dr1 = 226, spherex_qr3 = 136 → ✓ `spherex_dr1` TAP'ta var
+- SIA2 `spherex_dr1` (M31): 226 görüntü
+- S3 `dr1/`: abs_gain_matrix, aurora_template, dark, dichroic, epsf, gain_factors, he_template, hips5_cube, l3_flux_corrections, level2, nonfunc_v2, nonlinear_pars, readnoise_pars, shuttle_glow_template, sip, solid_angle_pixel_map, spectral_channels, spectral_wcs, xtalk_class1, xtalk_class2, zodi_scaling_v2. İlk level2 dönemi: `2025W17_4B`.
+- Örnek kare `2025W33_2C_0177_1` D6 (2025-08-15):
+  - VERSION 7.0.5, BUNIT MJy/sr, ZODIMDL KEL98_WAVESCL_V1
+  - Uzantılar: PRIMARY, IMAGE, FLAGS, VARIANCE, ZODI, EPSF, WCS-WAVE
+  - Bayrak başlığı MSK (MSKM ve MSKD de var), 22 bayrak
+  - R7 (QR3) düzeniyle fark: **yok ✓**; R7 bayrak listesiyle fark: yok. (R6/QR2 düzeninden uzantılar, bayrak biçimi ve ZODI modeli farklı; beklenen bir durum.)
+- Demo karşılaştırmaları (yalnızca DR1 dönemleri arasında):
+  - **M31** (D2, λ 1,649 / 1,655 µm): parlaklık farkı **−1,6 ± 4,2 %** → anlamlı değişim yok ✓. Normalleştirme çarpanı 0,978. Uyarılar: NO_BACKGROUND, HIGH_MASK_FRACTION. (QR2 ile görülen sahte %20'lik "parlama" DR1'in tutarlı kalibrasyonuyla kayboldu.)
+  - **Barnard** (D5, 202 gün; 2025-08 ile 2026-03 zıt tarama yönünde, PA 0°/180°): ölçülen 9,65″ (1,57 piksel), beklenen 5,74″ (0,93 piksel) → fark 0,64 piksel **✗ uyumsuz**. Olası neden: doymuş ya da maskeli çekirdek ağırlık merkezini maskesiz tarafa çekiyor ve yön 180° dönünce bu sapma toplanıyor. Çözüm cilalama maddesi E1 (doymuş çekirdeği dışlayan PSF uydurma). Aynı yönlü DR1 → QR3 çiftinde fark 0,22 piksel.
+  - 3I/ATLAS: hareketli cisim görünümü (MOST) bu araçta henüz test edilmiyor, atlandı.
+
 ## 5. Teknik sonuçlar (bu kararlardan çıkan)
 
 - **Render ücretsiz planında dosya sistemi kalıcı değil.** SQLite her yeniden başlatmada sıfırlanır. Kullanıcı, etkinlik ve geri bildirim verileri için `DATABASE_URL` ile **Render Postgres** kullanılır. Yerelde SQLite kullanılır. Ayrıntı: `docs/DEPLOY.md`.

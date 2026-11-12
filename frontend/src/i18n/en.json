@@ -69,6 +69,8 @@
     "UNKNOWN_IMAGE": "Image not found; repeat the search.",
     "INTERNAL_ERROR": "Unexpected error.",
     "JOB_TIMEOUT": "The operation took too long.",
+    "NO_COVERAGE": "No SPHEREx observation of this object in the selected band.",
+    "SAME_OBJECT": "The same object was picked twice; choose another one.",
     "generic": "Something went wrong."
   },
   "workspace": {
@@ -160,6 +162,7 @@
     "PROPER_MOTION_APPLIED": "The target position for each date uses SIMBAD proper motion (annual parallax ignored).",
     "SATURATED_OR_MASKED_CORE": "Epoch {{epoch}}: the target core is saturated or masked; no aperture photometry.",
     "NO_PHOTOMETRY": "Epoch {{epoch}}: not enough valid pixels in the aperture; brightness not measured.",
+    "DIFFERENT_TYPES": "The two objects are of different types ({{a}} / {{b}}); the comparison is for illustration only.",
     "generic": "{{code}}"
   },
   "info": {

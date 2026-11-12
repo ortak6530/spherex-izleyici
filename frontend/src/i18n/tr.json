@@ -69,6 +69,8 @@
     "UNKNOWN_IMAGE": "Görüntü bilgisi bulunamadı; aramayı yenileyin.",
     "INTERNAL_ERROR": "Beklenmeyen bir hata oluştu.",
     "JOB_TIMEOUT": "İşlem çok uzun sürdü.",
+    "NO_COVERAGE": "Bu cisim için seçili bantta SPHEREx gözlemi bulunamadı.",
+    "SAME_OBJECT": "İki kez aynı cisim seçildi; farklı bir cisim seçin.",
     "generic": "Bir hata oluştu."
   },
   "workspace": {
@@ -160,6 +162,7 @@
     "PROPER_MOTION_APPLIED": "Hedef konumu her tarih için SIMBAD öz hareketiyle hesaplandı (yıllık paralaks ihmal edildi).",
     "SATURATED_OR_MASKED_CORE": "Dönem {{epoch}}: hedefin merkezi doymuş veya maskeli; açıklık fotometrisi yapılamadı.",
     "NO_PHOTOMETRY": "Dönem {{epoch}}: açıklık içinde yeterli geçerli piksel yok; parlaklık ölçülmedi.",
+    "DIFFERENT_TYPES": "İki cisim farklı türden ({{a}} / {{b}}); karşılaştırma yalnızca görünüm amaçlıdır.",
     "generic": "{{code}}"
   },
   "info": {

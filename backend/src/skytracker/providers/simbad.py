@@ -125,9 +125,9 @@ async def suggest(text: str, limit: int = 8) -> list[dict]:
 async def same_type(otype: str, exclude_main_id: str, ra: float | None = None, limit: int = 8) -> list[dict]:
     """Well-studied objects of the same SIMBAD type (most bibliographic references first)."""
     q = f"""
-    SELECT TOP {limit + 1} b.main_id, b.otype, b.ra, b.dec, b.nbref FROM basic AS b
-    WHERE b.otype = {adql_str(otype)} AND b.main_id <> {adql_str(exclude_main_id)}
-    ORDER BY b.nbref DESC
+    SELECT TOP {limit + 1} main_id, otype, ra, dec, nbref FROM basic
+    WHERE otype = {adql_str(otype)} AND main_id <> {adql_str(exclude_main_id)}
+    ORDER BY nbref DESC
     """
     rows = await tap_query(q, timeout=20)
     return [

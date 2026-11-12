@@ -68,8 +68,13 @@ async def info(request: Request, main_id: str = Query(min_length=1, max_length=1
 @router.get("/similar")
 async def similar(main_id: str = Query(max_length=100), otype: str = Query(max_length=16)) -> dict:
     """Same-type objects for the object-vs-object comparison (most studied first)."""
+    key = f"{otype}|{main_id}"
+    if (hit := cache.get_json("_external/similar", key, DAY)) is not None:
+        return hit
     try:
         items = await simbad.same_type(otype, main_id)
     except UpstreamError:
         return {"items": [], "unavailable": ["SIMBAD"]}
-    return {"items": items, "unavailable": []}
+    out = {"items": items, "unavailable": []}
+    cache.put_json("_external/similar", key, out)
+    return out

@@ -193,6 +193,8 @@ export interface ReleaseInfo {
   calib_family: string;
   doi: string | null;
   show_with_warning: boolean;
+  announced: boolean;
+  notice: string | null;
   notes: string;
 }
 

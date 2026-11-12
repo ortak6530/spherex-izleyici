@@ -1,4 +1,5 @@
 """Phase 0 verification: SIMBAD outage page text and alternative SIMBAD interfaces."""
+
 import re
 import requests
 
@@ -9,10 +10,14 @@ txt = re.sub(r"<[^>]+>", " ", txt)
 print("TAP 404 page text:", re.sub(r"\s+", " ", txt).strip()[:600])
 
 tests = {
-    "sim-id votable": ("https://simbad.cds.unistra.fr/simbad/sim-id",
-                       {"Ident": "M31", "output.format": "votable"}),
-    "sim-script": ("https://simbad.cds.unistra.fr/simbad/sim-script",
-                   {"script": "format object \"%IDLIST(1) | %OTYPE(S) | %SP(S) | %PLX(V) | %RV(Z)\"\nM31"}),
+    "sim-id votable": (
+        "https://simbad.cds.unistra.fr/simbad/sim-id",
+        {"Ident": "M31", "output.format": "votable"},
+    ),
+    "sim-script": (
+        "https://simbad.cds.unistra.fr/simbad/sim-script",
+        {"script": 'format object "%IDLIST(1) | %OTYPE(S) | %SP(S) | %PLX(V) | %RV(Z)"\nM31'},
+    ),
     "simbad home": ("https://simbad.cds.unistra.fr/simbad/", {}),
     "cds home": ("https://cds.unistra.fr/", {}),
     "vizier tap": ("https://tapvizier.cds.unistra.fr/TAPVizieR/tap/capabilities", {}),

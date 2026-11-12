@@ -12,6 +12,7 @@ from ...events import log_action
 from ...http import UpstreamError
 from ...providers import simbad
 from ...security import TokenBucket
+from ...services.object_compare import compare_objects
 from ...services.time_compare import compare_time
 from .sky import CUTOUT_SIZES
 
@@ -21,7 +22,10 @@ IMAGE_ID = r"^[a-z0-9]+:[0-9A-Za-z_]+:D[1-6]$"
 
 
 def strip_arrays(result: dict) -> dict:
-    return {k: v for k, v in result.items() if not k.endswith("_b64")}
+    """Drop pixel arrays (any '*_b64' key, at any depth) before storing a comparison."""
+    return {
+        k: strip_arrays(v) if isinstance(v, dict) else v for k, v in result.items() if not k.endswith("_b64")
+    }
 
 
 def save_comparison(request: Request, kind: str, object_key: str | None, params: dict, result: dict) -> None:
@@ -85,3 +89,40 @@ async def time_compare(req: TimeCompareRequest, request: Request) -> dict:
         return result
 
     return {"job_id": jobs.start("compare_time", run)}
+
+
+class ObjectRef(BaseModel):
+    name: str = Field(max_length=120)
+    main_id: str | None = Field(default=None, max_length=100)
+    key: str = Field(max_length=120)
+    ra: float = Field(ge=0, lt=360)
+    dec: float = Field(ge=-90, le=90)
+
+
+class ObjectCompareRequest(BaseModel):
+    a: ObjectRef
+    b: ObjectRef
+    image_a: str = Field(pattern=IMAGE_ID)  # the exposure currently selected for object A
+    size_deg: float = 0.1
+    zodi: str = Field(default="sub", pattern="^(sub|raw)$")
+
+
+@router.post("/objects")
+async def object_compare(req: ObjectCompareRequest, request: Request) -> dict:
+    if not _limiter.allow(request.state.session_id):
+        raise HTTPException(429, {"code": "RATE_LIMITED"})
+    if req.size_deg not in CUTOUT_SIZES:
+        raise HTTPException(400, {"code": "INVALID_SIZE"})
+    if req.a.key == req.b.key:
+        raise HTTPException(400, {"code": "SAME_OBJECT"})
+    log_action(request, "compare_objects", object_key=req.a.key, payload={"b": req.b.key})
+
+    async def run(progress):
+        result = await compare_objects(
+            req.a.model_dump(), req.b.model_dump(), req.image_a, req.size_deg, req.zodi, progress
+        )
+        result["object_key"] = req.a.key
+        save_comparison(request, "object", req.a.key, req.model_dump(), result)
+        return result
+
+    return {"job_id": jobs.start("compare_objects", run)}

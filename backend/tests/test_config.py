@@ -8,7 +8,7 @@ from skytracker.settings import Settings
 
 def test_release_config_loads():
     cfg = releases()
-    assert {r.id for r in cfg.active} == {"qr2", "qr3"}
+    assert {r.id for r in cfg.active} == {"dr1", "qr3"}  # QR2 superseded on 2026-11-12
     assert cfg.get("dr1").supersedes.release == "qr2"
 
 

@@ -1,54 +1,61 @@
 # SPHEREx data releases.
-# Adding a new release (e.g. DR1, QR4) = add a [[release]] block here; no code change needed.
+# Adding a new release (e.g. DR2, QR4) = add a [[release]] block here; no code change needed.
 # status: active | staged | superseded | retired
 #   active     -> used for searches and comparisons
 #   staged     -> known (e.g. files on S3) but not public yet; ignored by searches
-#   superseded -> still readable, hidden from default lists (see `supersedes`)
+#   superseded -> cached results stay readable; never used for new searches
 #   retired    -> not available upstream any more
+# announced = false shows a "official announcement pending" note in the UI; set it to true (one line)
+#   once IRSA announces the release.
 # calib_family groups releases whose calibrations can be compared directly (R6 = QR2, R7 = QR3/DR1).
+# Every active release is searched; default_release is the one shown first (must be active).
 
-default_release = "qr2"
+default_release = "dr1"
 
 [[release]]
-id = "qr2"
-label = "QR2"
+id = "dr1"
+label = "DR1"
 status = "active"
-calib_family = "R6"
-sia_collections = ["spherex_qr2"]
-deep_collections = ["spherex_qr2_deep"]
-ibe_prefix = "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/"
-s3_prefix = "qr2/"
-doi = "10.26131/IRSA652"
-flags_header_style = "auto"   # QR2 uses MP_<NAME>; detected per file
-notes = "Quick Release 2 (pipeline 6.4-6.5.x). Survey 1-2 and the first weeks of survey 3-4."
+announced = false             # 2026-11-12: served by IRSA TAP/SIA2 (spherex_dr1) but not announced yet
+notice = "DR1, IRSA'nın veri servislerinde yayında; resmî duyuru bekleniyor."
+calib_family = "R7"
+sia_collections = ["spherex_dr1"]
+deep_collections = []         # name not verified yet
+ibe_prefix = "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/"
+s3_prefix = "dr1/"
+doi = ""                      # not published yet
+flags_header_style = "auto"   # R7 uses MSKNnnnn/MSKMnnnn
+supersedes = { release = "qr2", start = "2025-05-01", end = "2026-05-15" }
+notes = "Data Release 1: Year-1 (surveys 1-2) reprocessed with pipeline R7."
 
 [[release]]
 id = "qr3"
 label = "QR3"
 status = "active"
+announced = true
 calib_family = "R7"
 sia_collections = ["spherex_qr3"]
 deep_collections = ["spherex_qr3_deep"]
 ibe_prefix = "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/"
 s3_prefix = "qr3/"
 doi = "10.26131/IRSA662"
-flags_header_style = "auto"   # R7 uses MSKNnnnn/MSKMnnnn
-cross_family_correction = "l3_flux_corrections"   # multiplicative factor for pre-QR3 data
+flags_header_style = "auto"
+cross_family_correction = "l3_flux_corrections"   # multiplicative factor for pre-QR3 (R6) data
 # Per-detector correction map (2040x2040, dimensionless). {det} = 1..6. Multiply pre-QR3 (R6) pixels by it.
 flux_corrections_url = "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/l3_flux_corrections/cal-flxc-v1-2026-191/{det}/l3_flux_corrections_D{det}_spx_cal-flxc-v1-2026-191.fits"
-show_with_warning = true
-notes = "Quick Release 3 (pipeline R7). Survey 3-4."
+show_with_warning = false     # same calibration family as DR1
+notes = "Quick Release 3 (pipeline R7). Surveys 3-4."
 
 [[release]]
-id = "dr1"
-label = "DR1"
-status = "staged"             # on S3 since 2026-11-11, not yet on IRSA IBE/TAP (2026-11-12)
-calib_family = "R7"
-sia_collections = []          # fill in when IRSA publishes the collection name
-deep_collections = []
-ibe_prefix = "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/"
-s3_prefix = "dr1/"
-doi = ""
-flags_header_style = "auto"
-supersedes = { release = "qr2", start = "2025-05-01", end = "2026-05-15" }
-notes = "Year-1 reprocessing with R7. Switch status to 'active' once IRSA announces it."
+id = "qr2"
+label = "QR2"
+status = "superseded"         # 2026-11-12: removed from IRSA TAP/SIA2, replaced by DR1; files still on IBE
+announced = true
+calib_family = "R6"
+sia_collections = ["spherex_qr2"]
+deep_collections = ["spherex_qr2_deep"]
+ibe_prefix = "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/"
+s3_prefix = "qr2/"
+doi = "10.26131/IRSA652"
+flags_header_style = "auto"   # QR2 uses MP_<NAME>
+notes = "Quick Release 2 (pipeline 6.4-6.5.x). Superseded by DR1."

@@ -24,6 +24,8 @@ class Release(BaseModel):
     id: str
     label: str
     status: ReleaseStatus
+    announced: bool = True  # False -> UI shows `notice` ("official announcement pending")
+    notice: str = ""
     calib_family: str
     sia_collections: list[str] = Field(default_factory=list)
     deep_collections: list[str] = Field(default_factory=list)
