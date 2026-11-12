@@ -115,6 +115,36 @@
 7. Asistan SSS'sine "Görüntü neden pikselli?" sorusu: SPHEREx'in 6,2″/piksel ölçeği, tüm gökyüzünü 102 renkte tarama amacı, Hubble/Webb ile fark.
 8. Galaksi arka planının ince ayarı.
 
+## 4d. Gece talimatları (2026-11-12, oturum sonu; çakışırsa bunlar geçerli)
+
+**Arama çubuğunda otomatik öneri**
+- Kaynaklar: yerel Türkçe adlı liste (JSON) + SIMBAD `ident` araması + JPL.
+- 2 karakterden sonra, 250 ms gecikmeyle, en fazla 8 öneri gösterilir.
+- Girdi koordinatsa "Bu koordinatta ara" seçeneği çıkar.
+- Klavye ile tam kullanım ve ARIA (combobox/listbox) desteği.
+- SIMBAD erişilemezse yalnızca yerel liste kullanılır.
+- ⚠ Not: SIMBAD'in CfA aynası `ILIKE` desteklemiyor (2026-11-12'de doğrulandı). Büyük/küçük harf duyarsızlığı için `LIKE` varyantları kullanılacak (`providers/simbad.suggest` gibi).
+
+**Canlı konum**
+- Yıldızlar: öz hareketle bugünkü RA/Dec.
+- Güneş Sistemi cisimleri: JPL Horizons, 10 sn'de bir WebSocket ile güncellenir.
+- İsteğe bağlı şehir seçimiyle "Benim gökyüzümde" görünümü: yükseklik, yön, doğuş/batış. Tarayıcı konum izni **istenmez**.
+
+**Öncelik sırası** (§4b'deki sıranın yerini alır)
+1. Yayın (GitHub + Render)
+2. Arayüz eksikleri: 3I/ATLAS MOST görünümü, geri bildirim butonu, otomatik öneri
+3. WebSocket altyapısı
+4. Hesaplar (EmailJS)
+5. Admin paneli
+6. Excel
+7. Asistan
+8. Gözlem filtreleri + veri kalitesi satırı
+9. Canlı konum
+10. Hubble ↔ Webb
+11. Cilalama
+
+Hesaplar ve admin paneli **Cuma (14 Kasım) öğlene kadar** biter. 8–11. maddeler vakit kalırsa yapılır.
+
 ## 4c. DR1 geçişi (2026-11-12 akşamı)
 
 **Olay:** IRSA, DR1'i (`spherex_dr1`) TAP ve SIA2'ye aldı ve QR2'yi bu servislerden kaldırdı. M31'de QR2 için 0 satır dönüyor; DR1'de 226, QR3'te 136 satır var. DR1 dosyaları ve kesitleri IBE'de çalışıyor (yalnızca dizin listesi 404). QR2 dosyaları doğrudan URL ile hâlâ açılıyor. IRSA'nın SPHEREx sayfası DR1'i henüz duyurmuyor.
