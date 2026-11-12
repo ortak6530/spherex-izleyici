@@ -37,11 +37,14 @@ src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "S", "SIM"]
-ignore = ["S101", "B008"]  # assert in tests; FastAPI's Depends() default-argument idiom
+# S101 assert in tests; B008 FastAPI Depends() idiom; S311 random is only used for retry jitter
+ignore = ["S101", "B008", "S311"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S"]
 "alembic/*" = ["E501", "W291"]
+# ADQL is built from values escaped by simbad.adql_str (quotes doubled, character whitelist)
+"src/skytracker/providers/simbad.py" = ["S608"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

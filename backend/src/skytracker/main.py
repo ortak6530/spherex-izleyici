@@ -38,6 +38,9 @@ async def lifespan(_app: FastAPI):
     except Exception:  # noqa: BLE001 - DB may not be migrated yet in a fresh dev checkout
         log.exception("event retention purge failed (did you run 'alembic upgrade head'?)")
     yield
+    from .http import http
+
+    await http.aclose()
 
 
 def create_app() -> FastAPI:

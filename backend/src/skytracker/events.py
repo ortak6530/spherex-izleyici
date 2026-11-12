@@ -66,6 +66,46 @@ def record(
     return ev
 
 
+CONSENT_COOKIE = "spx_consent"  # set by the frontend when the visitor accepts the privacy notice
+
+
+def log_action(
+    request,
+    type: str,
+    *,
+    object_key: str | None = None,
+    release_id: str | None = None,
+    payload: dict | None = None,
+) -> None:
+    """Server-side action log (search, observations, cutout, download…). Respects the consent cookie.
+
+    Downloads are always logged (admin audit) but without IP/UA unless the visitor consented.
+    """
+    from .db import session_scope
+    from .security import client_ip, ip_hash, ua_family
+
+    consented = request.cookies.get(CONSENT_COOKIE) == "all"
+    if not consented and type != "download":
+        return
+    try:
+        with session_scope() as db:
+            record(
+                db,
+                type=type,
+                session_id=request.state.session_id,
+                object_key=object_key,
+                release_id=release_id,
+                payload=payload,
+                page=None,
+                ip_hash=ip_hash(client_ip(request)) if consented else None,
+                ua_family=ua_family(request.headers.get("user-agent")) if consented else None,
+            )
+    except Exception:  # noqa: BLE001 - logging must never break a request
+        import logging
+
+        logging.getLogger("skytracker.events").exception("could not log action %s", type)
+
+
 def purge_old(db: Session, retention_days: int) -> int:
     cutoff = datetime.now(UTC) - timedelta(days=retention_days)
     res = db.execute(delete(Event).where(Event.ts < cutoff))
