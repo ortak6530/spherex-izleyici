@@ -127,6 +127,8 @@ async def compare_objects(a: dict, b: dict, image_a: str, size: float, zodi: str
             phot = C.aperture_flux(e.data, e.var, e.phot_bad, e.tx, e.ty, e.omega)
             if phot is None:
                 warn.append({"code": "NO_PHOTOMETRY", "epoch": tag})
+            elif phot["err_ujy"] and phot["flux_ujy"] / phot["err_ujy"] < 5:
+                warn.append({"code": "LOW_SNR", "epoch": tag, "snr": phot["flux_ujy"] / phot["err_ujy"]})
             fin = img[np.isfinite(img)]
             out[tag] = {
                 "image_id": e.img.image_id,

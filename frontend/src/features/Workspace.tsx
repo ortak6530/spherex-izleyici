@@ -15,6 +15,7 @@ import { runJob, type ProgressStep } from "../lib/jobs";
 import { percentileLimits, type Colormap, type Stretch } from "../render/image";
 import CompareView, { ViewControls } from "./CompareView";
 import type { TimeCompareResult } from "./compareTypes";
+import ObjectCompare from "./ObjectCompare";
 import ResultPanel from "./ResultPanel";
 
 // Explanatory Supplement v2.0, Table 2
@@ -464,6 +465,8 @@ export default function Workspace({ target }: { target: Target }) {
           <ResultPanel r={result} />
         </>
       )}
+
+      {visits.length > 0 && <ObjectCompare target={target} imageA={imgA} size={size} zodi={zodi} />}
     </section>
   );
 }
