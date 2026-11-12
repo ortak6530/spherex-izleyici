@@ -1,0 +1,36 @@
+# Outbound allowlist (SSRF protection). The server never connects to any other host,
+# and redirects are checked against this list too.
+# Timeouts in seconds; concurrency = max parallel requests per upstream group.
+
+[groups.irsa]
+hosts = ["irsa.ipac.caltech.edu", "nasa-irsa-spherex.s3.amazonaws.com", "nasa-irsa-spherex.s3.us-east-1.amazonaws.com"]
+timeout = 60
+concurrency = 4
+
+[groups.cds]
+hosts = ["cds.unistra.fr", "vizier.idia.ac.za", "simbad.cds.unistra.fr", "simbad.cfa.harvard.edu", "simbad.harvard.edu"]
+timeout = 15
+concurrency = 4
+# Tried in order; Strasbourg SIMBAD was down on 2026-11-12 while the CfA mirror worked.
+simbad_tap_mirrors = ["https://simbad.cds.unistra.fr/simbad/sim-tap", "https://simbad.cfa.harvard.edu/simbad/sim-tap"]
+sesame_url = "https://cds.unistra.fr/cgi-bin/nph-sesame/-oxp/SNV"
+
+[groups.mast]
+hosts = ["mast.stsci.edu"]
+timeout = 90
+concurrency = 2
+
+[groups.jpl]
+hosts = ["ssd-api.jpl.nasa.gov", "ssd.jpl.nasa.gov"]
+timeout = 20
+concurrency = 4
+
+[groups.wikimedia]
+hosts = ["www.wikidata.org", "tr.wikipedia.org", "en.wikipedia.org"]
+timeout = 10
+concurrency = 4
+
+[groups.email]
+hosts = ["api.emailjs.com"]
+timeout = 15
+concurrency = 1

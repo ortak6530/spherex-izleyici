@@ -1,0 +1,54 @@
+{
+  "app": {
+    "title": "SPHEREx Sky Tracker",
+    "tagline": "See how the sky changes over time"
+  },
+  "search": {
+    "label": "Object name or coordinates",
+    "placeholder": "M31, Betelgeuse, 10.684 41.269, 00h42m44s +41d16m09s…",
+    "submit": "Search",
+    "notConnected": "Search will be connected in the next release. Only the interface is ready for now."
+  },
+  "release": {
+    "label": "Data release",
+    "lastUpdate": "Last update",
+    "never": "not scanned yet",
+    "loading": "loading…",
+    "unavailable": "server unreachable"
+  },
+  "hero": {
+    "heading": "SPHEREx re-maps the whole sky every six months",
+    "body": "SPHEREx surveys the entire sky in 102 colours (spectral channels) between 0.75 and 5 µm. Comparing images of the same region taken at different dates reveals comets, asteroids and fast-moving nearby stars as they change position.",
+    "step1": "Type an object name or coordinates",
+    "step2": "Pick two observation epochs",
+    "step3": "See the change with blink and difference images",
+    "honest": "A SPHEREx image is not a single-colour photograph: the wavelength changes from one edge of the image to the other. The site shows this clearly on every screen."
+  },
+  "privacy": {
+    "title": "Privacy notice",
+    "summary": "This site records anonymous usage events to understand how it is used (e.g. which page was opened, which object was searched).",
+    "details": "Recorded: a random session id, event type and time, searched object, browser family (e.g. \"chrome\") and a salted hash of your IP address that changes every day. The IP address itself is never stored. Records are deleted after 90 days. If you create an account, your e-mail is used only to send login codes. Data is not shared with third parties.",
+    "more": "Details",
+    "less": "Less",
+    "acceptAll": "Accept",
+    "essentialOnly": "Essential only",
+    "essentialNote": "With \"Essential only\" no usage events are sent; the site still works fully."
+  },
+  "footer": {
+    "simulation": "Background: artistic simulation, not to scale.",
+    "data": "Data: NASA/IPAC IRSA (SPHEREx) · MAST/STScI (Hubble, Webb) · CDS Strasbourg (SIMBAD, Sesame)",
+    "sources": "Sources & credits",
+    "privacy": "Privacy",
+    "live": "Live connection",
+    "liveOn": "on",
+    "liveConnecting": "connecting…",
+    "liveOff": "off (using HTTP)"
+  },
+  "attributions": {
+    "title": "Sources & credits",
+    "close": "Close"
+  },
+  "lang": {
+    "switch": "Türkçe"
+  }
+}

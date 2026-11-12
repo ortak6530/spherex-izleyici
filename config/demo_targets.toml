@@ -1,0 +1,32 @@
+# Demo objects: caches are pre-warmed for these (SPHEREx coverage, SIMBAD, MAST previews).
+# Coordinates are filled by the resolver at runtime; names must resolve via Sesame/SIMBAD/JPL.
+
+[[target]]
+key = "m31"
+query = "M31"
+label = "Andromeda Galaksisi (M31)"
+kind = "object"
+
+[[target]]
+key = "m42"
+query = "M42"
+label = "Orion Bulutsusu (M42)"
+kind = "object"
+
+[[target]]
+key = "wise0855"
+query = "WISE J085510.83-071442.5"
+label = "WISE 0855−0714 (kahverengi cüce)"
+kind = "object"
+
+[[target]]
+key = "barnard"
+query = "Barnard's Star"
+label = "Barnard Yıldızı (yüksek öz hareket)"
+kind = "object"
+
+[[target]]
+key = "3i_atlas"
+query = "C/2025 N1"
+label = "3I/ATLAS (yıldızlararası kuyruklu yıldız)"
+kind = "solar_system"

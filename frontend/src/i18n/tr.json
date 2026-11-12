@@ -1,0 +1,54 @@
+{
+  "app": {
+    "title": "SPHEREx Gökyüzü İzleyici",
+    "tagline": "Gökyüzünün zaman içinde nasıl değiştiğini görün"
+  },
+  "search": {
+    "label": "Cisim adı veya koordinat",
+    "placeholder": "M31, Betelgeuse, 10.684 41.269, 00h42m44s +41d16m09s…",
+    "submit": "Ara",
+    "notConnected": "Arama bir sonraki sürümde bağlanacak. Şimdilik yalnızca arayüz hazır."
+  },
+  "release": {
+    "label": "Veri sürümü",
+    "lastUpdate": "Son güncelleme",
+    "never": "henüz taranmadı",
+    "loading": "yükleniyor…",
+    "unavailable": "sunucuya ulaşılamadı"
+  },
+  "hero": {
+    "heading": "SPHEREx gökyüzünü altı ayda bir yeniden haritalıyor",
+    "body": "SPHEREx, 0,75–5 µm arasında 102 renkte (spektral kanalda) tüm gökyüzünü tarıyor. Aynı bölgenin farklı tarihlerdeki görüntülerini karşılaştırınca kuyruklu yıldızlar, asteroitler ve hızlı hareket eden yakın yıldızlar konum değiştirerek kendini gösterir.",
+    "step1": "Bir cisim adı ya da koordinat yazın",
+    "step2": "İki gözlem dönemini seçin",
+    "step3": "Yanıp sönme ve fark görüntüsüyle değişimi görün",
+    "honest": "Her SPHEREx görüntüsü tek renkli bir fotoğraf değildir: görüntünün bir kenarından diğerine dalga boyu değişir. Site bunu her ekranda açıkça gösterir."
+  },
+  "privacy": {
+    "title": "Gizlilik bildirimi",
+    "summary": "Bu site, nasıl kullanıldığını anlamak için anonim kullanım olayları kaydeder (ör. hangi sayfa açıldı, hangi cisim arandı).",
+    "details": "Kaydedilenler: rastgele bir oturum kimliği, olay türü ve zamanı, aranan cisim, tarayıcı ailesi (ör. \"chrome\") ve IP adresinin her gün değişen tuzlanmış özeti. IP adresinin kendisi saklanmaz. Kayıtlar 90 gün sonra silinir. Hesap açarsanız e-posta adresiniz yalnızca giriş kodu göndermek için kullanılır. Veriler üçüncü taraflarla paylaşılmaz.",
+    "more": "Ayrıntılar",
+    "less": "Daha az",
+    "acceptAll": "Kabul et",
+    "essentialOnly": "Yalnızca gerekli",
+    "essentialNote": "\"Yalnızca gerekli\" seçilirse kullanım olayları gönderilmez; site yine tamamen çalışır."
+  },
+  "footer": {
+    "simulation": "Arka plan: sanatsal simülasyon, ölçekli değildir.",
+    "data": "Veri: NASA/IPAC IRSA (SPHEREx) · MAST/STScI (Hubble, Webb) · CDS Strasbourg (SIMBAD, Sesame)",
+    "sources": "Kaynaklar ve atıflar",
+    "privacy": "Gizlilik",
+    "live": "Canlı bağlantı",
+    "liveOn": "açık",
+    "liveConnecting": "bağlanıyor…",
+    "liveOff": "kapalı (HTTP ile çalışıyor)"
+  },
+  "attributions": {
+    "title": "Kaynaklar ve atıflar",
+    "close": "Kapat"
+  },
+  "lang": {
+    "switch": "English"
+  }
+}

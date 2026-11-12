@@ -1,0 +1,46 @@
+# Attribution texts shown in the site footer / sources page and written into Excel exports.
+# Verified 2026-11-12 (see docs/DATA_SOURCES.md section 9), except where marked.
+
+[[item]]
+key = "spherex"
+title = "SPHEREx (NASA/IPAC IRSA)"
+text = "This publication makes use of data products from the Spectro-Photometer for the History of the Universe, Epoch of Reionization and Ices Explorer (SPHEREx), which is a joint project of the Jet Propulsion Laboratory and the California Institute of Technology, and is funded by the National Aeronautics and Space Administration."
+dois = ["10.26131/IRSA652 (QR2)", "10.26131/IRSA662 (QR3)"]
+url = "https://irsa.ipac.caltech.edu/Missions/spherex.html"
+
+[[item]]
+key = "irsa"
+title = "NASA/IPAC Infrared Science Archive"
+text = "This research has made use of the NASA/IPAC Infrared Science Archive, which is funded by the National Aeronautics and Space Administration and operated by the California Institute of Technology."
+url = "https://irsa.ipac.caltech.edu/ack.html"
+
+[[item]]
+key = "hst"
+title = "Hubble (MAST/STScI)"
+text = "Based on observations made with the NASA/ESA Hubble Space Telescope obtained from the Space Telescope Science Institute, which is operated by the Association of Universities for Research in Astronomy, Inc., under NASA contract NAS5-26555."
+url = "https://archive.stsci.edu/publishing/mission-acknowledgements"
+
+[[item]]
+key = "jwst"
+title = "Webb (MAST/STScI)"
+text = "Based on observations made with the NASA/ESA/CSA James Webb Space Telescope. The data were obtained from the Mikulski Archive for Space Telescopes at the Space Telescope Science Institute, which is operated by the Association of Universities for Research in Astronomy, Inc., under NASA contract NAS5-03127 for JWST."
+url = "https://archive.stsci.edu/publishing/mission-acknowledgements"
+
+[[item]]
+key = "cds"
+title = "CDS Strasbourg (SIMBAD, Sesame)"
+# Standard CDS wording; the live page could not be checked on 2026-11-12 (SIMBAD outage) - re-verify.
+text = "This research has made use of the SIMBAD database and the Sesame name resolver, operated at CDS, Strasbourg, France."
+url = "https://cds.unistra.fr/"
+
+[[item]]
+key = "jpl"
+title = "JPL Solar System Dynamics (SBDB, Horizons)"
+text = "Solar system object data from the JPL Small-Body Database and Horizons system, NASA Jet Propulsion Laboratory."
+url = "https://ssd.jpl.nasa.gov/"
+
+[[item]]
+key = "wikipedia"
+title = "Vikipedi / Wikidata"
+text = "Short descriptions from Wikipedia (CC BY-SA 4.0) and identifiers from Wikidata (CC0)."
+url = "https://www.wikipedia.org/"

@@ -1,0 +1,52 @@
+# SPHEREx data releases.
+# Adding a new release (e.g. DR1, QR4) = add a [[release]] block here; no code change needed.
+# status: active | staged | superseded | retired
+#   active     -> used for searches and comparisons
+#   staged     -> known (e.g. files on S3) but not public yet; ignored by searches
+#   superseded -> still readable, hidden from default lists (see `supersedes`)
+#   retired    -> not available upstream any more
+# calib_family groups releases whose calibrations can be compared directly (R6 = QR2, R7 = QR3/DR1).
+
+default_release = "qr2"
+
+[[release]]
+id = "qr2"
+label = "QR2"
+status = "active"
+calib_family = "R6"
+sia_collections = ["spherex_qr2"]
+deep_collections = ["spherex_qr2_deep"]
+ibe_prefix = "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/"
+s3_prefix = "qr2/"
+doi = "10.26131/IRSA652"
+flags_header_style = "auto"   # QR2 uses MP_<NAME>; detected per file
+notes = "Quick Release 2 (pipeline 6.4-6.5.x). Survey 1-2 and the first weeks of survey 3-4."
+
+[[release]]
+id = "qr3"
+label = "QR3"
+status = "active"
+calib_family = "R7"
+sia_collections = ["spherex_qr3"]
+deep_collections = ["spherex_qr3_deep"]
+ibe_prefix = "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/"
+s3_prefix = "qr3/"
+doi = "10.26131/IRSA662"
+flags_header_style = "auto"   # R7 uses MSKNnnnn/MSKMnnnn
+cross_family_correction = "l3_flux_corrections"   # multiplicative factor for pre-QR3 data
+show_with_warning = true
+notes = "Quick Release 3 (pipeline R7). Survey 3-4."
+
+[[release]]
+id = "dr1"
+label = "DR1"
+status = "staged"             # on S3 since 2026-11-11, not yet on IRSA IBE/TAP (2026-11-12)
+calib_family = "R7"
+sia_collections = []          # fill in when IRSA publishes the collection name
+deep_collections = []
+ibe_prefix = "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/"
+s3_prefix = "dr1/"
+doi = ""
+flags_header_style = "auto"
+supersedes = { release = "qr2", start = "2025-05-01", end = "2026-05-15" }
+notes = "Year-1 reprocessing with R7. Switch status to 'active' once IRSA announces it."

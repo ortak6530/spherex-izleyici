@@ -1,0 +1,43 @@
+# Render Blueprint: one Docker web service + a free Postgres database.
+# Secrets marked sync:false are entered in the Render dashboard (never committed).
+services:
+  - type: web
+    name: spherex-izleyici
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/v1/health
+    autoDeploy: true
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: IP_HASH_SALT
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: spherex-db
+          property: connectionString
+      - key: PUBLIC_BASE_URL
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: EMAILJS_SERVICE_ID
+        sync: false
+      - key: EMAILJS_TEMPLATE_ID
+        sync: false
+      - key: EMAILJS_PUBLIC_KEY
+        sync: false
+      - key: EMAILJS_PRIVATE_KEY
+        sync: false
+      - key: WIKIMEDIA_USER_AGENT
+        sync: false
+      - key: CACHE_MAX_GB
+        value: "1"
+
+databases:
+  - name: spherex-db
+    plan: free
+    region: frankfurt
