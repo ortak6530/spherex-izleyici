@@ -220,6 +220,37 @@ async def index_wavelengths(
     return out
 
 
+# ---------- QR2 -> QR3 flux corrections (rows read with HTTP Range) ----------
+
+
+async def flux_correction_region(det: int, x0: int, x1: int, y0: int, y1: int) -> np.ndarray | None:
+    """Correction factors for original detector pixels [y0:y1+1, x0:x1+1] (0-based), or None."""
+    rel = next((r for r in releases().active if r.flux_corrections_url), None)
+    if rel is None:
+        return None
+    url = rel.flux_corrections_url.format(det=det)
+    x0, y0 = max(x0, 0), max(y0, 0)
+    x1, y1 = min(x1, DETECTOR_PIXELS - 1), min(y1, DETECTOR_PIXELS - 1)
+    key = f"D{det}_{y0}_{y1}"
+    raw = cache.get_bytes(f"{rel.id}/fluxcorr", key)
+    if raw is None:
+        head = await http.get(url, headers={"Range": "bytes=0-8639"}, timeout=30)
+        if head.status_code not in (200, 206):
+            return None
+        _prim, h = _parse_primary_and_image_header(head.content)
+        offset = len(fits.Header.fromstring(head.content.decode("latin-1")).tostring()) + len(h.tostring())
+        row = DETECTOR_PIXELS * 4
+        r = await http.get(
+            url, headers={"Range": f"bytes={offset + y0 * row}-{offset + (y1 + 1) * row - 1}"}, timeout=60
+        )
+        if r.status_code not in (200, 206):
+            return None
+        raw = r.content
+        cache.put_bytes(f"{rel.id}/fluxcorr", key, raw)
+    rows = np.frombuffer(raw, dtype=">f4").reshape(y1 - y0 + 1, DETECTOR_PIXELS)
+    return rows[:, x0 : x1 + 1].astype(np.float64)
+
+
 # ---------- cutouts ----------
 
 

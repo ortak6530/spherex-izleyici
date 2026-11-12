@@ -32,6 +32,7 @@ class Release(BaseModel):
     doi: str = ""
     flags_header_style: Literal["auto", "MP", "MSK"] = "auto"
     cross_family_correction: str | None = None
+    flux_corrections_url: str | None = None
     show_with_warning: bool = False
     supersedes: Supersedes | None = None
     notes: str = ""

@@ -20,6 +20,16 @@ log = logging.getLogger("skytracker.jobs")
 JOB_TTL_S = 1800
 MAX_JOBS = 500
 
+
+class JobError(Exception):
+    """Expected, user-facing failure with a stable code (e.g. CHANNEL_REJECT)."""
+
+    def __init__(self, code: str, **params: Any):
+        super().__init__(code)
+        self.code = code
+        self.params = params
+
+
 _jobs: dict[str, dict[str, Any]] = {}
 _tasks: set[asyncio.Task] = set()
 
@@ -68,6 +78,8 @@ def start(kind: str, fn: JobFn) -> str:
             job["status"] = "done"
         except UpstreamError as e:
             job["status"], job["error"] = "error", {"code": e.code, "upstream": e.upstream}
+        except JobError as e:
+            job["status"], job["error"] = "error", {"code": e.code, **e.params}
         except Exception:  # noqa: BLE001 - surfaced to the client as a generic error
             log.exception("job %s (%s) failed", job_id, kind)
             job["status"], job["error"] = "error", {"code": "INTERNAL_ERROR"}

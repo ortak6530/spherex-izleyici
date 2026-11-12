@@ -30,3 +30,18 @@ class Event(Base):
     payload: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     ip_hash: Mapped[str | None] = mapped_column(String(64), nullable=True)
     ua_family: Mapped[str | None] = mapped_column(String(32), nullable=True)
+
+
+class Comparison(Base):
+    """A computed comparison (time or object-object). The assistant and Excel export read these values."""
+
+    __tablename__ = "comparison"
+
+    id: Mapped[str] = mapped_column(String(32), primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True)
+    session_id: Mapped[str] = mapped_column(String(64), index=True)
+    user_id: Mapped[int | None] = mapped_column(Integer, nullable=True, index=True)
+    kind: Mapped[str] = mapped_column(String(16))  # time | object
+    object_key: Mapped[str | None] = mapped_column(String(120), nullable=True, index=True)
+    params: Mapped[dict] = mapped_column(JSON)
+    result: Mapped[dict] = mapped_column(JSON)

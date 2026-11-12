@@ -34,6 +34,8 @@ s3_prefix = "qr3/"
 doi = "10.26131/IRSA662"
 flags_header_style = "auto"   # R7 uses MSKNnnnn/MSKMnnnn
 cross_family_correction = "l3_flux_corrections"   # multiplicative factor for pre-QR3 data
+# Per-detector correction map (2040x2040, dimensionless). {det} = 1..6. Multiply pre-QR3 (R6) pixels by it.
+flux_corrections_url = "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr3/l3_flux_corrections/cal-flxc-v1-2026-191/{det}/l3_flux_corrections_D{det}_spx_cal-flxc-v1-2026-191.fits"
 show_with_warning = true
 notes = "Quick Release 3 (pipeline R7). Survey 3-4."
 

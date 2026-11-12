@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import asyncio
+import math
 import re
 
 from fastapi import APIRouter, HTTPException, Query, Request
 
+from ...domain.astrometry import SEARCH_EPOCH, jyear_to_mjd, propagate
 from ...domain.coords import CoordinateError, parse_coordinates
 from ...events import log_action
 from ...http import UpstreamError
@@ -24,14 +26,24 @@ def object_key(main_id: str) -> str:
 
 def target_from_sesame(r: dict, query: str) -> dict:
     name = (r.get("main_id") or query).removeprefix("NAME ")
+    pmra, pmdec = r.get("pmra_mas_yr"), r.get("pmdec_mas_yr")
+    # SPHEREx searches use the position at the mission epoch, not J2000 (matters for fast stars)
+    ra, dec = propagate(r["ra"], r["dec"], pmra, pmdec, jyear_to_mjd(SEARCH_EPOCH))
+    moved = math.hypot((ra - r["ra"]) * math.cos(math.radians(r["dec"])), dec - r["dec"]) * 3600
     return {
         "kind": "object",
         "key": object_key(r.get("main_id") or query),
         "name": name,
         "main_id": r.get("main_id"),
         "query": query,
-        "ra": r["ra"],
-        "dec": r["dec"],
+        "ra": ra,
+        "dec": dec,
+        "ra_j2000": r["ra"],
+        "dec_j2000": r["dec"],
+        "pmra_mas_yr": pmra,
+        "pmdec_mas_yr": pmdec,
+        "epoch": SEARCH_EPOCH,
+        "moved_since_j2000_arcsec": moved,
         "otype": r.get("otype"),
         "source": "CDS Sesame (" + (r.get("resolver") or "SIMBAD") + ")",
     }

@@ -15,6 +15,8 @@ export function getConsent(): Consent {
 
 export function setConsent(c: Exclude<Consent, null>) {
   storage.set("consent", c);
+  // The server logs its own actions (search, downloads…) only when this cookie says "all"
+  document.cookie = `spx_consent=${c}; path=/; max-age=${90 * 24 * 3600}; SameSite=Lax`;
   if (c === "all") track("privacy_consent", { payload: { choice: c } });
   else queue.length = 0;
 }
