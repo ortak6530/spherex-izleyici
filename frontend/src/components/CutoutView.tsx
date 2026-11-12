@@ -5,10 +5,15 @@ import type { CutoutResult } from "../lib/api";
 import { decodeFloat32, renderImage, type Colormap, type Stretch } from "../render/image";
 
 export interface DecodedCutout {
-  raw: CutoutResult;
+  raw: Pick<CutoutResult, "width" | "height"> & { meta: ViewMeta };
   data: Float32Array;
-  lambda: Float32Array;
+  lambda: Float32Array | null;
 }
+
+export type ViewMeta = Pick<
+  CutoutResult["meta"],
+  "unit" | "target_px" | "wavelength_um" | "date_obs" | "north_deg" | "east_deg" | "pixel_scale_arcsec"
+>;
 
 export function decodeCutout(c: CutoutResult): DecodedCutout {
   return { raw: c, data: decodeFloat32(c.data_b64), lambda: decodeFloat32(c.lambda_b64) };
@@ -26,7 +31,16 @@ interface Props {
 }
 
 /** One SPHEREx cutout on a canvas (pixelated), with scale bar, N/E arrows and a hover readout. */
-export default function CutoutView({ cutout, data, limits, stretch, cmap, label, unit, showOverlays = true }: Props) {
+export default function CutoutView({
+  cutout,
+  data,
+  limits,
+  stretch,
+  cmap,
+  label,
+  unit,
+  showOverlays = true,
+}: Props) {
   const { t } = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<{ x: number; y: number } | null>(null);
@@ -64,7 +78,7 @@ export default function CutoutView({ cutout, data, limits, stretch, cmap, label,
     ? (() => {
         const row = h - 1 - hover.y;
         const i = row * w + hover.x;
-        return { v: pixels[i], lam: cutout.lambda[i] };
+        return { v: pixels[i], lam: cutout.lambda ? cutout.lambda[i] : null };
       })()
     : null;
 
@@ -86,17 +100,45 @@ export default function CutoutView({ cutout, data, limits, stretch, cmap, label,
           className="h-full w-full"
           style={{ imageRendering: "pixelated" }}
           role="img"
-          aria-label={t("viewer.canvasLabel", { lam: meta.wavelength_um.toFixed(3), date: meta.date_obs.slice(0, 10) })}
+          aria-label={t("viewer.canvasLabel", {
+            lam: meta.wavelength_um.toFixed(3),
+            date: meta.date_obs.slice(0, 10),
+          })}
         />
         {showOverlays && (
-          <svg viewBox={`0 0 ${w} ${h}`} className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
+          <svg
+            viewBox={`0 0 ${w} ${h}`}
+            className="pointer-events-none absolute inset-0 h-full w-full"
+            aria-hidden="true"
+          >
             <g stroke="#fcd34d" strokeWidth={Math.max(w / 220, 0.25)} fill="none">
               <circle cx={overlay.target[0]} cy={overlay.target[1]} r={w * 0.06} />
-              <line x1={overlay.target[0]} y1={overlay.target[1] - w * 0.11} x2={overlay.target[0]} y2={overlay.target[1] - w * 0.07} />
-              <line x1={overlay.target[0]} y1={overlay.target[1] + w * 0.07} x2={overlay.target[0]} y2={overlay.target[1] + w * 0.11} />
+              <line
+                x1={overlay.target[0]}
+                y1={overlay.target[1] - w * 0.11}
+                x2={overlay.target[0]}
+                y2={overlay.target[1] - w * 0.07}
+              />
+              <line
+                x1={overlay.target[0]}
+                y1={overlay.target[1] + w * 0.07}
+                x2={overlay.target[0]}
+                y2={overlay.target[1] + w * 0.11}
+              />
             </g>
-            <g stroke="#e8edf7" strokeWidth={Math.max(w / 200, 0.3)} fill="#e8edf7" fontSize={w * 0.055} fontFamily="Inter Variable">
-              <line x1={overlay.origin[0]} y1={overlay.origin[1]} x2={overlay.north[0]} y2={overlay.north[1]} />
+            <g
+              stroke="#e8edf7"
+              strokeWidth={Math.max(w / 200, 0.3)}
+              fill="#e8edf7"
+              fontSize={w * 0.055}
+              fontFamily="Inter Variable"
+            >
+              <line
+                x1={overlay.origin[0]}
+                y1={overlay.origin[1]}
+                x2={overlay.north[0]}
+                y2={overlay.north[1]}
+              />
               <line x1={overlay.origin[0]} y1={overlay.origin[1]} x2={overlay.east[0]} y2={overlay.east[1]} />
               <text x={overlay.north[0]} y={overlay.north[1]} stroke="none" textAnchor="middle" dy="-0.3em">
                 {t("viewer.north")}
@@ -114,7 +156,8 @@ export default function CutoutView({ cutout, data, limits, stretch, cmap, label,
       </div>
       <div className="min-h-5 font-mono text-xs text-ink-400" aria-live="off">
         {readout && Number.isFinite(readout.v)
-          ? `x=${hover!.x} y=${h - 1 - hover!.y} · ${readout.v.toFixed(3)} ${unit ?? meta.unit} · λ=${readout.lam.toFixed(4)} µm`
+          ? `x=${hover!.x} y=${h - 1 - hover!.y} · ${readout.v.toFixed(3)} ${unit ?? meta.unit}` +
+            (readout.lam !== null ? ` · λ=${readout.lam.toFixed(4)} µm` : "")
           : readout
             ? `x=${hover!.x} y=${h - 1 - hover!.y} · ${t("viewer.masked")}`
             : t("viewer.hoverHint")}

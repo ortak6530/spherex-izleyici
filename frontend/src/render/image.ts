@@ -14,7 +14,9 @@ export function lut(name: Colormap): Uint8ClampedArray {
   if (hit) return hit;
   const hex = COLORMAP_HEX[name];
   const n = hex.length / 6;
-  const stops = Array.from({ length: n }, (_, i) => [0, 2, 4].map((o) => parseInt(hex.substr(i * 6 + o, 2), 16)));
+  const stops = Array.from({ length: n }, (_, i) =>
+    [0, 2, 4].map((o) => parseInt(hex.substr(i * 6 + o, 2), 16)),
+  );
   const out = new Uint8ClampedArray(256 * 3);
   for (let i = 0; i < 256; i++) {
     const f = (i / 255) * (n - 1);
@@ -47,7 +49,8 @@ export function percentileLimits(arrays: Float32Array[], lo = 0.5, hi = 99.5): [
   for (const a of arrays) for (const v of a) if (Number.isFinite(v)) vals.push(v);
   if (!vals.length) return [0, 1];
   vals.sort((x, y) => x - y);
-  const q = (p: number) => vals[Math.min(vals.length - 1, Math.max(0, Math.round((p / 100) * (vals.length - 1))))];
+  const q = (p: number) =>
+    vals[Math.min(vals.length - 1, Math.max(0, Math.round((p / 100) * (vals.length - 1))))];
   const a = q(lo);
   const b = q(hi);
   return b > a ? [a, b] : [a, a + 1e-6];

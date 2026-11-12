@@ -1,10 +1,10 @@
-import { Database, Languages, Search } from "lucide-react";
-import { useEffect, useId, useState, type FormEvent } from "react";
+import { Database, Languages } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { setLang } from "../i18n";
-import { apiGet, type ReleasesResponse } from "../lib/api";
-import { track } from "../lib/events";
+import { apiGet, type ReleasesResponse, type Target } from "../lib/api";
+import SearchBox from "./SearchBox";
 
 function ReleaseBadge() {
   const { t } = useTranslation();
@@ -22,14 +22,18 @@ function ReleaseBadge() {
   }, []);
 
   const label = data?.releases.find((r) => r.id === data.default)?.label;
+  const extra = data?.releases
+    .filter((r) => r.status === "active" && r.id !== data.default)
+    .map((r) => r.label);
   return (
-    <div className="hidden items-center gap-2 text-sm text-ink-300 lg:flex" aria-live="polite">
+    <div className="hidden items-center gap-2 text-sm text-ink-300 xl:flex" aria-live="polite">
       <Database className="size-4 text-nebula-400" aria-hidden="true" />
       <span>
         {t("release.label")}:{" "}
         <strong className="font-medium text-ink-100">
           {error ? t("release.unavailable") : (label ?? t("release.loading"))}
         </strong>
+        {extra && extra.length > 0 && <span className="text-ink-400"> (+{extra.join(", ")})</span>}
         {data && (
           <>
             {" · "}
@@ -41,19 +45,8 @@ function ReleaseBadge() {
   );
 }
 
-export default function TopBar() {
+export default function TopBar({ onTarget }: { onTarget: (t: Target) => void }) {
   const { t, i18n } = useTranslation();
-  const inputId = useId();
-  const [query, setQuery] = useState("");
-  const [note, setNote] = useState<string | null>(null);
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!query.trim()) return;
-    track("search_submitted", { payload: { length: query.trim().length, connected: false } });
-    setNote(t("search.notConnected"));
-  };
-
   return (
     <header className="glass sticky top-3 z-30 mx-3 mt-3 rounded-2xl px-4 py-3 sm:mx-4">
       <div className="flex flex-wrap items-center gap-3 lg:flex-nowrap">
@@ -63,41 +56,7 @@ export default function TopBar() {
             {t("app.title")}
           </span>
         </a>
-
-        <form onSubmit={onSubmit} role="search" className="order-last w-full lg:order-none lg:mx-4 lg:flex-1">
-          <label htmlFor={inputId} className="sr-only">
-            {t("search.label")}
-          </label>
-          <div className="relative flex items-center">
-            <Search className="pointer-events-none absolute left-3 size-5 text-ink-400" aria-hidden="true" />
-            <input
-              id={inputId}
-              type="search"
-              value={query}
-              maxLength={100}
-              autoComplete="off"
-              spellCheck={false}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setNote(null);
-              }}
-              placeholder={t("search.placeholder")}
-              className="h-11 w-full rounded-xl border border-white/10 bg-space-950/70 pr-24 pl-10 text-base text-ink-100 placeholder:text-ink-400 focus:border-nebula-400 focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="absolute right-1.5 h-8 cursor-pointer rounded-lg bg-star-400 px-4 text-sm font-semibold text-space-950 transition-colors duration-200 hover:bg-star-300"
-            >
-              {t("search.submit")}
-            </button>
-          </div>
-          {note && (
-            <p role="status" className="mt-2 text-sm text-warn-400">
-              {note}
-            </p>
-          )}
-        </form>
-
+        <SearchBox onTarget={onTarget} />
         <div className="ml-auto flex items-center gap-3">
           <ReleaseBadge />
           <button

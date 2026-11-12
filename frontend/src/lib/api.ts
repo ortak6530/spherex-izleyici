@@ -42,6 +42,12 @@ export interface Target {
   dec?: number;
   otype?: string | null;
   source: string;
+  ra_j2000?: number;
+  dec_j2000?: number;
+  pmra_mas_yr?: number | null;
+  pmdec_mas_yr?: number | null;
+  epoch?: number;
+  moved_since_j2000_arcsec?: number;
   input_format?: string;
   designation?: string;
   body_kind?: string;
