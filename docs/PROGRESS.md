@@ -1,6 +1,6 @@
 # İlerleme durumu
 
-> **Son güncelleme:** 2026-11-13 gece · Teslim: **15 Kasım 2026, 16:00** · Canlı: https://spherex-izleyici.onrender.com
+> **Son güncelleme:** 2026-11-14 gece yarısından sonra (oturum sonu, son commit `32a2723` + bu belge) · Teslim: **15 Kasım 2026, 16:00** · Canlı: https://spherex-izleyici.onrender.com
 > Kararlar ve talimatlar: [`DECISIONS.md`](DECISIONS.md) (**geçerli plan §4e**) · Mimari: [`ARCHITECTURE.md`](ARCHITECTURE.md) · Veri kaynakları: [`DATA_SOURCES.md`](DATA_SOURCES.md) · Kaynaklar/atıflar: [`SOURCES.md`](SOURCES.md) · Yayın: [`DEPLOY.md`](DEPLOY.md)
 
 ## Geçerli plan (DECISIONS.md §4e) — durum
@@ -14,8 +14,42 @@
 | **1d-2** Arama kutusunda otomatik öneri | ✅ | `GET /api/v1/suggest?q=` (+ `&local=1` anında yanıt). Kaynaklar: yerel Türkçe liste `config/names_tr.json` (49 cisim; her `query` 2026-11-13'te `/resolve` ile canlı doğrulandı, Halley/Encke için `1P`/`2P`), Sesame (yalnızca SIMBAD, tam ad), JPL SBDB, SIMBAD kimlik öneki. Her uzak kaynak 4 sn sınırlı ve paralel; düşen kaynak `unavailable` içinde bildirilir, yerel liste her zaman yanıt verir. Türkçe normalleştirme (ı/İ, ş, ğ, ü, ö, ç). "barnard" → **Barnard Yıldızı** ilk sırada. Koordinat girilince "Bu koordinatta ara". `/resolve` da tam Türkçe adı tanır ("Kutup Yıldızı" → Polaris). Ön uç: ARIA combobox/listbox, 2 karakter, 250 ms, en fazla 8, ↑/↓/Enter/Esc/Tab, eski yanıtlar atılır. **Düzeltilen hata:** `adql_str` `%`'yi sildiği için SIMBAD `LIKE` sorguları tam eşleşmeye dönüşüyordu (eski "Bunu mu demek istediniz?" önerileri de etkileniyordu). Testler: `test_suggest.py` (25), `SearchBox.test.tsx` (4). **2026-11-13 düzeltme:** tam eşleşmeler her zaman en üstte ("m3" → M 3, sonra M 31/M 33); tam eşleşme = Sesame/SBDB'nin doğrudan çözdüğü ad, yerel listede birebir ad/takma ad ya da SIMBAD kimliğinin yazılanla aynı olması (+3 test, canlıda doğrulandı). |
 | **2g-1** WebSocket: yavaş sorgu ilerlemesi | ✅ | Gözlem/kesit/karşılaştırma/MOST zaten iş + WS ile çalışıyordu. Eklenenler: her ilerleme mesajında `elapsed_s`; `/objects/info` ve `/objects/similar` önbellekteyse hemen, değilse `job_id` + adımlar (`info_query`, `info_fallback` (Sesame yedeği), `similar_query`); istemcide `runMaybeJob` ve ortak `ProgressLine` (adım + saniye sayacı, 20 sn sonra "arşiv yavaş, işlem sürüyor" notu). Yeniden bağlanınca abonelikler geri yükleniyor, HTTP yoklaması her zaman yedek. Testler: `test_progress.py` (4, WS üzerinden `job_done` dahil), `ProgressLine.test.tsx` (3). Kalan WS işleri: admin canlı akışı (f) ve asistan akışı (i). |
 | **2-prewarm** `tools/prewarm.py` | ✅ | 3I/ATLAS, Barnard, WISE 0855, Luhman 16. Arayüzün yaptığı istekleri sırayla yapar: ad çözümleme, bilgi paneli, aynı tür önerileri, gözlemler (Barnard D5, WISE 0855/Luhman 16 D6), varsayılan zaman karşılaştırması (ilk ve son dönem, en küçük Δλ/bant); 3I/ATLAS için MOST kareleri ve en parlak dönemin D5 kesitleri (3 paralel, en fazla 40). Yalnızca standart kütüphane, 429'da bekleyip yeniden dener. Yerelde canlı veriyle çalıştı (43 sn, 0 hata): Barnard 12,50″, WISE 0855 8,52″, Luhman 16 2,90″ ölçülen kayma; 3I/ATLAS 17/17 kesit. Test: `test_prewarm.py` (seçim mantığı arayüzle aynı). Kullanım `DEPLOY.md`'de. |
-| **2e** Hesaplar (EmailJS) | ✅ (EmailJS anahtarları bekleniyor) | Tablolar `user_account`, `login_code`, `auth_session`, `saved_item` (Alembic `0004`, `alembic check` temiz). Kod: `secrets` ile 6 hane, yalnızca HMAC-SHA256(SECRET_KEY) saklanır, 10 dk, kod başına 5 deneme (sonra kilit), e-posta başına saatte ≤3 gönderim (+ oturum başına sınır), yalnızca en yeni kod geçerli, başarısız gönderim hakkı yemez. EmailJS REST sunucudan, `accessToken` ile; şablon değişkenleri `to_email`, `code`, `valid_minutes`, `site_url` (DECISIONS §4f). EmailJS boşsa geliştirmede kod yalnızca sunucu günlüğüne (maskeli e-postayla), üretimde 503 `EMAIL_NOT_CONFIGURED`; kod hiçbir yanıtta yok. Oturum: rastgele belirteç, httpOnly/SameSite=Lax (üretimde Secure) çerez, yalnızca SHA-256 saklanır, 30 gün. Çerezli POST'larda Origin denetimi. Admin rolü `ADMIN_EMAIL` ile (saklanmaz). Kayıtlılar: cisim listesi + çalışmalar (karşılaştırma kimliğiyle; yalnızca hesaplayan tarayıcı ya da sahibi kaydedebilir), en fazla 200. Ön uç: üst çubukta Giriş/Hesabım, iki adımlı giriş (tek kullanımlık kod alanı), cisim başlığında "Listeme ekle", karşılaştırma sonuçlarında "Çalışmayı kaydet". Testler: `test_accounts.py` (11), `Account.test.tsx` (2). Yerelde uçtan uca curl ile doğrulandı. |
-| 2f, 2h, Aşama 3–4 | — | `DECISIONS.md` §4e |
+| **2e** Hesaplar (EmailJS) | ✅ canlıda doğrulandı (kullanıcı kodla giriş yaptı, 2026-11-14) | Tablolar `user_account`, `login_code`, `auth_session`, `saved_item` (Alembic `0004`, `alembic check` temiz). Kod: `secrets` ile 6 hane, yalnızca HMAC-SHA256(SECRET_KEY) saklanır, 10 dk, kod başına 5 deneme (sonra kilit), e-posta başına saatte ≤3 gönderim (+ oturum başına sınır), yalnızca en yeni kod geçerli, başarısız gönderim hakkı yemez. EmailJS REST sunucudan, `accessToken` ile; şablon değişkenleri `to_email`, `code`, `valid_minutes`, `site_url` (DECISIONS §4f). EmailJS boşsa geliştirmede kod yalnızca sunucu günlüğüne (maskeli e-postayla), üretimde 503 `EMAIL_NOT_CONFIGURED`; kod hiçbir yanıtta yok. Oturum: rastgele belirteç, httpOnly/SameSite=Lax (üretimde Secure) çerez, yalnızca SHA-256 saklanır, 30 gün. Çerezli POST'larda Origin denetimi. Admin rolü `ADMIN_EMAIL` ile (saklanmaz). Kayıtlılar: cisim listesi + çalışmalar (karşılaştırma kimliğiyle; yalnızca hesaplayan tarayıcı ya da sahibi kaydedebilir), en fazla 200. Ön uç: üst çubukta Giriş/Hesabım, iki adımlı giriş (tek kullanımlık kod alanı), cisim başlığında "Listeme ekle", karşılaştırma sonuçlarında "Çalışmayı kaydet". Testler: `test_accounts.py` (11), `Account.test.tsx` (2). Yerelde uçtan uca curl ile doğrulandı. |
+| **2e-fix** Kod isteme sınırı | ✅ `1e44269` | Gönderilmeyen kod (EmailJS hatası, adres sınırı, geçersiz adres) tarayıcı hakkını yemez; 429'da `retry_after_s` + "yaklaşık N dakika". Sınırlar: tarayıcı başına art arda 5 istek, sonra 12 dk'da 1 (bellekte, yayında sıfırlanır); e-posta başına saatte 3 (veritabanında). |
+| **2f** Admin paneli | 🟡 kod bitti, canlıda yönetici girişiyle **denenmedi** — aşağıdaki "Admin paneli: nerede kaldık" | `32a2723` |
+| 2g-2 (asistan akışı), 2h (Excel), Aşama 3–4 | — | `DECISIONS.md` §4e |
+
+## Admin paneli (2f): nerede kaldık — 2026-11-14
+
+**Bitenler** (`32a2723`, testler: arka uç 119, ön uç 22, tsc/ESLint/ruff temiz, push'landı)
+- Arka uç `api/v1/admin.py`, tümü yalnızca `ADMIN_EMAIL` oturumuyla (yoksa 401, başka hesap 403 `ADMIN_ONLY`):
+  - `GET /admin/summary`: kullanıcı sayısı, son 24 saatin olayları (türlere göre), ziyaret sayısı, yeni geri bildirim, e-posta modu.
+  - `GET /admin/users`: e-posta, kayıt, son giriş, kayıtlı öğe ve olay sayısı.
+  - `GET /admin/events?group=search|compare|download|account|feedback&before_id=&limit=`: kısa oturum öneki ve kullanıcı e-postası gösterilir, **IP özeti hiç gösterilmez**.
+  - `GET /admin/feedback?status=`, `POST /admin/feedback/{id}/status` (`new`/`read`/`done`).
+  - `GET /admin/releases`: `releases.toml`'dan sürümler (salt okunur; açma/kapama yalnızca dosyadan) + önbellek boyutları.
+  - `POST /admin/cache/refresh {scope}`: kapsam bir sürüm kimliği, `external` ya da `all` olabilir. Kapsamlar sabit listeden seçilir, önbellek kökünün dışına çıkılamaz (`../etc` ve `_index` → 400). Görüntü dizini (`_index`) yalnızca `all` ile silinir.
+- **Canlı akış:** WebSocket `admin` konusuna yalnızca admin oturumu abone olabilir (çerez + `ADMIN_EMAIL`, bağlantı başına bir kez denetlenir).
+  - Kaydedilen her olay ve her geri bildirim anında yayınlanır. `publish_nowait` senkron uç noktalardan da çalışır; izleyen admin yoksa hiçbir şey gönderilmez.
+  - Olaylara giriş yapan kullanıcının kimliği (`user_id`) eklenir.
+- **Ön uç:** `/#admin` (ayrı paket, 13 KB). Sekmeler: Özet, Canlı etkinlik (grup filtresi; soket kapalıysa 15 sn'de bir HTTP yenileme), Kullanıcılar, Geri bildirimler (durum düğmeleri), Veri sürümleri (önbellek boyutları + onaylı "Önbelleği yenile"). "Hesabım" penceresinde yöneticiye "Yönetici paneli" bağlantısı görünür.
+- **Yazarken düzeltilen hata:** canlı olay mesajında olay türü `type` alanına yazılıyor ve mesaj türünü (`admin_event`) eziyordu; arama/karşılaştırma olayları arayüze hiç ulaşmayacaktı. Alan `event_type` oldu, iki tarafta da testi var.
+
+**Kalanlar**
+1. **Canlıda yönetici girişiyle elle deneme** (kullanıcı): Hesabım → Yönetici paneli → beş sekme. Özellikle Canlı etkinlik: başka bir sekmede arama yapınca satır anında üste gelmeli (WS).
+2. "İndirme" grubu, Excel (2h) gelene kadar boş kalacak.
+3. Olay listesinde "daha eski" sayfalama düğmesi yok (API `before_id` destekliyor); şimdilik son 100 olay.
+4. Kullanıcı ayrıntısı (tek kullanıcının olayları) ve geri bildirime yanıt yok (kapsamda istenmedi).
+5. Prewarm canlıda en son `32a2723`'ten **önce** çalıştırıldı; bu yayın önbelleği sildi. Demodan önce yeniden çalıştırılmalı: `tools\prewarm.py --base https://spherex-izleyici.onrender.com --only <cisim>` (cisim cisim).
+
+**Bilinen hatalar / riskler**
+- **Render yeniden başlatması (çözülmedi):** 2026-11-13 20:42–20:50 UTC arasında prewarm sırasında sunucu yeniden başladı, önbellek silindi ve iş kayboldu (`UNKNOWN_JOB`).
+  - Yerel ölçümde bellek en fazla 162 MB (sınır 512 MB). Ücretsiz planın 0,1 CPU'su yüzünden sağlık kontrolünün zaman aşımına uğraması daha olası, ama **doğrulanmadı**.
+  - Kullanıcıdan Render → Events'teki mesaj bekleniyor. "Health check failed" ise yapılacaklar: VOTable ayrıştırmasını `to_thread`'e almak, başlık okumayı en fazla 8 paralelle sınırlamak.
+  - Cisim cisim prewarm (00:09–00:12) sorunsuz geçti.
+- Sunucu tarafı olaylar (arama, karşılaştırma, kayıt, önbellek yenileme) yalnızca gizlilik bildirimini kabul eden ziyaretçilerde kaydedilir (KVKK kararı). Geri bildirimler ve (Excel gelince) indirmeler her zaman görünür. Bu yüzden canlı akış tüm trafiği göstermez; panelde not olarak yazıyor.
+- `admin/cache/refresh` işlemi olay günlüğüne yalnızca admin tarayıcısı izin verdiyse düşer.
+- Bellek içi işler ve hız sınırları her yayında ve yeniden başlatmada sıfırlanır (tek örnek tasarımı).
 
 ## Önceki oturumdan devralınan 3 iş (bitti / plana taşındı)
 
