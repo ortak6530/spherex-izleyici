@@ -185,6 +185,31 @@ def test_emailjs_request_shape(monkeypatch):
     assert e.value.code == "EMAIL_SEND_FAILED" and e.value.status == 502
 
 
+def test_failed_sends_do_not_use_up_the_browser_limit(client, monkeypatch):
+    # Regression (2026-11-14): with EmailJS failing, the 6th try said "too many attempts"
+    # instead of the real problem, although no e-mail had been sent.
+    async def failing(email, code):
+        raise A.AccountError("EMAIL_SEND_FAILED", 502)
+
+    monkeypatch.setattr(A, "deliver", failing)
+    codes = [
+        client.post("/api/v1/auth/request-code", json={"email": _email(f"fail{i}")}).json()["code"]
+        for i in range(7)
+    ]
+    assert codes == ["EMAIL_SEND_FAILED"] * 7
+
+
+def test_browser_limit_reports_when_to_retry(client, sent):
+    codes = [
+        client.post("/api/v1/auth/request-code", json={"email": _email(f"many{i}")}).status_code
+        for i in range(5)
+    ]
+    assert codes == [202] * 5
+    r = client.post("/api/v1/auth/request-code", json={"email": _email("many5")})
+    assert r.status_code == 429 and r.json()["code"] == "RATE_LIMITED"
+    assert 600 < r.json()["retry_after_s"] <= 721  # one new try every 12 minutes
+
+
 def test_saved_items_need_login_and_belong_to_their_owner(client, sent):
     assert client.get("/api/v1/me/saved").status_code == 401
     _login(client, sent, _email("owner"))

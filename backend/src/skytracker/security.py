@@ -135,3 +135,19 @@ class TokenBucket:
             if len(self._state) > 50_000:  # crude memory bound
                 self._state.clear()
             return ok
+
+    def refund(self, key: str, cost: float = 1.0) -> None:
+        """Give a token back (the request failed on our side, e.g. the e-mail service was down)."""
+        with self._lock:
+            if key in self._state:
+                tokens, last = self._state[key]
+                self._state[key] = (min(self.burst, tokens + cost), last)
+
+    def retry_after(self, key: str, cost: float = 1.0) -> int:
+        """Seconds until `cost` tokens are available again (0 if they are now)."""
+        now = time.monotonic()
+        with self._lock:
+            tokens, last = self._state.get(key, (float(self.burst), now))
+            tokens = min(self.burst, tokens + (now - last) * self.rate)
+            missing = cost - tokens
+            return 0 if missing <= 0 or self.rate <= 0 else int(missing / self.rate) + 1

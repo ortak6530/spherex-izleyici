@@ -76,6 +76,7 @@
       "EMAIL_NOT_CONFIGURED": "E-posta gönderimi şu an kapalı; giriş yapılamıyor. Site girişsiz de kullanılabilir.",
       "EMAIL_SEND_FAILED": "E-posta gönderilemedi. Biraz sonra tekrar deneyin.",
       "RATE_LIMITED": "Çok fazla deneme yapıldı; birkaç dakika bekleyin.",
+      "RATE_LIMITED_WAIT": "Bu tarayıcıdan çok fazla istek geldi. Yaklaşık {{min}} dakika sonra tekrar deneyin.",
       "FORBIDDEN_ORIGIN": "İstek bu siteden gelmediği için reddedildi."
     }
   },

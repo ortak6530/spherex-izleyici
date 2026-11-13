@@ -17,6 +17,10 @@ function useErrorText() {
     if (!(e instanceof ApiError)) return t("errors.generic");
     const b = e.body;
     if (e.code === "INVALID_CODE") return t("account.errors.INVALID_CODE", { n: b.attempts_left ?? 0 });
+    if (e.code === "RATE_LIMITED" && b.retry_after_s !== undefined)
+      return t("account.errors.RATE_LIMITED_WAIT", {
+        min: Math.max(1, Math.ceil(Number(b.retry_after_s) / 60)),
+      });
     if (e.code === "EMAIL_RATE_LIMITED")
       return t("account.errors.EMAIL_RATE_LIMITED", { min: Math.ceil(Number(b.retry_after_s ?? 60) / 60) });
     return t(`account.errors.${e.code}`, {

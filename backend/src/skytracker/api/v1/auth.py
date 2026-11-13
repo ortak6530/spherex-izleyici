@@ -70,10 +70,12 @@ async def request_code(body: CodeRequest, request: Request, db: Session = Depend
     _same_origin(request)
     sid = session_id_from(request)
     if not _code_limiter.allow(sid):
-        raise HTTPException(429, {"code": "RATE_LIMITED"})
+        raise HTTPException(429, {"code": "RATE_LIMITED", "retry_after_s": _code_limiter.retry_after(sid)})
     try:
         out = await A.request_code(db, body.email, sid, ip_hash(client_ip(request)))
     except A.AccountError as e:
+        # No e-mail went out (typo, per-address limit, e-mail service down): the try is not counted
+        _code_limiter.refund(sid)
         _raise(e)
     A.purge_expired(db)
     log_action(request, "login_code_requested")
@@ -83,8 +85,9 @@ async def request_code(body: CodeRequest, request: Request, db: Session = Depend
 @router.post("/auth/verify")
 def verify(body: VerifyRequest, request: Request, response: Response, db: Session = Depends(get_db)) -> dict:
     _same_origin(request)
-    if not _verify_limiter.allow(session_id_from(request)):
-        raise HTTPException(429, {"code": "RATE_LIMITED"})
+    sid = session_id_from(request)
+    if not _verify_limiter.allow(sid):
+        raise HTTPException(429, {"code": "RATE_LIMITED", "retry_after_s": _verify_limiter.retry_after(sid)})
     try:
         user, token = A.verify_code(db, body.email, body.code)
     except A.AccountError as e:
