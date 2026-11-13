@@ -169,6 +169,34 @@ Hesaplar ve admin paneli **Cuma (14 Kasım) öğlene kadar** biter. 8–11. madd
   - **Barnard** (D5, 202 gün; 2025-08 ile 2026-03 zıt tarama yönünde, PA 0°/180°): ölçülen 9,65″ (1,57 piksel), beklenen 5,74″ (0,93 piksel) → fark 0,64 piksel **✗ uyumsuz**. Olası neden: doymuş ya da maskeli çekirdek ağırlık merkezini maskesiz tarafa çekiyor ve yön 180° dönünce bu sapma toplanıyor. Çözüm cilalama maddesi E1 (doymuş çekirdeği dışlayan PSF uydurma). Aynı yönlü DR1 → QR3 çiftinde fark 0,22 piksel.
   - 3I/ATLAS: hareketli cisim görünümü (MOST) bu araçta henüz test edilmiyor, atlandı.
 
+## 4e. Son plan (2026-11-13 akşam; **önceki planların ve öncelik sıralarının yerine geçer**)
+
+**Çalışma kuralları**
+- Sıra bozulmaz. Her özellik ayrı commit; her biri için test + `docs/PROGRESS.md` güncellemesi.
+- Push: Render ilk derlemesi "Live" olana kadar yapılmaz (2026-11-13'te Live oldu). Sonrasında aşama testleri geçince toplu push.
+- Yeni anahtar istenmez, `.env`'ye dokunulmaz, yeni klasör açılmaz, ekran görüntüsü denemesi yapılmaz (tarayıcı kontrolünü kullanıcı yapar).
+- Dış çağrılar sunucudan, önbellekli, zaman aşımlı. Hata siteyi bozmaz, nazik not gösterilir.
+- Doğrulanmamış her uç nokta ve parametre canlı denenir. Çalışmazsa özellik yarım bırakılmaz; PROGRESS.md'ye "yapılmadı" yazılır.
+
+**Aşama 1 (13 Kasım gecesi)**
+- a) `docs/SOURCES.md` ve sitede "Kaynaklar" sayfası (alt bilgiden bağlantı). Her dış kaynak için ad, URL, kullanım amacı, lisans/teşekkür; yarışma kuralı gereği kullanılan **her** kaynak anılır.
+  - IRSA/SPHEREx zorunlu teşekkür metni `Missions/spherex.html` sayfasından aynen alınır. Atıflar: Bock+2026 (Mission), Akeson+2026 (Pipeline), Crill+2025 (Sky Simulator), Korngut+2026 (Instrument & Calibration). IRSA eğitimleri referans olarak anılır: Data Overview, Spectral Image Cutouts, PSF Models, Source Discovery Tool, Mosaic Cube, HiPS All-Sky Cube.
+  - MAST (Hubble/JWST; Gaia için yalnızca ikincil), Gaia (ESA atıf kılavuzundan), SIMBAD/CDS, JPL Horizons, Wikipedia.
+  - CADC SSOIS: Gwyn, Hill & Kavelaars 2012; CADC teşekkürü SSOIS belge sayfasından.
+  - CSA NEOSSat: Open Government Licence – Canada; FITS kılavuzu CSA-NEOSSAT-MAN-0002 v4.00; teşekkür metni CADC NEOSSat sayfasındaki İngilizce kalıptan aynen. CSA tanıtım sayfası ve `asc-csa/NEOSSAT_Tutorial` deposu referans olarak anılır (koddan kopyalama yok).
+  - WiseView (Caselden & Westin; ASCL 1806.004): yalnızca bağlantı.
+- b) `DATA_SOURCES.md`'ye NEOSSat notları (kullanıcının verdiği kurallar; yalnızca kılavuzdaki bilgiler).
+- c) 3I/ATLAS MOST oynatıcısı (bitti) + ana sayfada "Koleksiyon" kartı; karttan IRSA'nın 3I/ATLAS SPHEREx sayfasına bağlantı.
+- d) Geri bildirim butonu (sunucuya kaydedilir, admin görür) + arama kutusunda öneri (Türkçe adlar, SIMBAD LIKE, JPL; "barnard" → Barnard Yıldızı).
+
+**Aşama 2 (14 Kasım sabah):** e) hesaplar (EmailJS; EMAILJS_* boşsa geliştirmede kod yalnızca sunucu günlüğüne yazılır, üretimde asla yanıtta dönmez) · f) admin paneli · g) WebSocket (asistan ve admin akışı) · h) Excel.
+
+**Aşama 3 (14 Kasım öğleden sonra):** i) kural tabanlı asistan · j) gözlem filtreleri + veri kalitesi satırı, canlı konum, Hubble↔Webb · k) veri durum çubuğu, spektrum grafiği (102 bant), `NEW_DATA.md`, `tools/prewarm.py`, admin "veri sürümleri" · l) hareket izi katmanı (2010.0, 2016.0 ve iki SPHEREx tarihi; Güneş Sistemi için MOST konumları; not: "Çizgi, bilinen hareketten hesaplanan beklenen konumdur; ölçüm değildir.") · m) cilalama (ePSF ile PSF uydurma vb.).
+
+**Aşama 4 (14 Kasım akşam, vakit kalırsa):** n) Gaia (ESA TAP, `gaiadr3.gaia_source`, pyvo) · o) CADC SSOIS (`search=bynameCADC`, BÜYÜK HARF, `format=tsv`; bynameHorizons/MPC kullanılmaz) · p) NEOSSat (CADC CAOM/TAP) · q) dış bağlantılar paneli · r) isteğe bağlı unWISE.
+
+**Donma:** 14 Kasım (Cumartesi) 21:00'den sonra yeni özellik yok; yalnızca hata düzeltme, güvenlik kontrolü, testler ve SOURCES.md eksiksizliği. 15 Kasım (Pazar): Render uyandırma, canlı tam deneme, 16:00'dan önce teslim.
+
 ## 5. Teknik sonuçlar (bu kararlardan çıkan)
 
 - **Render ücretsiz planında dosya sistemi kalıcı değil.** SQLite her yeniden başlatmada sıfırlanır. Kullanıcı, etkinlik ve geri bildirim verileri için `DATABASE_URL` ile **Render Postgres** kullanılır. Yerelde SQLite kullanılır. Ayrıntı: `docs/DEPLOY.md`.

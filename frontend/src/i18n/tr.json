@@ -40,7 +40,7 @@
   },
   "footer": {
     "simulation": "Arka plan: sanatsal simülasyon, ölçekli değildir.",
-    "data": "Veri: NASA/IPAC IRSA (SPHEREx) · MAST/STScI (Hubble, Webb) · CDS Strasbourg (SIMBAD, Sesame)",
+    "data": "Veri: NASA/IPAC IRSA (SPHEREx) · CDS Strasbourg (SIMBAD, Sesame) · JPL (SBDB, Horizons) · Vikipedi",
     "sources": "Kaynaklar ve atıflar",
     "privacy": "Gizlilik",
     "live": "Canlı bağlantı",
@@ -48,9 +48,20 @@
     "liveConnecting": "bağlanıyor…",
     "liveOff": "kapalı (HTTP ile çalışıyor)"
   },
-  "attributions": {
+  "sources": {
     "title": "Kaynaklar ve atıflar",
-    "close": "Kapat"
+    "intro": "Bu sitenin kullandığı her dış kaynak, kullanım amacı ve sağlayıcının istediği teşekkür metniyle aşağıda listelenir. Teşekkür metinleri sağlayıcının sayfasından aynen alınmıştır; nereden ve ne zaman alındığı her metnin altında yazar. \"Planlandı\" işaretli kaynaklar henüz kullanılmıyor; ilgili özellik eklendiğinde kullanılmaya başlanacak.",
+    "back": "Geri dön",
+    "data": "Veri kaynakları ve servisler",
+    "software": "Yazılım",
+    "used": "Kullanılıyor",
+    "planned": "Planlandı",
+    "textFrom": "Metnin alındığı yer:",
+    "verified": "{{date}} tarihinde doğrulandı",
+    "license": "Lisans / koşullar",
+    "cite": "Atıf yapılacak yayınlar:",
+    "references": "Başvurulan belgeler:",
+    "failed": "Kaynak listesi şu an yüklenemedi. Tam liste depodaki docs/SOURCES.md dosyasında da var."
   },
   "lang": {
     "switch": "English"

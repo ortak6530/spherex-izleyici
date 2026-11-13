@@ -255,7 +255,16 @@ export interface ReleasesResponse {
 export interface Attribution {
   key: string;
   title: string;
-  text: string;
+  group?: "data" | "software";
+  status?: "used" | "planned";
+  purpose?: string;
+  text?: string; // acknowledgement, verbatim from text_source
+  text_source?: string;
+  verified?: string;
+  license?: string;
+  note?: string;
   url?: string;
   dois?: string[];
+  citations?: Array<{ label: string; url: string }>;
+  references?: Array<{ label: string; url: string }>;
 }

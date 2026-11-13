@@ -40,7 +40,7 @@
   },
   "footer": {
     "simulation": "Background: artistic simulation, not to scale.",
-    "data": "Data: NASA/IPAC IRSA (SPHEREx) · MAST/STScI (Hubble, Webb) · CDS Strasbourg (SIMBAD, Sesame)",
+    "data": "Data: NASA/IPAC IRSA (SPHEREx) · CDS Strasbourg (SIMBAD, Sesame) · JPL (SBDB, Horizons) · Wikipedia",
     "sources": "Sources & credits",
     "privacy": "Privacy",
     "live": "Live connection",
@@ -48,9 +48,20 @@
     "liveConnecting": "connecting…",
     "liveOff": "off (using HTTP)"
   },
-  "attributions": {
+  "sources": {
     "title": "Sources & credits",
-    "close": "Close"
+    "intro": "Every external resource this site uses is listed below with what it is used for and the acknowledgement its provider asks for. Acknowledgements are copied verbatim from the provider's page; where and when each was copied is shown under it. Resources marked \"Planned\" are not used yet; they will be once the related feature is added.",
+    "back": "Back",
+    "data": "Data sources and services",
+    "software": "Software",
+    "used": "In use",
+    "planned": "Planned",
+    "textFrom": "Text copied from:",
+    "verified": "verified on {{date}}",
+    "license": "Licence / terms",
+    "cite": "Papers to cite:",
+    "references": "Documents referred to:",
+    "failed": "The source list could not be loaded right now. The full list is also in docs/SOURCES.md in the repository."
   },
   "lang": {
     "switch": "Türkçe"

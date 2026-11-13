@@ -1,46 +1,217 @@
-# Attribution texts shown in the site footer / sources page and written into Excel exports.
-# Verified 2026-11-12 (see docs/DATA_SOURCES.md section 9), except where marked.
+# Every external resource the site uses (or will use), with its acknowledgement text.
+# Shown on the "Kaynaklar" page (/#kaynaklar), mirrored in docs/SOURCES.md, written into Excel exports.
+#
+# Competition rule: EVERY resource used must be credited. Keep this file and docs/SOURCES.md in sync.
+#
+# Fields
+#   key, title, group ("data" | "software"), status ("used" | "planned")
+#   purpose       what the site uses it for (Turkish, shown to users)
+#   url           main page
+#   text          acknowledgement, copied VERBATIM from text_source (never paraphrased)
+#   text_source   page the text was copied from; verified = date it was checked live
+#   license       licence / terms, only as stated by the provider
+#   citations     papers to cite: [{label, url}]
+#   references    documentation / tutorials referred to: [{label, url}]
+#   note          caveats (e.g. "official wording not found")
 
 [[item]]
 key = "spherex"
-title = "SPHEREx (NASA/IPAC IRSA)"
-text = "This publication makes use of data products from the Spectro-Photometer for the History of the Universe, Epoch of Reionization and Ices Explorer (SPHEREx), which is a joint project of the Jet Propulsion Laboratory and the California Institute of Technology, and is funded by the National Aeronautics and Space Administration."
-dois = ["10.26131/IRSA652 (QR2)", "10.26131/IRSA662 (QR3)"]
+title = "SPHEREx (NASA / JPL / Caltech)"
+group = "data"
+status = "used"
+purpose = "Tüm SPHEREx spektral görüntüleri, kesitler, zaman ve cisim karşılaştırmaları, hareketli cisim kareleri."
 url = "https://irsa.ipac.caltech.edu/Missions/spherex.html"
+text = "This publication makes use of data products from the Spectro-Photometer for the History of the Universe, Epoch of Reionization and Ices Explorer (SPHEREx), which is a joint project of the Jet Propulsion Laboratory and the California Institute of Technology, and is funded by the National Aeronautics and Space Administration."
+text_source = "https://irsa.ipac.caltech.edu/Missions/spherex.html"
+verified = "2026-11-13"
+license = "IRSA'nın SPHEREx sayfasındaki zorunlu teşekkür metni yayınlarda ve bu sitede yer almalıdır."
+dois = ["10.26131/IRSA662 (QR3)", "10.26131/IRSA652 (QR2)", "DR1: henüz yayımlanmadı"]
+citations = [
+  { label = "Bock et al. (2026) — Mission", url = "https://ui.adsabs.harvard.edu/abs/2026ApJ...999..139B/abstract" },
+  { label = "Akeson et al. (2026) — Pipeline", url = "https://ui.adsabs.harvard.edu/abs/2026ApJS..285...67A/abstract" },
+  { label = "Crill et al. (2025) — Sky Simulator", url = "https://ui.adsabs.harvard.edu/abs/2025ApJS..281...10C/abstract" },
+  { label = "Korngut et al. (2026) — Instrument & Calibration", url = "https://ui.adsabs.harvard.edu/abs/2026arXiv260329835K/abstract" },
+]
+references = [
+  { label = "SPHEREx Explanatory Supplement", url = "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp.pdf" },
+  { label = "IRSA tutorial: Introduction to SPHEREx Spectral Images (Data Overview)", url = "https://caltech-ipac.github.io/irsa-tutorials/spherex-intro/" },
+  { label = "IRSA tutorial: SPHEREx Spectral Image Cutouts", url = "https://caltech-ipac.github.io/irsa-tutorials/spherex-cutouts/" },
+  { label = "IRSA tutorial: SPHEREx PSF in Spectral Image Cutouts (PSF Models)", url = "https://caltech-ipac.github.io/irsa-tutorials/spherex-psf/" },
+  { label = "IRSA tutorial: SPHEREx Source Discovery Tool", url = "https://caltech-ipac.github.io/irsa-tutorials/spherex-source-discovery-tool-demo/" },
+  { label = "IRSA tutorial: SPHEREx Mosaic Cubes", url = "https://caltech-ipac.github.io/irsa-tutorials/spherex-mosaic/" },
+  { label = "IRSA tutorial: SPHEREx HiPS (All-Sky) Cubes", url = "https://caltech-ipac.github.io/irsa-tutorials/spherex-hipscube/" },
+  { label = "IRSA: SPHEREx observations of Comet 3I/ATLAS", url = "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/index.html" },
+]
 
 [[item]]
 key = "irsa"
-title = "NASA/IPAC Infrared Science Archive"
+title = "NASA/IPAC Infrared Science Archive (IRSA)"
+group = "data"
+status = "used"
+purpose = "SPHEREx verisine erişim: SIA2 kapsam sorgusu, TAP, kesit servisi, IBE dosyaları, MOST (hareketli cisim arama)."
+url = "https://irsa.ipac.caltech.edu/"
 text = "This research has made use of the NASA/IPAC Infrared Science Archive, which is funded by the National Aeronautics and Space Administration and operated by the California Institute of Technology."
-url = "https://irsa.ipac.caltech.edu/ack.html"
-
-[[item]]
-key = "hst"
-title = "Hubble (MAST/STScI)"
-text = "Based on observations made with the NASA/ESA Hubble Space Telescope obtained from the Space Telescope Science Institute, which is operated by the Association of Universities for Research in Astronomy, Inc., under NASA contract NAS5-26555."
-url = "https://archive.stsci.edu/publishing/mission-acknowledgements"
-
-[[item]]
-key = "jwst"
-title = "Webb (MAST/STScI)"
-text = "Based on observations made with the NASA/ESA/CSA James Webb Space Telescope. The data were obtained from the Mikulski Archive for Space Telescopes at the Space Telescope Science Institute, which is operated by the Association of Universities for Research in Astronomy, Inc., under NASA contract NAS5-03127 for JWST."
-url = "https://archive.stsci.edu/publishing/mission-acknowledgements"
+text_source = "https://irsa.ipac.caltech.edu/ack.html"
+verified = "2026-11-12"
+references = [
+  { label = "IRSA Moving Object Search Tool (MOST)", url = "https://irsa.ipac.caltech.edu/applications/MOST" },
+  { label = "IRSA program interfaces", url = "https://irsa.ipac.caltech.edu/voapi.html" },
+]
 
 [[item]]
 key = "cds"
-title = "CDS Strasbourg (SIMBAD, Sesame)"
-# Standard CDS wording; the live page could not be checked on 2026-11-12 (SIMBAD outage) - re-verify.
-text = "This research has made use of the SIMBAD database and the Sesame name resolver, operated at CDS, Strasbourg, France."
-url = "https://cds.unistra.fr/"
+title = "SIMBAD ve Sesame (CDS, Strasbourg)"
+group = "data"
+status = "used"
+purpose = "Ad çözümleme (Sesame), cisim türü, tayf türü, paralaks, öz hareket ve aynı-tür önerileri (SIMBAD TAP; CDS ve CfA aynası)."
+url = "https://simbad.cds.unistra.fr/simbad/"
+text = "This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France"
+text_source = "https://simbad.cds.unistra.fr/ (Acknowledgment bölümü)"
+verified = "2026-11-13"
+citations = [
+  { label = "Wenger et al. (2000), A&AS 143, 9", url = "https://ui.adsabs.harvard.edu/abs/2000A%26AS..143....9W" },
+]
+references = [
+  { label = "CDS Sesame name resolver", url = "https://cds.unistra.fr/cgi-bin/Sesame" },
+]
 
 [[item]]
 key = "jpl"
 title = "JPL Solar System Dynamics (SBDB, Horizons)"
-text = "Solar system object data from the JPL Small-Body Database and Horizons system, NASA Jet Propulsion Laboratory."
+group = "data"
+status = "used"
+purpose = "Güneş Sistemi cisimlerinin tanımı (SBDB) ve öngörülen konumlar (Horizons; IRSA MOST üzerinden)."
 url = "https://ssd.jpl.nasa.gov/"
+text = "Solar system object data from the JPL Small-Body Database and Horizons system, NASA Jet Propulsion Laboratory."
+note = "Horizons sayfasında resmî bir teşekkür kalıbı bulunamadı (2026-11-13); metin bizim açıklamamızdır, alıntı değildir."
+references = [
+  { label = "JPL Horizons", url = "https://ssd.jpl.nasa.gov/horizons/" },
+  { label = "JPL Small-Body Database API", url = "https://ssd-api.jpl.nasa.gov/doc/sbdb.html" },
+]
 
 [[item]]
 key = "wikipedia"
-title = "Vikipedi / Wikidata"
-text = "Short descriptions from Wikipedia (CC BY-SA 4.0) and identifiers from Wikidata (CC0)."
+title = "Vikipedi / Wikipedia ve Wikidata"
+group = "data"
+status = "used"
+purpose = "Cisim bilgi panelindeki kısa açıklama (önce Türkçe, yoksa İngilizce) ve tanımlayıcılar."
 url = "https://www.wikipedia.org/"
+text = "Short descriptions from Wikipedia (CC BY-SA 4.0) and identifiers from Wikidata (CC0)."
+license = "Vikipedi metinleri CC BY-SA 4.0; Wikidata CC0."
+
+[[item]]
+key = "hst"
+title = "Hubble (MAST / STScI)"
+group = "data"
+status = "planned"
+purpose = "Hubble ↔ Webb karşılaştırması: yalnızca herkese açık önizlemeler ve kayıt bilgisi (Aşama 3)."
+url = "https://archive.stsci.edu/"
+text = "This research is based on observations made with the NASA/ESA Hubble Space Telescope obtained from the Space Telescope Science Institute, which is operated by the Association of Universities for Research in Astronomy, Inc., under NASA contract NAS5–26555. These observations are associated with program(s) __________."
+text_source = "https://archive.stsci.edu/publishing/mission-acknowledgements"
+verified = "2026-11-13"
+note = "Program numaraları her önizlemenin kayıt bilgisinde gösterilir."
+
+[[item]]
+key = "jwst"
+title = "Webb (MAST / STScI)"
+group = "data"
+status = "planned"
+purpose = "Hubble ↔ Webb karşılaştırması: yalnızca herkese açık önizlemeler ve kayıt bilgisi (Aşama 3)."
+url = "https://archive.stsci.edu/"
+text = "This work is based [in part] on observations made with the NASA/ESA/CSA James Webb Space Telescope. The data were obtained from the Mikulski Archive for Space Telescopes at the Space Telescope Science Institute, which is operated by the Association of Universities for Research in Astronomy, Inc., under NASA contract NAS5-03127 for JWST. These observations are associated with program #____."
+text_source = "https://archive.stsci.edu/publishing/mission-acknowledgements"
+verified = "2026-11-13"
+note = "Program numaraları her önizlemenin kayıt bilgisinde gösterilir. MAST, Gaia için yalnızca ikincil kaynaktır."
+
+[[item]]
+key = "gaia"
+title = "Gaia (ESA)"
+group = "data"
+status = "planned"
+purpose = "Öz hareket ve paralaks (ESA Gaia TAP, gaiadr3.gaia_source) ve görüntü üstü Gaia kaynak katmanı (Aşama 4)."
+url = "https://www.cosmos.esa.int/gaia"
+text = "This work has made use of data from the European Space Agency (ESA) mission Gaia (https://www.cosmos.esa.int/gaia), processed by the Gaia Data Processing and Analysis Consortium (DPAC, https://www.cosmos.esa.int/web/gaia/dpac/consortium). Funding for the DPAC has been provided by national institutions, in particular the institutions participating in the Gaia Multilateral Agreement."
+text_source = "https://gea.esac.esa.int/archive/documentation/GDR3/Miscellaneous/sec_credit_and_citation_instructions/"
+verified = "2026-11-13"
+license = "Gaia verisi CC BY-NC 3.0 IGO lisansıyla dağıtılır (https://www.cosmos.esa.int/web/gaia-users/license)."
+citations = [
+  { label = "Gaia Collaboration et al. (2016b) — The Gaia mission", url = "https://gea.esac.esa.int/archive/documentation/GDR3/Miscellaneous/sec_credit_and_citation_instructions/" },
+  { label = "Gaia Collaboration et al. (2023j) — Gaia DR3: Summary of the contents and survey properties", url = "https://gea.esac.esa.int/archive/documentation/GDR3/Miscellaneous/sec_credit_and_citation_instructions/" },
+]
+references = [
+  { label = "Gaia data credits and acknowledgements", url = "https://www.cosmos.esa.int/web/gaia-users/credits" },
+]
+
+[[item]]
+key = "cadc_ssois"
+title = "CADC SSOIS (Solar System Object Image Search)"
+group = "data"
+status = "planned"
+purpose = "Güneş Sistemi cisimleri için \"bu cismi başka hangi teleskoplar görmüş\" listesi; yalnızca bağlantı, dosya indirme yok (Aşama 4)."
+url = "https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/en/ssois/"
+text = "This research used the facilities of the Canadian Astronomy Data Centre operated by the National Research Council of Canada with the support of the Canadian Space Agency."
+text_source = "https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/en/ssois/documentation.html"
+verified = "2026-11-13"
+citations = [
+  { label = "Gwyn, Hill & Kavelaars (2012), PASP 124, 579", url = "https://adsabs.harvard.edu/abs/2012PASP..124..579G" },
+]
+references = [
+  { label = "SSOIS API documentation", url = "https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/en/ssois/apidoc.html" },
+]
+
+[[item]]
+key = "neossat"
+title = "NEOSSat (CSA / DRDC; veri CADC'de)"
+group = "data"
+status = "planned"
+purpose = "Konuma ve tarihe göre NEOSSat görüntüleri (filtresiz optik): yalnızca konum, hareket ve zaman; SPHEREx ile parlaklık karşılaştırması yapılmaz (Aşama 4)."
+url = "https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/en/neossat/"
+text = "Based on data from the NEOSSat satellite, a joint mission of the Canadian Space Agency (CSA) and Defence Research and Development Canada (DRDC), with contributions from Microsat Systems Canada Inc. (MSCI), the University of Calgary, Bishop's University, and the National Research Council of Canada (NRC)."
+text_source = "https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/en/neossat/"
+verified = "2026-11-13"
+license = "Open Government Licence – Canada (https://open.canada.ca/en/open-government-licence-canada)."
+note = "Lisans sayfası 2026-11-13'te otomatik erişimi reddetti; lisans adı proje talimatından ve CSA açık veri yayınından alınmıştır."
+references = [
+  { label = "NEOSSat FITS Image User's Guide, CSA-NEOSSAT-MAN-0002 v4.00", url = "https://data.asc-csa.gc.ca/users/OpenData_DonneesOuvertes/pub/NEOSSAT/Supporting%20Documents/CSA-NEOSSAT-MAN-0002_FITS_IMAGE_UGUIDE-v4-00.pdf" },
+  { label = "CSA: NEOSSat tanıtım sayfası", url = "https://www.asc-csa.gc.ca/eng/satellites/neossat/" },
+  { label = "asc-csa/NEOSSAT_Tutorial (referans; koddan kopyalama yok)", url = "https://github.com/asc-csa/NEOSSAT_Tutorial" },
+]
+
+[[item]]
+key = "wiseview"
+title = "WiseView (Caselden & Westin)"
+group = "data"
+status = "planned"
+purpose = "Yalnızca dış bağlantı: \"Bu cismi WISE'ta yıllar boyunca izle\" (Aşama 4). Gömme yok."
+url = "https://ascl.net/1806.004"
+citations = [
+  { label = "Caselden, D., Westin, P. et al. (2018), WiseView, ASCL 1806.004", url = "https://ui.adsabs.harvard.edu/abs/2018ascl.soft06004C/abstract" },
+]
+references = [
+  { label = "WiseView kaynak kodu", url = "https://github.com/backyardworlds/wiseview" },
+]
+
+[[item]]
+key = "astropy"
+title = "Astropy"
+group = "software"
+status = "used"
+purpose = "FITS okuma, WCS, VOTable ayrıştırma, zaman dönüşümleri."
+url = "https://www.astropy.org/"
+license = "BSD-3-Clause"
+text_source = "https://www.astropy.org/acknowledging.html"
+verified = "2026-11-13"
+citations = [
+  { label = "Astropy Collaboration (2013), A&A 558, A33 — Paper I", url = "https://ui.adsabs.harvard.edu/abs/2013A%26A...558A..33A" },
+  { label = "Astropy Collaboration (2018), AJ 156, 123 — Paper II", url = "https://ui.adsabs.harvard.edu/abs/2018AJ....156..123A" },
+  { label = "Astropy Collaboration (2022), ApJ 935, 167 — Paper III", url = "https://ui.adsabs.harvard.edu/abs/2022ApJ...935..167A" },
+]
+
+[[item]]
+key = "software"
+title = "Açık kaynak yazılımlar"
+group = "software"
+status = "used"
+purpose = "Sitenin yapımında kullanılan kütüphaneler (sürüm ve lisans, paket bilgisinden)."
+url = "https://github.com/ortak6530/spherex-izleyici"
+note = "Arka uç: FastAPI (MIT), Uvicorn (BSD-3-Clause), NumPy (BSD-3-Clause), PyVO (BSD-3-Clause), HTTPX (BSD-3-Clause), SQLAlchemy (MIT), Alembic (MIT), Pydantic (MIT), openpyxl (MIT), Pillow (MIT-CMU), psycopg (LGPL-3.0), argon2-cffi (MIT). Ön uç: React (MIT), three.js (MIT), Framer Motion (MIT), i18next ve react-i18next (MIT), Lucide (ISC). Yazı tipleri: Inter, Exo 2, Roboto Mono (SIL OFL 1.1)."

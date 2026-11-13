@@ -1,16 +1,26 @@
 # İlerleme durumu
 
-> **Son güncelleme:** 2026-11-12 gece (oturum sonu) · **Son commit:** `f841f16` · Teslim: **15 Kasım 2026, 16:00**
-> Kararlar ve talimatlar: [`DECISIONS.md`](DECISIONS.md) · Mimari: [`ARCHITECTURE.md`](ARCHITECTURE.md) · Veri kaynakları: [`DATA_SOURCES.md`](DATA_SOURCES.md) · Yayın: [`DEPLOY.md`](DEPLOY.md)
+> **Son güncelleme:** 2026-11-13 gece · Teslim: **15 Kasım 2026, 16:00** · Canlı: https://spherex-izleyici.onrender.com
+> Kararlar ve talimatlar: [`DECISIONS.md`](DECISIONS.md) (**geçerli plan §4e**) · Mimari: [`ARCHITECTURE.md`](ARCHITECTURE.md) · Veri kaynakları: [`DATA_SOURCES.md`](DATA_SOURCES.md) · Kaynaklar/atıflar: [`SOURCES.md`](SOURCES.md) · Yayın: [`DEPLOY.md`](DEPLOY.md)
 
-## Yarın ilk yapılacak 3 iş
+## Geçerli plan (DECISIONS.md §4e) — durum
+
+| Madde | Durum | Not |
+|---|---|---|
+| **1a** Kaynaklar sayfası + `SOURCES.md` | ✅ | 13 kaynak (`config/attributions.toml` tek kaynak). Teşekkür metinleri 2026-11-13'te sağlayıcı sayfalarından aynen alındı: SPHEREx, SIMBAD, MAST (HST/JWST), Gaia DR3 (+ lisans CC BY-NC 3.0 IGO), CADC (SSOIS belge sayfası), NEOSSat (CADC). Sitede `/#kaynaklar`, alt bilgiden bağlantı; eski atıf iletişim kutusu kaldırıldı. `SOURCES.md`, `tools/gen_sources_md.py` çıktısıdır; `tests/test_sources.py` eşitliği ve zorunlu metinleri denetler. **Bulunamayanlar:** JPL Horizons'ın resmî teşekkür kalıbı (bizim açıklamamız, "alıntı değildir" notuyla); OGL–Canada sayfası otomatik erişimi reddetti (ad talimattan). Gelecekte kullanılacak kaynaklar "Planlandı" olarak işaretli. |
+| **1b** NEOSSat notları (`DATA_SOURCES.md`) | ⏳ | |
+| **1c** 3I/ATLAS oynatıcı + "Koleksiyon" kartı | ⏳ | Oynatıcı bitti (aşağıda); kart sırada |
+| **1d** Geri bildirim + otomatik öneri | ⏳ | |
+| Aşama 2–4 | — | `DECISIONS.md` §4e |
+
+## Önceki oturumdan devralınan 3 iş (bitti / plana taşındı)
 
 1. ✅ **Yayın (2026-11-13):** https://spherex-izleyici.onrender.com — depo `github.com/ortak6530/spherex-izleyici`, Render Blueprint (web + `spherex-db`), `autoDeploy`. Duman testi: `/api/v1/health` → `{"status":"ok","db":"ok"}`; M31 ve 3I/ATLAS çözümleme, MOST işi (364 kare) canlıda çalışıyor; güvenlik başlıkları ve `Secure` çerez var. Kalan: uyku önleyici zamanlayıcı (cron-job.org, 10 dk'da bir `/api/v1/health`).
 2. **3I/ATLAS hareketli cisim görünümü (MOST).**
    - ✅ Arka uç (`915471d`): `providers/most.py`, `GET /moving/{tanım}/frames` (job + WS), `POST /moving/cutout` (cisme ortalı kesit, ayrı hız sınırı). MOST'a ad değil SBDB tanımı (`des`) verilir: "Ceres" belirsiz → 400, `1`/`433`/`2P`/`2025 N1` çalışır. MOST bitişi 2026-10-16'ya kırpıyor.
    - ✅ Ön uç (`features/MovingView.tsx`): dönem + dedektör seçimi (kare sayılarıyla), kesitler 3'er paralel yüklenir ve geldikçe gösterilir (en fazla 40), oynat/duraklat, ←/→/boşluk, hız 1/2/4 kare/sn, zaman kaydırıcısı, her karede zaman, RA/Dec, λ, r, Δ, faz, V, FITS bağlantısı; ortak parlaklık ölçeği seçeneği; dönemin ±3 günlük gök yolu grafiği. Varsayılan: öngörülen en parlak dönem + D5 (CO₂ 4,26 µm).
    - Başsız Edge (CDP, gerçek zamanlı) ile doğrulandı: 3I/ATLAS Aralık 2025 D5 → 17/17 kare ~60 sn'de, cisim karenin ortasında net; Ağustos 2025'te (Δ 2,8 AU) tek karede seçilmiyor.
-3. **Geri bildirim butonu + arama çubuğunda otomatik öneri** (§4d): yerel Türkçe ad listesi, SIMBAD ve JPL; 250 ms; klavye ve ARIA.
+3. **Geri bildirim butonu + arama çubuğunda otomatik öneri** → §4e madde 1d.
 
 ## Bitenler
 
