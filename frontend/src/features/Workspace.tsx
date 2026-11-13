@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import CutoutView, { decodeCutout, type DecodedCutout } from "../components/CutoutView";
 import ProgressLine from "../components/ProgressLine";
+import SaveButton from "../components/SaveButton";
 import {
   apiPost,
   type CutoutResult,
@@ -235,9 +236,17 @@ export default function Workspace({ target }: { target: Target }) {
     <section className="space-y-4" aria-labelledby="ws-title">
       <div className="glass space-y-4 rounded-2xl p-5">
         <div>
-          <h2 id="ws-title" className="font-display text-2xl font-semibold text-ink-100">
-            {target.name}
-          </h2>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <h2 id="ws-title" className="font-display text-2xl font-semibold text-ink-100">
+              {target.name}
+            </h2>
+            <SaveButton
+              kind="object"
+              refId={target.key}
+              label={target.name}
+              data={{ q: target.kind === "coordinate" ? target.query : target.name, d: detector }}
+            />
+          </div>
           <p className="font-mono text-sm text-ink-300">
             {raDecText(target.ra!, target.dec!)} · {target.otype ?? ""} · {target.source}
           </p>
@@ -445,7 +454,13 @@ export default function Workspace({ target }: { target: Target }) {
           <div className="glass rounded-2xl p-5">
             <CompareView result={result} />
           </div>
-          <ResultPanel r={result} />
+          <ResultPanel
+            r={result}
+            save={{
+              label: `${target.name} · ${result.a.date_obs.slice(0, 10)} → ${result.b.date_obs.slice(0, 10)} · D${detector}`,
+              data: { q: target.kind === "coordinate" ? target.query : target.name, d: detector },
+            }}
+          />
         </>
       )}
 

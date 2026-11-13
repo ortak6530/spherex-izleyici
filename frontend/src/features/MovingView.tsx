@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import CutoutView, { decodeCutout, type DecodedCutout } from "../components/CutoutView";
 import ProgressLine from "../components/ProgressLine";
+import SaveButton from "../components/SaveButton";
 import {
   apiGet,
   apiPost,
@@ -261,9 +262,12 @@ export default function MovingView({ target }: { target: Target }) {
     <section className="space-y-4" aria-labelledby="mv-title">
       <div className="glass space-y-4 rounded-2xl p-5">
         <div>
-          <h2 id="mv-title" className="font-display text-2xl font-semibold text-ink-100">
-            {target.name}
-          </h2>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <h2 id="mv-title" className="font-display text-2xl font-semibold text-ink-100">
+              {target.name}
+            </h2>
+            <SaveButton kind="object" refId={target.key} label={target.name} data={{ q: target.query }} />
+          </div>
           <p className="text-sm text-ink-300">
             {[target.orbit_class, designation && `${t("moving.designation")}: ${designation}`, target.source]
               .filter(Boolean)

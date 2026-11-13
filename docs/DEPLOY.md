@@ -12,7 +12,8 @@ Site tek bir Render **Docker web servisi** olarak çalışır. FastAPI hem API'y
 2. Render panelinde **New → Blueprint** seçin, depoyu bağlayın. `render.yaml` dosyası okunur, web servisi ve `spherex-db` veritabanı birlikte oluşturulur.
 3. `sync: false` olan değişkenleri panele girin. Bunlar sohbette paylaşılmaz.
    - `PUBLIC_BASE_URL`: Render'ın verdiği adres, ör. `https://spherex-izleyici.onrender.com`
-   - `ADMIN_EMAIL`, `EMAILJS_*` (hesaplar fazından önce gerekmez), `WIKIMEDIA_USER_AGENT`
+   - `ADMIN_EMAIL`, `EMAILJS_*` (girişler için gerekli; şablon değişkenleri `DECISIONS.md` §4f'de), `WIKIMEDIA_USER_AGENT`
+   - EmailJS boşken site çalışır, yalnızca giriş kapalıdır ("E-posta gönderimi şu an kapalı" mesajı).
    - `SECRET_KEY` ve `IP_HASH_SALT` Render tarafından otomatik üretilir.
 4. İlk derleme birkaç dakika sürer. Sonrasında kontrol için `https://<adres>/api/v1/health` adresi `{"status":"ok"}` döndürmeli.
 

@@ -1,6 +1,8 @@
 import { AlertTriangle, ExternalLink } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import SaveButton from "../components/SaveButton";
+import type { SavedItem } from "../lib/auth";
 import { fmt, warningText } from "../lib/format";
 import type { TimeCompareResult } from "./compareTypes";
 
@@ -13,7 +15,13 @@ function Stat({ label, children }: { label: string; children: React.ReactNode })
   );
 }
 
-export default function ResultPanel({ r }: { r: TimeCompareResult }) {
+export default function ResultPanel({
+  r,
+  save,
+}: {
+  r: TimeCompareResult;
+  save?: { label: string; data: SavedItem["data"] };
+}) {
   const { t } = useTranslation();
   const ph = r.photometry;
   const chip = r.channel.status === "match" ? "bg-ok-400/15 text-ok-400" : "bg-warn-400/15 text-warn-400";
@@ -24,6 +32,7 @@ export default function ResultPanel({ r }: { r: TimeCompareResult }) {
         <h3 id="result-title" className="font-display text-lg font-semibold text-ink-100">
           {t("result.title")}
         </h3>
+        {save && <SaveButton kind="comparison" refId={r.id} label={save.label} data={save.data} />}
         <span className={`rounded-full px-3 py-1 text-xs font-medium ${chip}`}>
           {t(`workspace.channelMatch.${r.channel.status}`)} ·{" "}
           {t("workspace.deltaLambda", {

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from sqlalchemy import JSON, DateTime, Integer, String, Text
+from sqlalchemy import JSON, DateTime, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .base import Base
@@ -30,6 +30,60 @@ class Event(Base):
     payload: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     ip_hash: Mapped[str | None] = mapped_column(String(64), nullable=True)
     ua_family: Mapped[str | None] = mapped_column(String(32), nullable=True)
+
+
+class User(Base):
+    """Account = verified e-mail address. The admin role is not stored: it is ADMIN_EMAIL from .env."""
+
+    __tablename__ = "user_account"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    email: Mapped[str] = mapped_column(String(254), unique=True, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    last_login_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class LoginCode(Base):
+    """One-time 6-digit code: only an HMAC of it is stored; 10 minutes, at most 5 attempts."""
+
+    __tablename__ = "login_code"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    email: Mapped[str] = mapped_column(String(254), index=True)
+    code_hash: Mapped[str] = mapped_column(String(64))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    attempts: Mapped[int] = mapped_column(Integer, default=0)
+    used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    session_id: Mapped[str] = mapped_column(String(64))
+    ip_hash: Mapped[str | None] = mapped_column(String(64), nullable=True)
+
+
+class AuthSession(Base):
+    """Signed-in browser. The cookie holds a random token; only its SHA-256 is stored."""
+
+    __tablename__ = "auth_session"
+
+    token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    user_id: Mapped[int] = mapped_column(Integer, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    last_seen_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class SavedItem(Base):
+    """A user's object list and saved studies (comparisons)."""
+
+    __tablename__ = "saved_item"
+    __table_args__ = (UniqueConstraint("user_id", "kind", "ref", name="uq_saved_item_user_kind_ref"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(Integer, index=True)
+    kind: Mapped[str] = mapped_column(String(16))  # object | comparison
+    ref: Mapped[str] = mapped_column(String(120))  # object key or comparison id
+    label: Mapped[str] = mapped_column(String(200))
+    data: Mapped[dict | None] = mapped_column(JSON, nullable=True)  # e.g. the search query to reopen it
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True)
 
 
 class Feedback(Base):

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { setLang } from "../i18n";
 import { apiGet, type ReleasesResponse, type Target } from "../lib/api";
+import AccountButton from "./Account";
 import FeedbackButton from "./FeedbackButton";
 import SearchBox, { type SearchRequest } from "./SearchBox";
 
@@ -76,6 +77,7 @@ export default function TopBar({
         <div className="ml-auto flex items-center gap-3">
           <ReleaseBadge />
           <FeedbackButton target={target} />
+          <AccountButton />
           <button
             type="button"
             onClick={() => setLang(i18n.language === "tr" ? "en" : "tr")}

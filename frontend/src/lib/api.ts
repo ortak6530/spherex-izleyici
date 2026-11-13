@@ -4,32 +4,38 @@ export class ApiError extends Error {
   constructor(
     public status: number,
     public code: string,
+    public body: Record<string, unknown> = {}, // extra fields, e.g. attempts_left, retry_after_s
   ) {
     super(code);
   }
 }
 
+async function fail(res: Response): Promise<never> {
+  const body = (await res.json().catch(() => ({}))) as Record<string, unknown>;
+  throw new ApiError(res.status, (body.code as string | undefined) ?? `HTTP_${res.status}`, body);
+}
+
+async function send<T>(method: "POST" | "DELETE", path: string, body?: unknown): Promise<T> {
+  const res = await fetch(`/api/v1${path}`, {
+    method,
+    credentials: "same-origin",
+    headers: body === undefined ? undefined : { "Content-Type": "application/json" },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+  if (!res.ok) return fail(res);
+  return (await res.json()) as T;
+}
+
+export const apiDelete = <T>(path: string) => send<T>("DELETE", path);
+
 export async function apiGet<T>(path: string, signal?: AbortSignal): Promise<T> {
   const res = await fetch(`/api/v1${path}`, { credentials: "same-origin", signal });
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}));
-    throw new ApiError(res.status, (body as { code?: string }).code ?? `HTTP_${res.status}`);
-  }
+  if (!res.ok) return fail(res);
   return (await res.json()) as T;
 }
 
 export async function apiPost<T>(path: string, body: unknown): Promise<T> {
-  const res = await fetch(`/api/v1${path}`, {
-    method: "POST",
-    credentials: "same-origin",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) {
-    const b = await res.json().catch(() => ({}));
-    throw new ApiError(res.status, (b as { code?: string }).code ?? `HTTP_${res.status}`);
-  }
-  return (await res.json()) as T;
+  return send<T>("POST", path, body ?? {});
 }
 
 export interface Target {

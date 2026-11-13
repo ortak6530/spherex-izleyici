@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import CutoutView, { type DecodedCutout } from "../components/CutoutView";
 import ProgressLine from "../components/ProgressLine";
+import SaveButton from "../components/SaveButton";
 import { apiGet, apiPost, type ResolveResponse, type Target } from "../lib/api";
 import { errorText, fmt, warningText, type Warning } from "../lib/format";
 import { runJob, runMaybeJob } from "../lib/jobs";
@@ -296,6 +297,12 @@ export default function ObjectCompare({
               ))}
             </div>
             <ViewControls stretch={stretch} setStretch={setStretch} cmap={cmap} setCmap={setCmap} />
+            <SaveButton
+              kind="comparison"
+              refId={result.id}
+              label={`${result.objects.a.name} ↔ ${result.objects.b.name}`}
+              data={{ q: target.name }}
+            />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             {(["a", "b"] as const).map((k) => {

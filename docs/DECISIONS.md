@@ -214,6 +214,21 @@ Hesaplar ve admin paneli **Cuma (14 Kasım) öğlene kadar** biter. 8–11. madd
 
 **Donma:** 14 Kasım (Cumartesi) 21:00'den sonra yeni özellik yok; yalnızca hata düzeltme, güvenlik kontrolü, testler ve SOURCES.md eksiksizliği. 15 Kasım (Pazar): Render uyandırma, canlı tam deneme, 16:00'dan önce teslim.
 
+## 4f. EmailJS şablonu (2026-11-14, hesaplar)
+
+- Sunucu `POST https://api.emailjs.com/api/v1.0/email/send` çağırır. Gövde: `service_id`, `template_id`, `user_id` (= public key), `accessToken` (= private key), `template_params`.
+- **Şablon değişkenleri** (§2.6'daki `to_email` ve `code` korunur, iki değişken eklendi):
+
+  | Değişken | Örnek | Not |
+  |---|---|---|
+  | `to_email` | `ayse@example.org` | Şablon ayarındaki **To Email** alanına `{{to_email}}` yazılmalı |
+  | `code` | `482913` | 6 hane |
+  | `valid_minutes` | `10` | |
+  | `site_url` | `https://spherex-izleyici.onrender.com` | `PUBLIC_BASE_URL`'den |
+
+- EmailJS hesabında **Account → Security → "Allow EmailJS API for non-browser applications"** açık olmalı; kapalıysa sunucudan gönderim reddedilir. Hata yalnızca sunucu günlüğüne yazılır, kullanıcı "E-posta gönderilemedi" mesajını görür.
+- `EMAILJS_*` boşken: geliştirmede kod yalnızca sunucu günlüğüne yazılır (e-posta maskeli). Üretimde gönderim `EMAIL_NOT_CONFIGURED` (503) ile reddedilir; site girişsiz çalışmaya devam eder. Kod hiçbir HTTP yanıtında yer almaz.
+
 ## 5. Teknik sonuçlar (bu kararlardan çıkan)
 
 - **Render ücretsiz planında dosya sistemi kalıcı değil.** SQLite her yeniden başlatmada sıfırlanır. Kullanıcı, etkinlik ve geri bildirim verileri için `DATABASE_URL` ile **Render Postgres** kullanılır. Yerelde SQLite kullanılır. Ayrıntı: `docs/DEPLOY.md`.
