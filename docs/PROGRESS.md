@@ -5,10 +5,10 @@
 
 ## Yarın ilk yapılacak 3 iş
 
-1. **Yayın (GitHub + Render).** Kullanıcı GitHub'da depo açar, ardından `git remote add origin … && git push -u origin main` yapar ve Render'da Blueprint'i bağlar (`docs/DEPLOY.md`). Claude Docker derleme günlüğünü takip eder, hataları düzeltir ve canlı adreste `/api/v1/health` ile duman testi yapar. Docker bu makinede yok, imaj yerelde hiç derlenmedi.
+1. ✅ **Yayın (2026-11-13):** https://spherex-izleyici.onrender.com — depo `github.com/ortak6530/spherex-izleyici`, Render Blueprint (web + `spherex-db`), `autoDeploy`. Duman testi: `/api/v1/health` → `{"status":"ok","db":"ok"}`; M31 ve 3I/ATLAS çözümleme, MOST işi (364 kare) canlıda çalışıyor; güvenlik başlıkları ve `Secure` çerez var. Kalan: uyku önleyici zamanlayıcı (cron-job.org, 10 dk'da bir `/api/v1/health`).
 2. **3I/ATLAS hareketli cisim görünümü (MOST).**
-   - Arka uç: `providers/most.py` (`POST /cgi-bin/MOST/nph-most`, `catalog=spherex`, VOTable; doğrulanmış parametreler `DATA_SOURCES.md` §4.8'de) ve `GET /moving/{designation}/frames` (job + WS).
-   - Ön uç: Güneş Sistemi hedefinde, cisme ortalanmış kare kare oynatma (zaman çizelgesi, hız, her karede konum ve tarih).
+   - ✅ Arka uç (`915471d`): `providers/most.py`, `GET /moving/{tanım}/frames` (job + WS), `POST /moving/cutout` (cisme ortalı kesit, ayrı hız sınırı). MOST'a ad değil SBDB tanımı (`des`) verilir: "Ceres" belirsiz → 400, `1`/`433`/`2P`/`2025 N1` çalışır. MOST bitişi 2026-10-16'ya kırpıyor.
+   - Ön uç (sırada): Güneş Sistemi hedefinde, cisme ortalanmış kare kare oynatma (zaman çizelgesi, hız, her karede konum ve tarih).
 3. **Geri bildirim butonu + arama çubuğunda otomatik öneri** (§4d): yerel Türkçe ad listesi, SIMBAD ve JPL; 250 ms; klavye ve ARIA.
 
 ## Bitenler
@@ -56,7 +56,7 @@ Commit'ler: `6c64a06` Faz 0 → `0a60c43` Faz 1 → `31f65ff` veri katmanı → 
 
 ## Bilinen sorunlar
 
-1. **Site henüz yayında değil.** Git uzak sunucusu yok; Dockerfile yerelde test edilmedi (Docker kurulu değil).
+1. ~~Site henüz yayında değil.~~ 2026-11-13'te yayına alındı (Render). Ücretsiz planda 15 dk sonra uyku; zamanlayıcı henüz kurulmadı.
 2. **Ağırlık merkezi sapması (doymuş yıldızlar):** Barnard'da zıt tarama yönündeki dönemler arasında 0,64 piksel uyumsuzluk var. Doymuş/maskeli çekirdek ağırlık merkezini maskesiz tarafa çekiyor. Çözüm: cilalama E1 (doymuş çekirdeği dışlayan PSF uydurma).
 3. **Parlak yıldızlarda fotometri yok:** D2 ve D5'te Barnard'ın çekirdeği doymuş, parlaklık farkı "ölçülemedi" olarak gösteriliyor (uydurma yok).
 4. **Arayüz tarayıcıda uçtan uca doğrulanmadı.** Başsız Edge karşılaştırma sonucunu bekleyemedi (sanal saat); kullanıcı tarayıcıda kontrol edecek. API düzeyinde test edildi.
