@@ -8,7 +8,8 @@
 1. ✅ **Yayın (2026-11-13):** https://spherex-izleyici.onrender.com — depo `github.com/ortak6530/spherex-izleyici`, Render Blueprint (web + `spherex-db`), `autoDeploy`. Duman testi: `/api/v1/health` → `{"status":"ok","db":"ok"}`; M31 ve 3I/ATLAS çözümleme, MOST işi (364 kare) canlıda çalışıyor; güvenlik başlıkları ve `Secure` çerez var. Kalan: uyku önleyici zamanlayıcı (cron-job.org, 10 dk'da bir `/api/v1/health`).
 2. **3I/ATLAS hareketli cisim görünümü (MOST).**
    - ✅ Arka uç (`915471d`): `providers/most.py`, `GET /moving/{tanım}/frames` (job + WS), `POST /moving/cutout` (cisme ortalı kesit, ayrı hız sınırı). MOST'a ad değil SBDB tanımı (`des`) verilir: "Ceres" belirsiz → 400, `1`/`433`/`2P`/`2025 N1` çalışır. MOST bitişi 2026-10-16'ya kırpıyor.
-   - Ön uç (sırada): Güneş Sistemi hedefinde, cisme ortalanmış kare kare oynatma (zaman çizelgesi, hız, her karede konum ve tarih).
+   - ✅ Ön uç (`features/MovingView.tsx`): dönem + dedektör seçimi (kare sayılarıyla), kesitler 3'er paralel yüklenir ve geldikçe gösterilir (en fazla 40), oynat/duraklat, ←/→/boşluk, hız 1/2/4 kare/sn, zaman kaydırıcısı, her karede zaman, RA/Dec, λ, r, Δ, faz, V, FITS bağlantısı; ortak parlaklık ölçeği seçeneği; dönemin ±3 günlük gök yolu grafiği. Varsayılan: öngörülen en parlak dönem + D5 (CO₂ 4,26 µm).
+   - Başsız Edge (CDP, gerçek zamanlı) ile doğrulandı: 3I/ATLAS Aralık 2025 D5 → 17/17 kare ~60 sn'de, cisim karenin ortasında net; Ağustos 2025'te (Δ 2,8 AU) tek karede seçilmiyor.
 3. **Geri bildirim butonu + arama çubuğunda otomatik öneri** (§4d): yerel Türkçe ad listesi, SIMBAD ve JPL; 250 ms; klavye ve ARIA.
 
 ## Bitenler

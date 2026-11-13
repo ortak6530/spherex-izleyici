@@ -10,23 +10,16 @@ import {
   type ObservationsResult,
   type Target,
 } from "../lib/api";
+import { BANDS } from "../lib/bands";
 import { errorText, fmt, raDecText } from "../lib/format";
 import { runJob, type ProgressStep } from "../lib/jobs";
 import { percentileLimits, type Colormap, type Stretch } from "../render/image";
 import CompareView, { ViewControls } from "./CompareView";
 import type { TimeCompareResult } from "./compareTypes";
+import MovingView from "./MovingView";
 import ObjectCompare from "./ObjectCompare";
 import ResultPanel from "./ResultPanel";
 
-// Explanatory Supplement v2.0, Table 2
-const BANDS: Record<number, string> = {
-  1: "0,74–1,12 µm",
-  2: "1,10–1,65 µm",
-  3: "1,64–2,42 µm",
-  4: "2,42–3,82 µm",
-  5: "3,81–4,42 µm",
-  6: "4,41–5,00 µm",
-};
 const SIZES = [0.05, 0.1, 0.25, 0.5];
 
 function usable(images: ObservationImage[]) {
@@ -235,14 +228,7 @@ export default function Workspace({ target }: { target: Target }) {
   const sel =
     "h-10 w-full cursor-pointer rounded-lg border border-white/10 bg-space-950/70 px-2 text-sm text-ink-100";
 
-  if (target.kind === "solar_system") {
-    return (
-      <section className="glass rounded-2xl p-5 text-sm text-ink-300">
-        <h2 className="font-display text-xl font-semibold text-ink-100">{target.name}</h2>
-        <p className="mt-2">{t("workspace.solarSystem")}</p>
-      </section>
-    );
-  }
+  if (target.kind === "solar_system") return <MovingView target={target} />;
 
   return (
     <section className="space-y-4" aria-labelledby="ws-title">

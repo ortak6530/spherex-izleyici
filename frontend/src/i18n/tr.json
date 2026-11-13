@@ -71,6 +71,8 @@
     "JOB_TIMEOUT": "İşlem çok uzun sürdü.",
     "NO_COVERAGE": "Bu cisim için seçili bantta SPHEREx gözlemi bulunamadı.",
     "SAME_OBJECT": "İki kez aynı cisim seçildi; farklı bir cisim seçin.",
+    "MOVING_NOT_FOUND": "JPL Horizons bu cismi bulamadı ya da ad birden çok cisme uyuyor.",
+    "INVALID_DATE": "Tarih aralığı geçersiz.",
     "generic": "Bir hata oluştu."
   },
   "workspace": {
@@ -109,6 +111,44 @@
     "deltaLambda": "Δλ = {{dl}} nm ({{ratio}} bant genişliği)",
     "solarSystem": "Hareketli cisim: SPHEREx kareleri IRSA MOST ile bulunur.",
     "notOnDetector": "dedektör dışında"
+  },
+  "moving": {
+    "designation": "Tanım",
+    "intro": "Hareketli cisim: SPHEREx kareleri IRSA MOST ile bulunur. Her kare, cismin o andaki JPL Horizons konumuna ortalanır; bu yüzden cisim merkezde durur, arka plandaki yıldızlar kayar.",
+    "noDesignation": "Bu cismin JPL tanımı bulunamadı; kareler aranamıyor.",
+    "noFrames": "{{start}} – {{end}} arasında bu cismi içeren SPHEREx karesi bulunamadı.",
+    "summary": "{{count}} kare · {{visits}} gözlem dönemi · {{releases}}",
+    "visit": "Gözlem dönemi",
+    "commonScale": "Tüm karelerde ortak parlaklık ölçeği",
+    "playerLabel": "Kare oynatıcı: sol/sağ ok ile kare değiştir, boşluk ile oynat/duraklat",
+    "frameLabel": "Kare {{n}} / {{total}}",
+    "frameLoading": "Kare IRSA'dan alınıyor…",
+    "frameFailed": "Bu kare alınamadı.",
+    "prev": "Önceki kare",
+    "next": "Sonraki kare",
+    "play": "Oynat",
+    "pause": "Duraklat",
+    "speed": "Hız",
+    "fps": "{{n}} kare/sn",
+    "timeline": "Zaman çizelgesi",
+    "loaded": "{{loaded}}/{{total}} kare yüklendi",
+    "failed": "{{n}} kare alınamadı",
+    "capped": "ilk {{n}} kare gösteriliyor",
+    "time": "Zaman",
+    "position": "Konum (RA/Dec)",
+    "sunDist": "Güneşe uzaklık (r)",
+    "geoDist": "Dünya'ya uzaklık (Δ)",
+    "phase": "Faz açısı",
+    "vmag": "Öngörülen V parlaklığı",
+    "frame": "Kare",
+    "trackLabel": "Cismin gökyüzündeki yolu",
+    "trackCaption": "Gri: JPL Horizons yolu (dönem ±3 gün) · mor: bu dönemdeki kareler · sarı: gösterilen kare. Doğu solda.",
+    "notes": "SPHEREx'in filtresi dedektör boyunca dalga boyu değiştirir; bu yüzden her kare farklı bir dalga boyundadır (λ). Kuyruklu yıldızlar sönük ve yaygın olduğundan sinyal gürültüye yakın olabilir.",
+    "source": "Kaynak: {{source}}",
+    "progress": {
+      "most_query": "IRSA MOST ile {{designation}} için kareler aranıyor…",
+      "most_done": "{{count}} kare bulundu"
+    }
   },
   "viewer": {
     "north": "K",

@@ -71,6 +71,8 @@
     "JOB_TIMEOUT": "The operation took too long.",
     "NO_COVERAGE": "No SPHEREx observation of this object in the selected band.",
     "SAME_OBJECT": "The same object was picked twice; choose another one.",
+    "MOVING_NOT_FOUND": "JPL Horizons did not find this object, or the name matches several objects.",
+    "INVALID_DATE": "Invalid date range.",
     "generic": "Something went wrong."
   },
   "workspace": {
@@ -109,6 +111,44 @@
     "deltaLambda": "Δλ = {{dl}} nm ({{ratio}} bandwidths)",
     "solarSystem": "Moving object: SPHEREx frames are found with IRSA MOST.",
     "notOnDetector": "off detector"
+  },
+  "moving": {
+    "designation": "Designation",
+    "intro": "Moving object: SPHEREx frames are found with IRSA MOST. Each frame is centred on the object's JPL Horizons position at that moment, so the object stays in the middle while background stars drift.",
+    "noDesignation": "No JPL designation for this object; frames cannot be searched.",
+    "noFrames": "No SPHEREx frame contains this object between {{start}} and {{end}}.",
+    "summary": "{{count}} frames · {{visits}} visits · {{releases}}",
+    "visit": "Visit",
+    "commonScale": "Same brightness scale for all frames",
+    "playerLabel": "Frame player: left/right arrows change frame, space plays/pauses",
+    "frameLabel": "Frame {{n}} / {{total}}",
+    "frameLoading": "Fetching frame from IRSA…",
+    "frameFailed": "This frame could not be fetched.",
+    "prev": "Previous frame",
+    "next": "Next frame",
+    "play": "Play",
+    "pause": "Pause",
+    "speed": "Speed",
+    "fps": "{{n}} frames/s",
+    "timeline": "Timeline",
+    "loaded": "{{loaded}}/{{total}} frames loaded",
+    "failed": "{{n}} frames failed",
+    "capped": "showing the first {{n}} frames",
+    "time": "Time",
+    "position": "Position (RA/Dec)",
+    "sunDist": "Distance to Sun (r)",
+    "geoDist": "Distance to Earth (Δ)",
+    "phase": "Phase angle",
+    "vmag": "Predicted V magnitude",
+    "frame": "Frame",
+    "trackLabel": "Path of the object on the sky",
+    "trackCaption": "Grey: JPL Horizons path (visit ±3 days) · purple: frames in this visit · yellow: frame shown. East is left.",
+    "notes": "SPHEREx's filter changes wavelength across the detector, so every frame is at a different wavelength (λ). Comets are faint and extended, so the signal may be close to the noise.",
+    "source": "Source: {{source}}",
+    "progress": {
+      "most_query": "Searching frames for {{designation}} with IRSA MOST…",
+      "most_done": "{{count}} frames found"
+    }
   },
   "viewer": {
     "north": "N",

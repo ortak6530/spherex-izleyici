@@ -149,6 +149,54 @@ export interface CutoutResult {
   meta: CutoutMeta;
 }
 
+export interface MovingFrame {
+  image_id: string;
+  release: string;
+  obs_id: string;
+  detector: number;
+  mjd: number;
+  mjd_end: number;
+  date_obs: string;
+  ra: number; // predicted position of the object in this frame (JPL Horizons via MOST)
+  dec: number;
+  sun_dist_au: number | null;
+  geo_dist_au: number | null;
+  phase_deg: number | null;
+  vmag: number | null;
+  dist_ctr_deg: number | null;
+  fits_url: string;
+}
+
+export interface MovingVisit {
+  index: number;
+  label: string;
+  start: string;
+  end: string;
+  releases: string[];
+  frames_per_detector: Record<string, number>;
+  frame_ids: string[];
+}
+
+export interface MovingResult {
+  designation: string;
+  horizons_name: string | null;
+  start: string;
+  end: string;
+  frames: MovingFrame[];
+  visits: MovingVisit[];
+  skipped_releases: Record<string, number>;
+  track: Array<{
+    mjd: number;
+    date: string;
+    ra: number;
+    dec: number;
+    sun_dist_au: number | null;
+    geo_dist_au: number | null;
+    vmag: number | null;
+  }>;
+  source: string;
+}
+
 export interface JobState<T> {
   id: string;
   kind: string;
