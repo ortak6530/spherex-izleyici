@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import tempfile
 import time
 from pathlib import Path
@@ -75,3 +76,61 @@ def cache_age_s(namespace: str, key: str, ext: str = ".json") -> float | None:
         return time.time() - _path(namespace, key, ext).stat().st_mtime
     except OSError:
         return None
+
+
+# ---------- admin: sizes and refresh ----------
+
+_SCOPE_RE = re.compile(r"^[a-z0-9_]{1,32}$")
+
+
+def _dir_stats(p: Path) -> dict:
+    files = size = 0
+    newest = None
+    for f in p.rglob("*"):
+        if f.is_file():
+            st = f.stat()
+            files += 1
+            size += st.st_size
+            newest = st.st_mtime if newest is None else max(newest, st.st_mtime)
+    return {"files": files, "bytes": size, "newest": newest}
+
+
+def stats() -> dict[str, dict]:
+    """Per scope: release folders ('dr1', 'qr3', …), '_external/<source>' and '_index'."""
+    root = _root()
+    out: dict[str, dict] = {}
+    if not root.exists():
+        return out
+    for d in sorted(p for p in root.iterdir() if p.is_dir()):
+        if d.name == "_external":
+            for sub in sorted(p for p in d.iterdir() if p.is_dir()):
+                out[f"_external/{sub.name}"] = _dir_stats(sub)
+        else:
+            out[d.name] = _dir_stats(d)
+    return out
+
+
+def clear(scope: str) -> dict:
+    """Delete one cache scope: a release id, 'external' (name/SIMBAD/Wikipedia/MOST answers), or 'all'.
+
+    The image index (_index) goes with 'all' only: open pages still use it for cutouts.
+    """
+    root = _root().resolve()
+    if scope == "all":
+        targets = [p for p in root.iterdir() if p.is_dir()] if root.exists() else []
+    elif scope == "external":
+        targets = [root / "_external"]
+    elif _SCOPE_RE.match(scope) and not scope.startswith("_"):
+        targets = [root / scope]
+    else:
+        raise ValueError("unknown cache scope")
+    removed = {"files": 0, "bytes": 0}
+    for t in targets:
+        t = t.resolve()
+        if root not in t.parents or not t.exists():  # never outside the cache root
+            continue
+        s = _dir_stats(t)
+        removed["files"] += s["files"]
+        removed["bytes"] += s["bytes"]
+        shutil.rmtree(t, ignore_errors=True)
+    return removed

@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from ...db import get_db
 from ...db.models import Feedback
-from ...events import log_action
+from ...events import log_action, notify_admin
 from ...security import TokenBucket, client_ip, ip_hash, session_id_from, ua_family
 
 router = APIRouter(tags=["feedback"])
@@ -82,5 +82,7 @@ def submit(fb: FeedbackIn, request: Request, db: Session = Depends(get_db)) -> d
     )
     db.add(row)
     db.commit()
+    # Always shown in the admin feed (stored regardless of the analytics consent)
+    notify_admin("feedback", {"id": row.id, "category": fb.category, "object_key": fb.object_key})
     log_action(request, "feedback", object_key=fb.object_key, payload={"category": fb.category})
     return {"ok": True, "id": row.id}

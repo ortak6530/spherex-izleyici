@@ -63,10 +63,47 @@ def record(
         ua_family=ua_family,
     )
     db.add(ev)
+    notify_admin(
+        "event",
+        {
+            "event_type": ev.type,  # not "type": that key is the WS message type ("admin_event")
+            "object_key": ev.object_key,
+            "page": ev.page,
+            "release_id": ev.release_id,
+            "payload": ev.payload,
+            "user_id": user_id,
+            "ua_family": ua_family,
+        },
+    )
     return ev
 
 
+def notify_admin(kind: str, data: dict) -> None:
+    """Push to the admin panel's live feed (no-op when no admin is watching). Never raises."""
+    try:
+        from .realtime import manager
+
+        message = {**data, "type": "admin_event", "kind": kind, "ts": datetime.now(UTC).isoformat()}
+        manager.publish_nowait("admin", message)
+    except Exception:  # noqa: BLE001 - the live feed is a convenience
+        import logging
+
+        logging.getLogger("skytracker.events").debug("admin feed push failed", exc_info=True)
+
+
 CONSENT_COOKIE = "spx_consent"  # set by the frontend when the visitor accepts the privacy notice
+
+
+def _user_id(db: Session, request) -> int | None:
+    """Signed-in user behind the request (accounts store only the token's SHA-256)."""
+    from .db.models import AuthSession
+    from .services.accounts import AUTH_COOKIE, token_hash
+
+    token = request.cookies.get(AUTH_COOKIE)
+    if not token or len(token) > 100:
+        return None
+    sess = db.get(AuthSession, token_hash(token))
+    return sess.user_id if sess else None
 
 
 def log_action(
@@ -93,6 +130,7 @@ def log_action(
                 db,
                 type=type,
                 session_id=request.state.session_id,
+                user_id=_user_id(db, request),
                 object_key=object_key,
                 release_id=release_id,
                 payload=payload,

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from contextlib import asynccontextmanager
 
@@ -16,6 +17,7 @@ from .api.v1 import router as api_router
 from .config_loader import attributions, demo_targets, releases, upstreams
 from .db import session_scope
 from .events import purge_old
+from .realtime import manager as ws_manager
 from .realtime import router as ws_router
 from .security import SecurityHeadersMiddleware, SessionMiddleware
 from .settings import get_settings
@@ -26,6 +28,7 @@ log = logging.getLogger("skytracker")
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     s = get_settings()
+    ws_manager.bind_loop(asyncio.get_running_loop())  # lets sync endpoints push admin events
     # Fail fast on broken configuration rather than at the first request
     releases(), upstreams(), demo_targets(), attributions()
     if s.is_production and (not s.secret_key or not s.ip_hash_salt):

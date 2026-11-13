@@ -62,8 +62,39 @@ class ConnectionManager:
     def topic_count(self) -> int:
         return len(self._topics)
 
+    def bind_loop(self, loop: asyncio.AbstractEventLoop) -> None:
+        self._loop = loop
 
+    def has_subscribers(self, topic: str) -> bool:
+        return bool(self._topics.get(topic))
+
+    def publish_nowait(self, topic: str, message: dict) -> None:
+        """Fire-and-forget publish from anywhere: async code, or sync endpoints running in a thread."""
+        if not self.has_subscribers(topic):
+            return
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = None
+        if loop is not None:
+            task = loop.create_task(self.publish(topic, message))
+            _background.add(task)
+            task.add_done_callback(_background.discard)
+        elif getattr(self, "_loop", None) is not None and self._loop.is_running():
+            asyncio.run_coroutine_threadsafe(self.publish(topic, message), self._loop)
+
+
+_background: set[asyncio.Task] = set()
 manager = ConnectionManager()
+
+
+def _is_admin_socket(token: str | None) -> bool:
+    from .db import session_scope
+    from .services import accounts
+
+    with session_scope() as db:
+        user = accounts.user_for_token(db, token)
+        return bool(user and accounts.is_admin(user.email))
 
 
 def _origin_allowed(origin: str | None) -> bool:
@@ -85,6 +116,7 @@ async def ws_endpoint(ws: WebSocket) -> None:
     sid = ws.cookies.get(SESSION_COOKIE)
     await ws.send_json({"type": "hello", "anonymous": True, "has_session": bool(sid)})
     topics: set[str] = set()
+    admin_ok: bool | None = None  # checked once per connection, on the first "admin" subscribe
     try:
         while True:
             raw = await ws.receive_text()
@@ -101,8 +133,12 @@ async def ws_endpoint(ws: WebSocket) -> None:
                 await ws.send_json({"type": "pong"})
             elif kind in ("subscribe", "unsubscribe"):
                 topic = str(msg.get("topic", ""))
-                # "admin" needs an authenticated admin session; accounts arrive in a later phase
-                if not TOPIC_RE.match(topic) or topic == "admin":
+                if topic == "admin" and kind == "subscribe" and admin_ok is None:
+                    # live activity feed: only for a signed-in ADMIN_EMAIL session
+                    from .services.accounts import AUTH_COOKIE
+
+                    admin_ok = await asyncio.to_thread(_is_admin_socket, ws.cookies.get(AUTH_COOKIE))
+                if not TOPIC_RE.match(topic) or (topic == "admin" and not admin_ok):
                     await ws.send_json({"type": "error", "code": "FORBIDDEN_TOPIC", "topic": topic})
                     continue
                 if kind == "subscribe":

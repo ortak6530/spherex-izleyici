@@ -292,6 +292,15 @@ export default function AccountButton() {
                 </span>
               )}
             </p>
+            {user.is_admin && (
+              <a
+                href="/#admin"
+                onClick={() => setOpen(false)}
+                className="inline-flex h-10 items-center gap-2 rounded-lg bg-star-400 px-4 text-sm font-semibold text-space-950 hover:bg-star-300"
+              >
+                <Shield className="size-4" aria-hidden="true" /> {t("account.adminPanel")}
+              </a>
+            )}
             <SavedList
               items={saved.filter((s) => s.kind === "object")}
               title={t("account.objects")}
