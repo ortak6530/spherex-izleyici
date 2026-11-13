@@ -212,6 +212,12 @@ Hedefteki λ, SIP'siz WCS-WAVE ile hesaplandı:
 - **3I/ATLAS tablosu:** `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/obscore_3I_Atlas.vot` → 259 satır, tamamı QR2. Tarihler 2025-08-01…08-15 ve 2025-12-08…12-14.
   - Sütunlar arasında `comet_ra`, `comet_dec` (pozlama başına öngörülen konum), `spherex_detector`, `access_url` (DataLink) var.
   - IRSA notu: düşük S/N. Cisim genişletilmiş olduğu için Spectrophotometry Tool **önerilmiyor**.
+- **2026-11-13 yeniden doğrulama (DR1 sonrası):**
+  - MOST artık **DR1** karelerini döndürüyor: `obj_name=2025 N1`, 2025-05-01 → bugün, **364 kare** (tamamı `dr1`, `uri` = `ibe/data/spherex/dr1/level2/...`), 6,6 sn. Dönemler: 2025-08-01…08-15, 2025-12-08…12-15, 2026-03-17…04-06. QR3 karesi yok.
+  - İkinci tablo 6 saatlik efemeris: `JD, Date, RA_obs, Dec_obs, ObsDist, GeoDist, HelioDist, Phase, Vmag`.
+  - **Ad biçimi:** `obj_name` için JPL SBDB'nin `des` alanı kullanılmalı. `Ceres` → 400 "Multiple matches", `2P/Encke` → 400 "HORIZONS name lookup failed", `C/2025 N1 (ATLAS)` ve `1 Ceres` → 400. Çalışanlar: `1`, `433`, `2P`, `C/2025 N1`, `2025 N1`.
+  - MOST bitiş tarihini kendisi kırpıyor (`user_input_end_time` 2026-10-16 döndü).
+  - Eşleşme olmayınca da 200 + VOTable döner (kare tablosu boş).
 
 ---
 
@@ -324,3 +330,46 @@ Test: `astroquery.mast.Observations.query_criteria(coordinates=..., radius=2′,
 - DR1'in resmî yayın tarihi, TAP koleksiyon adı ve DOI'si.
 - `CWAVE` haritasıyla WCS-WAVE arasındaki fark ve MWIR'deki X çevirme yönü. Faz 2'de doğrulanacak.
 - Derin alan koleksiyonlarının TAP'ta nasıl göründüğü. Faz 3'te bakılacak.
+
+---
+
+## 12. NEOSSat (planlandı — DECISIONS.md §4e madde p)
+
+**Durum:** Yalnızca belge. Arama uç noktası (CADC CAOM/TAP, koleksiyon `NEOSSAT`) **henüz canlı denenmedi**; kod yok.
+
+**Kaynaklar** (2026-11-13'te okundu):
+- CADC NEOSSat sayfası: <https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/en/neossat/>. Ürün tablosu ve teşekkür metni burada; metin [`SOURCES.md`](SOURCES.md)'de aynen var.
+- *NEOSSat FITS Image User's Guide*, **CSA-NEOSSAT-MAN-0002 v4.00** (PDF, 33 sayfa; CADC sayfasındaki bağlantıdan indirildi, yalnızca standart kütüphaneyle metne çevrildi).
+- Lisans: Open Government Licence – Canada.
+
+**Ürün seçimi** (CADC ürün tablosu)
+
+| Ürün | Dosya | İçerik | Kullanım |
+|---|---|---|---|
+| CORD | `*_cord.fits.gz` | kırpma + overscan düzeltmesi + karanlık çıkarma (`DARK_###` başlıkları) | **1. tercih** |
+| COR | `*_cor.fits.gz` | kırpma + overscan düzeltmesi | CORD yoksa |
+| RAW | `*.fits`, `*.fits.gz` | işlenmemiş, overscan dahil | ikisi de yoksa, **uyarıyla** |
+| CLEAN | `*_clean.fits` | eski CSA yazılımı, kırpma yok | **kullanılmaz** |
+
+**Geometri** (kılavuz)
+- Piksel ölçeği **2,997″/piksel (binning'siz)**. Binning varsa `XBINNING` / `YBINNING` ile çarpılır.
+- Görüş alanı: "The field of view within the 1024 x 1024 area … is **0.86 degrees**." (CADC sayfası yuvarlak olarak "3″/pixel, 0,85°" diyor; kılavuzdaki değerler kullanılır.)
+- Teleskop açıklığı gibi kılavuzda doğrulamadığımız değerler sitede yazılmaz.
+
+**WCS**
+- Kılavuzdaki WCS alanları: `WCSNAME` (sabit `celestial`), `WCSAXES`, `CRPIX`, `CTYPE`, `CUNIT`, `CDELT`, `CRVAL`, `CROTA2`, `CDx_y`. Başlık tablosunda `CRTYPE1` adı da geçiyor; bu yüzden **`CTYPE1` ve `CRTYPE1` ikisi de denenecek**, ölçek ve dönme için **CD matrisi** kullanılacak.
+- WCS'nin uydu yönelim tahmininden geldiği ve plaka çözümü olmadığı proje talimatında yazıyor; kılavuzda bunu açıkça söyleyen bir cümle bulamadım (arama: "WCS", "accuracy"). Arayüzde her durumda "**konum doğruluğu sınırlı**" notu gösterilecek.
+
+**Kare süzgeci** (kılavuzdaki başlık anahtarları)
+- `OBSTYPE = OBJECT`.
+- `SHUTTER` açık ("Shutter status (OPEN or CLOSED)").
+- `DETECTOR = Science` ("Science or Star Tracker").
+- `MODE` = `16 - FINE_POINT` ("stabilized relative to fixed stars") veya `14 - FINE_SLEW` ("slewing to track a moving object").
+- `N_SUBIMG > 0` ve `PKT_SEQ` anomalisi olan kareler (paket sırası sayacı kesintili) elenir ya da uyarıyla gösterilir.
+- **FINE_SLEW**'de yıldızlar çizgi olur. Hız `RA_VEL`, `DEC_VEL` (ve `ROL_VEL`) ile gösterilir.
+
+**Bilimsel sınır**
+- `FILTER = 'CLEAR'` (filtresiz optik). SPHEREx ile **parlaklık karşılaştırması yapılmaz**; yalnızca konum, hareket ve zaman. Arayüzde açıkça yazılır.
+
+**Erişim**
+- Arama yalnızca CADC üzerinden yapılır (koleksiyon `NEOSSAT`). `data.asc-csa.gc.ca` ham dizini **taranmaz**.
