@@ -9,7 +9,16 @@ import { errorText } from "../lib/format";
 // Shareable links: ?q=<name or coordinates> runs the search on load
 const INITIAL_Q = new URLSearchParams(window.location.search).get("q") ?? "";
 
-export default function SearchBox({ onTarget }: { onTarget: (t: Target) => void }) {
+/** A search started from elsewhere on the page (e.g. a collection card); `n` makes repeats distinct. */
+export type SearchRequest = { q: string; n: number } | null;
+
+export default function SearchBox({
+  onTarget,
+  request = null,
+}: {
+  onTarget: (t: Target) => void;
+  request?: SearchRequest;
+}) {
   const { t } = useTranslation();
   const inputId = useId();
   const [query, setQuery] = useState(INITIAL_Q);
@@ -59,6 +68,16 @@ export default function SearchBox({ onTarget }: { onTarget: (t: Target) => void 
     return () => window.clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!request) return;
+    const id = window.setTimeout(() => {
+      setQuery(request.q);
+      void resolve(request.q);
+    }, 0);
+    return () => window.clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [request?.n]);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();

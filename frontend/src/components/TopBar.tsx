@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { setLang } from "../i18n";
 import { apiGet, type ReleasesResponse, type Target } from "../lib/api";
-import SearchBox from "./SearchBox";
+import SearchBox, { type SearchRequest } from "./SearchBox";
 
 function ReleaseBadge() {
   const { t } = useTranslation();
@@ -52,7 +52,13 @@ function ReleaseBadge() {
   );
 }
 
-export default function TopBar({ onTarget }: { onTarget: (t: Target) => void }) {
+export default function TopBar({
+  onTarget,
+  searchRequest = null,
+}: {
+  onTarget: (t: Target) => void;
+  searchRequest?: SearchRequest;
+}) {
   const { t, i18n } = useTranslation();
   return (
     <header className="glass sticky top-3 z-30 mx-3 mt-3 rounded-2xl px-4 py-3 sm:mx-4">
@@ -63,7 +69,7 @@ export default function TopBar({ onTarget }: { onTarget: (t: Target) => void }) 
             {t("app.title")}
           </span>
         </a>
-        <SearchBox onTarget={onTarget} />
+        <SearchBox onTarget={onTarget} request={searchRequest} />
         <div className="ml-auto flex items-center gap-3">
           <ReleaseBadge />
           <button

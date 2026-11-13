@@ -9,7 +9,7 @@
 |---|---|---|
 | **1a** Kaynaklar sayfası + `SOURCES.md` | ✅ | 13 kaynak (`config/attributions.toml` tek kaynak). Teşekkür metinleri 2026-11-13'te sağlayıcı sayfalarından aynen alındı: SPHEREx, SIMBAD, MAST (HST/JWST), Gaia DR3 (+ lisans CC BY-NC 3.0 IGO), CADC (SSOIS belge sayfası), NEOSSat (CADC). Sitede `/#kaynaklar`, alt bilgiden bağlantı; eski atıf iletişim kutusu kaldırıldı. `SOURCES.md`, `tools/gen_sources_md.py` çıktısıdır; `tests/test_sources.py` eşitliği ve zorunlu metinleri denetler. **Bulunamayanlar:** JPL Horizons'ın resmî teşekkür kalıbı (bizim açıklamamız, "alıntı değildir" notuyla); OGL–Canada sayfası otomatik erişimi reddetti (ad talimattan). Gelecekte kullanılacak kaynaklar "Planlandı" olarak işaretli. |
 | **1b** NEOSSat notları (`DATA_SOURCES.md`) | ✅ | §12: ürün sırası (CORD → COR → RAW uyarılı, CLEAN yok), 2,997″/px ve 0,86° (CSA-NEOSSAT-MAN-0002 v4.00'dan doğrulandı), CTYPE1/CRTYPE1 + CD matrisi, süzgeç anahtarları, FILTER=CLEAR → parlaklık karşılaştırması yok. "WCS = uydu yönelim tahmini" ifadesi kılavuzda bulunamadı, not düşüldü. CADC TAP henüz denenmedi (madde p). Ayrıca §4.8'e 2026-11-13 MOST doğrulaması eklendi. |
-| **1c** 3I/ATLAS oynatıcı + "Koleksiyon" kartı | ⏳ | Oynatıcı bitti (aşağıda); kart sırada |
+| **1c** 3I/ATLAS oynatıcı + "Koleksiyon" kartı | ✅ | Oynatıcı `239827d` (canlıda doğrulandı). Ana sayfada "Koleksiyon" kartı: "Kare kare izle" aramayı arama kutusu üzerinden başlatır (`?q=` paylaşım bağlantısı güncellenir); IRSA'nın 3I/ATLAS SPHEREx sayfasına bağlantı (200 doğrulandı). Test: `Hero.test.tsx` (+ tr/en anahtar eşitliği testi). |
 | **1d** Geri bildirim + otomatik öneri | ⏳ | |
 | Aşama 2–4 | — | `DECISIONS.md` §4e |
 

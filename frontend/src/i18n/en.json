@@ -28,6 +28,15 @@
     "step3": "See the change with blink and difference images",
     "honest": "A SPHEREx image is not a single-colour photograph: the wavelength changes from one edge of the image to the other. The site shows this clearly on every screen."
   },
+  "collection": {
+    "badge": "Collection",
+    "atlas": {
+      "title": "3I/ATLAS — interstellar comet",
+      "body": "SPHEREx observed this comet in August and December 2025; DR1 also has frames from March–April 2026. Frames are centred on the comet and played one by one.",
+      "play": "Watch frame by frame",
+      "irsa": "IRSA's 3I/ATLAS SPHEREx page"
+    }
+  },
   "privacy": {
     "title": "Privacy notice",
     "summary": "This site records anonymous usage events to understand how it is used (e.g. which page was opened, which object was searched).",

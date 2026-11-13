@@ -28,6 +28,15 @@
     "step3": "Yanıp sönme ve fark görüntüsüyle değişimi görün",
     "honest": "Her SPHEREx görüntüsü tek renkli bir fotoğraf değildir: görüntünün bir kenarından diğerine dalga boyu değişir. Site bunu her ekranda açıkça gösterir."
   },
+  "collection": {
+    "badge": "Koleksiyon",
+    "atlas": {
+      "title": "3I/ATLAS — yıldızlararası kuyruklu yıldız",
+      "body": "SPHEREx bu kuyruklu yıldızı Ağustos ve Aralık 2025'te gözledi; DR1'de Mart–Nisan 2026 kareleri de var. Kareler cisme ortalanmış olarak, kare kare oynatılır.",
+      "play": "Kare kare izle",
+      "irsa": "IRSA'nın 3I/ATLAS SPHEREx sayfası"
+    }
+  },
   "privacy": {
     "title": "Gizlilik bildirimi",
     "summary": "Bu site, nasıl kullanıldığını anlamak için anonim kullanım olayları kaydeder (ör. hangi sayfa açıldı, hangi cisim arandı).",

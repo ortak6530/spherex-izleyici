@@ -3,6 +3,7 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
 import PrivacyNotice from "./components/PrivacyNotice";
+import type { SearchRequest } from "./components/SearchBox";
 import SourcesPage from "./components/SourcesPage";
 import TopBar from "./components/TopBar";
 import InfoPanel from "./features/InfoPanel";
@@ -21,6 +22,8 @@ export default function App() {
   const [sources, setSources] = useState(onSourcesPage);
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [target, setTarget] = useState<Target | null>(null);
+  const [searchRequest, setSearchRequest] = useState<SearchRequest>(null);
+  const search = (q: string) => setSearchRequest((r) => ({ q, n: (r?.n ?? 0) + 1 }));
 
   useEffect(() => {
     realtime.start();
@@ -51,7 +54,7 @@ export default function App() {
       <Suspense fallback={null}>
         <GalaxyBackground />
       </Suspense>
-      <TopBar onTarget={pickTarget} />
+      <TopBar onTarget={pickTarget} searchRequest={searchRequest} />
       {sources ? (
         <main className="flex flex-1 justify-center px-3 py-6 sm:px-6">
           <SourcesPage onBack={closeSources} />
@@ -65,7 +68,7 @@ export default function App() {
         </main>
       ) : (
         <main className="flex flex-1 items-center justify-center px-3 py-8 sm:px-6 lg:justify-start lg:px-12">
-          <Hero />
+          <Hero onSearch={search} />
         </main>
       )}
       <Footer onSources={openSources} onPrivacy={() => setPrivacyOpen(true)} />
