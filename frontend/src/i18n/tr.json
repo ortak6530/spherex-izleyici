@@ -28,6 +28,25 @@
     "step3": "Yanıp sönme ve fark görüntüsüyle değişimi görün",
     "honest": "Her SPHEREx görüntüsü tek renkli bir fotoğraf değildir: görüntünün bir kenarından diğerine dalga boyu değişir. Site bunu her ekranda açıkça gösterir."
   },
+  "feedback": {
+    "button": "Geri bildirim",
+    "title": "Geri bildirim gönder",
+    "close": "Kapat",
+    "category": "Konu",
+    "categories": {
+      "bug": "Hata",
+      "idea": "Öneri",
+      "data": "Veri sorunu",
+      "other": "Diğer"
+    },
+    "message": "Mesajınız",
+    "email": "E-posta (isteğe bağlı)",
+    "emailNote": "Yalnızca size yanıt vermek için kullanılır; yazmak zorunda değilsiniz.",
+    "context": "Mesaja otomatik eklenecek: sayfa ({{page}}) ve seçili cisim ({{object}}).",
+    "send": "Gönder",
+    "tooShort": "Lütfen en az 5 karakterlik bir mesaj yazın.",
+    "thanks": "Teşekkürler! Geri bildiriminiz kaydedildi."
+  },
   "collection": {
     "badge": "Koleksiyon",
     "atlas": {
@@ -93,6 +112,7 @@
     "SAME_OBJECT": "İki kez aynı cisim seçildi; farklı bir cisim seçin.",
     "MOVING_NOT_FOUND": "JPL Horizons bu cismi bulamadı ya da ad birden çok cisme uyuyor.",
     "INVALID_DATE": "Tarih aralığı geçersiz.",
+    "INVALID_INPUT": "Girilen bilgiler geçersiz; lütfen kontrol edin (ör. e-posta biçimi).",
     "generic": "Bir hata oluştu."
   },
   "workspace": {

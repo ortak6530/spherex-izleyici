@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { setLang } from "../i18n";
 import { apiGet, type ReleasesResponse, type Target } from "../lib/api";
+import FeedbackButton from "./FeedbackButton";
 import SearchBox, { type SearchRequest } from "./SearchBox";
 
 function ReleaseBadge() {
@@ -55,9 +56,11 @@ function ReleaseBadge() {
 export default function TopBar({
   onTarget,
   searchRequest = null,
+  target = null,
 }: {
   onTarget: (t: Target) => void;
   searchRequest?: SearchRequest;
+  target?: Target | null;
 }) {
   const { t, i18n } = useTranslation();
   return (
@@ -72,6 +75,7 @@ export default function TopBar({
         <SearchBox onTarget={onTarget} request={searchRequest} />
         <div className="ml-auto flex items-center gap-3">
           <ReleaseBadge />
+          <FeedbackButton target={target} />
           <button
             type="button"
             onClick={() => setLang(i18n.language === "tr" ? "en" : "tr")}

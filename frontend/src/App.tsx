@@ -54,7 +54,7 @@ export default function App() {
       <Suspense fallback={null}>
         <GalaxyBackground />
       </Suspense>
-      <TopBar onTarget={pickTarget} searchRequest={searchRequest} />
+      <TopBar onTarget={pickTarget} searchRequest={searchRequest} target={target} />
       {sources ? (
         <main className="flex flex-1 justify-center px-3 py-6 sm:px-6">
           <SourcesPage onBack={closeSources} />

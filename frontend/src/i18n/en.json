@@ -28,6 +28,25 @@
     "step3": "See the change with blink and difference images",
     "honest": "A SPHEREx image is not a single-colour photograph: the wavelength changes from one edge of the image to the other. The site shows this clearly on every screen."
   },
+  "feedback": {
+    "button": "Feedback",
+    "title": "Send feedback",
+    "close": "Close",
+    "category": "Topic",
+    "categories": {
+      "bug": "Bug",
+      "idea": "Idea",
+      "data": "Data problem",
+      "other": "Other"
+    },
+    "message": "Your message",
+    "email": "E-mail (optional)",
+    "emailNote": "Only used to reply to you; you do not have to give it.",
+    "context": "Attached automatically: page ({{page}}) and selected object ({{object}}).",
+    "send": "Send",
+    "tooShort": "Please write a message of at least 5 characters.",
+    "thanks": "Thank you! Your feedback has been saved."
+  },
   "collection": {
     "badge": "Collection",
     "atlas": {
@@ -93,6 +112,7 @@
     "SAME_OBJECT": "The same object was picked twice; choose another one.",
     "MOVING_NOT_FOUND": "JPL Horizons did not find this object, or the name matches several objects.",
     "INVALID_DATE": "Invalid date range.",
+    "INVALID_INPUT": "Some of the input is invalid; please check it (e.g. the e-mail format).",
     "generic": "Something went wrong."
   },
   "workspace": {
