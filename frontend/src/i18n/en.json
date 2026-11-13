@@ -38,6 +38,10 @@
     "step3": "See the change with blink and difference images",
     "honest": "A SPHEREx image is not a single-colour photograph: the wavelength changes from one edge of the image to the other. The site shows this clearly on every screen."
   },
+  "progress": {
+    "elapsed": "{{s}} s",
+    "slow": "The data archive is answering slowly (30–60 s is normal at IRSA); the work is still running, please keep the page open."
+  },
   "feedback": {
     "button": "Feedback",
     "title": "Send feedback",

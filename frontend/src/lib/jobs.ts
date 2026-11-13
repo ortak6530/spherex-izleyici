@@ -4,6 +4,20 @@ import { realtime } from "./realtime";
 
 export type ProgressStep = { step: string; [k: string]: unknown };
 
+/** For endpoints that answer from the cache at once or return {job_id} when the work is slow. */
+export async function runMaybeJob<T extends object>(
+  start: () => Promise<T | { job_id: string }>,
+  onProgress?: (s: ProgressStep) => void,
+  signal?: AbortSignal,
+): Promise<T> {
+  const first = await start();
+  const keys = Object.keys(first);
+  if (keys.length === 1 && keys[0] === "job_id") {
+    return runJob<T>(async () => first as { job_id: string }, onProgress, signal);
+  }
+  return first as T;
+}
+
 export async function runJob<T>(
   start: () => Promise<{ job_id: string }>,
   onProgress?: (s: ProgressStep) => void,

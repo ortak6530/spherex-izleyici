@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import CutoutView, { decodeCutout, type DecodedCutout } from "../components/CutoutView";
+import ProgressLine from "../components/ProgressLine";
 import {
   apiPost,
   type CutoutResult,
@@ -272,11 +273,7 @@ export default function Workspace({ target }: { target: Target }) {
           </div>
         </fieldset>
 
-        {step && (
-          <p className="flex items-center gap-2 text-sm text-nebula-300" role="status">
-            <Loader2 className="size-4 animate-spin" aria-hidden="true" /> {step}
-          </p>
-        )}
+        {step && <ProgressLine text={step} />}
         {error && (
           <p className="text-sm text-danger-400" role="alert">
             {error}

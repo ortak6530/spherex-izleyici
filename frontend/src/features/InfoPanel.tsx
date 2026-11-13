@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { apiGet, type ObjectInfo, type Target } from "../lib/api";
 import { errorText, fmt, raDecText } from "../lib/format";
+import { runMaybeJob } from "../lib/jobs";
 
 function Row({ label, value, source }: { label: string; value: React.ReactNode; source?: string }) {
   return (
@@ -27,7 +28,11 @@ export default function InfoPanel({ target }: { target: Target }) {
     // The parent remounts this panel per target (key), so no state reset is needed here
     if (!mainId) return;
     const ctrl = new AbortController();
-    apiGet<ObjectInfo>(`/objects/info?main_id=${encodeURIComponent(mainId)}`, ctrl.signal)
+    runMaybeJob<ObjectInfo>(
+      () => apiGet(`/objects/info?main_id=${encodeURIComponent(mainId)}`, ctrl.signal),
+      undefined,
+      ctrl.signal,
+    )
       .then(setInfo)
       .catch((e: unknown) => {
         if (!(e instanceof DOMException && e.name === "AbortError")) setError(errorText(t, e));

@@ -66,7 +66,8 @@ def start(kind: str, fn: JobFn) -> str:
     }
 
     async def progress(step: str, data: dict) -> None:
-        entry = {"step": step, **data}
+        # elapsed_s lets the UI show how long a slow upstream (IRSA: 30-60 s) has been working
+        entry = {"step": step, **data, "elapsed_s": round(time.time() - _jobs[job_id]["created"], 1)}
         _jobs[job_id]["steps"].append(entry)
         del _jobs[job_id]["steps"][:-30]  # keep the tail only
         await manager.publish(f"job:{job_id}", {"type": "progress", "job_id": job_id, **entry})

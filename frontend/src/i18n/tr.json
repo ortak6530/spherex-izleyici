@@ -38,6 +38,10 @@
     "step3": "Yanıp sönme ve fark görüntüsüyle değişimi görün",
     "honest": "Her SPHEREx görüntüsü tek renkli bir fotoğraf değildir: görüntünün bir kenarından diğerine dalga boyu değişir. Site bunu her ekranda açıkça gösterir."
   },
+  "progress": {
+    "elapsed": "{{s}} sn",
+    "slow": "Veri arşivi yavaş yanıt veriyor (IRSA'da 30–60 sn olağan); işlem sürüyor, sayfayı kapatmayın."
+  },
   "feedback": {
     "button": "Geri bildirim",
     "title": "Geri bildirim gönder",
