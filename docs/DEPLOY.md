@@ -18,6 +18,14 @@ Site tek bir Render **Docker web servisi** olarak çalışır. FastAPI hem API'y
 
 Her `git push` otomatik olarak yeniden yayınlanır (`autoDeploy: true`).
 
+**Yayından sonra ve demodan önce önbelleği ısıtın.** Render diski her yayında sıfırlanır; ilk ziyaretçi IRSA'yı beklemesin:
+
+```powershell
+backend\.venv\Scripts\python.exe tools\prewarm.py --base https://spherex-izleyici.onrender.com
+```
+
+Araç 3I/ATLAS, Barnard Yıldızı, WISE 0855 ve Luhman 16 için arayüzün açtığı her şeyi bir kez ister. Yalnızca standart kütüphaneyi kullanır. Sıcak önbellekte yaklaşık 1 dk, soğuk önbellekte birkaç dakika sürer.
+
 > Not: Bu bilgisayarda Docker kurulu olmadığı için imaj yerelde derlenip denenmedi. İlk derleme Render'da yapılacak. Hata olursa derleme günlüğünü paylaşmanız yeterli.
 
 ## Ücretsiz planın sınırları ve çözümleri
