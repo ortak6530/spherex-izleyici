@@ -11,7 +11,17 @@
     "searching": "Searching…",
     "suggestions": "Did you mean?",
     "noResult": "No result. Try the full designation (e.g. \"WISE J085510.83-071442.5\") or coordinates.",
-    "upstreamDown": "The name resolver is not responding right now; you can search by coordinates."
+    "upstreamDown": "The name resolver is not responding right now; you can search by coordinates.",
+    "suggestLabel": "Suggestions",
+    "searchHere": "Search at these coordinates: {{q}}",
+    "moreComing": "Suggestions from SIMBAD and JPL are on the way…",
+    "partial": "Some sources cannot be reached right now; the list may be incomplete.",
+    "count": "{{count}} suggestions",
+    "source": {
+      "local": "Turkish list",
+      "SIMBAD": "SIMBAD",
+      "JPL": "JPL"
+    }
   },
   "release": {
     "label": "Data release",

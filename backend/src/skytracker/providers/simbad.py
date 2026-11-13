@@ -21,6 +21,16 @@ def adql_str(value: str) -> str:
     return "'" + v.replace("'", "''") + "'"
 
 
+def adql_like_prefix(parts: list[str]) -> str:
+    """LIKE pattern 'p1%p2%…%': each user part is cleaned like adql_str; only we add the % wildcards.
+
+    (adql_str strips '%', so `adql_str(v + '%')` silently became an exact match — fixed 2026-11-13.)
+    """
+    clean = [_ADQL_SAFE.sub("", p) for p in parts]
+    v = "%".join(c for c in clean if c)[:80]
+    return "'" + v.replace("'", "''") + "%'"
+
+
 async def tap_query(adql: str, timeout: float = 20) -> list[dict]:
     mirrors = getattr(upstreams().groups["cds"], "simbad_tap_mirrors", None) or [
         "https://simbad.cfa.harvard.edu/simbad/sim-tap"
@@ -88,19 +98,47 @@ async def object_basic(main_id: str) -> dict | None:
     }
 
 
-async def suggest(text: str, limit: int = 8) -> list[dict]:
-    """Prefix search on SIMBAD identifiers, e.g. 'WISE 0855' -> 'WISE J085510.83-071442.5'."""
-    t = re.sub(r"\s+", " ", text.strip())
-    if len(t) < 2:
+def like_words(text: str) -> list[str]:
+    """'m3' -> ['m ', '3'], 'wise 0855' -> ['wise', '0855'].
+
+    SIMBAD pads catalogue numbers with spaces ('M   3', 'NGC  1976'), so letters glued to a number must be
+    followed directly by a space: 'M %3%' matches 'M   3' and 'M  31' but not 'MSX …', 'MCC 31' or 'MZ 350'.
+    """
+    words = []
+    for w in re.split(r"\s+", text.strip()):
+        parts = [p for p in re.split(r"(?<=[A-Za-z])(?=\d)", w) if p]
+        words += [*(p + " " for p in parts[:-1]), parts[-1]] if parts else []
+    return words
+
+
+def suggest_patterns(text: str) -> list[str]:
+    """LIKE prefix patterns; the CfA mirror has no ILIKE, so case variants are spelled out."""
+    words = like_words(text)
+    if not words or len("".join(words)) < 2:
         return []
-    core = t.replace(" ", "%")
-    variants = {core, core.upper(), core.capitalize(), "NAME " + core, "NAME " + core.capitalize()}
-    where = " OR ".join(f"i.id LIKE {adql_str(v + '%')}" for v in sorted(variants))
+    cases = {
+        tuple(words),
+        tuple(w.upper() for w in words),
+        tuple(w.capitalize() for w in words),
+    }
+    pats = {adql_like_prefix(list(c)) for c in cases}
+    pats |= {adql_like_prefix(["NAME " + c[0], *c[1:]]) for c in cases if not c[0].isupper() or len(c[0]) > 3}
+    return sorted(pats)
+
+
+async def suggest(text: str, limit: int = 8, timeout: float = 15) -> list[dict]:
+    """Prefix search on SIMBAD identifiers, e.g. 'WISE 0855' -> 'WISE J085510.83-071442.5'."""
+    pats = suggest_patterns(text)
+    if not pats:
+        return []
+    where = " OR ".join(f"i.id LIKE {p}" for p in pats)
     q = (
-        f"SELECT TOP {limit * 3} i.id, b.main_id, b.otype, b.ra, b.dec FROM ident AS i "
+        f"SELECT TOP {limit * 4} i.id, b.main_id, b.otype, b.ra, b.dec FROM ident AS i "
         f"JOIN basic AS b ON i.oidref = b.oid WHERE {where}"
     )
-    rows = await tap_query(q, timeout=15)
+    rows = await tap_query(q, timeout=timeout)
+    # Common names ("NAME …") first, then the shortest identifiers
+    rows.sort(key=lambda r: (not r["id"].startswith("NAME "), len(r["id"])))
     seen: set[str] = set()
     out = []
     for r in rows:

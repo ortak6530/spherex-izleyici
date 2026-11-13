@@ -12,7 +12,7 @@ from ...domain.astrometry import SEARCH_EPOCH, jyear_to_mjd, propagate
 from ...domain.coords import CoordinateError, parse_coordinates
 from ...events import log_action
 from ...http import UpstreamError
-from ...providers import resolvers
+from ...providers import names, resolvers
 from ...security import TokenBucket
 
 router = APIRouter(tags=["search"])
@@ -78,7 +78,11 @@ async def resolve(request: Request, q: str = Query(min_length=1, max_length=100)
     if not _NAME_OK.match(text):
         raise HTTPException(400, {"code": "INVALID_NAME"})
 
-    ses, sbdb = await asyncio.gather(resolvers.sesame(text), resolvers.jpl_sbdb(text), return_exceptions=True)
+    # Turkish names from the local list ("Kutup Yıldızı") are looked up by their catalogue name
+    lookup = names.exact_query(text) or text
+    ses, sbdb = await asyncio.gather(
+        resolvers.sesame(lookup), resolvers.jpl_sbdb(lookup), return_exceptions=True
+    )
     upstream_down = [n for n, v in (("sesame", ses), ("jpl", sbdb)) if isinstance(v, UpstreamError)]
     ses = None if isinstance(ses, BaseException) else ses
     sbdb = None if isinstance(sbdb, BaseException) else sbdb

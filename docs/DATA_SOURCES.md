@@ -322,6 +322,14 @@ Test: `astroquery.mast.Observations.query_criteria(coordinates=..., radius=2′,
 
 ---
 
+## 10b. Otomatik öneri için canlı ölçümler (2026-11-13)
+
+- **SIMBAD TAP:** Strasbourg `https://simbad.cds.unistra.fr/simbad/sim-tap/sync` → **404** (HTML). Kod sıradaki aynaya (CfA) geçiyor. CfA `ident` önek sorguları ~0,5–2 sn sürüyor, bazıları 15 sn'yi aşıyor (`hd 209458`).
+- CfA'da `lower()` desteklenmiyor (400), `ILIKE` de yok. Büyük/küçük harf için `LIKE` varyantları kullanılıyor.
+- SIMBAD katalog numaralarını boşlukla dolduruyor (`M   3`, `NGC  1976`). Bu yüzden `m3` → `'M %3%'` kalıbı kullanılıyor: `M   3` ve `M  31` eşleşir, `MSX …`, `MCC 31`, `MZ 350` eşleşmez.
+- `TOP N` sonucu rastgele bir alt küme; kısa katalog adları her zaman listeye girmeyebilir. Bu yüzden öneride tam ad için **Sesame (yalnızca SIMBAD, `-oxp/S`)** de soruluyor. `SNV`, bilinmeyen adlarda NED/VizieR'i de denediği için yavaş ve gürültülü ("barnard" → NED'den bir galaksi).
+- **JPL SBDB:** kısmi adlarda 300 + `list` döner ("halley" → `2688 Halley (1982 HG1)`, `1P/Halley`). Ancak `sstr=1P/Halley` ve `sstr=Halley` bulunamıyor; `1P`, `2P`, sayı (`2688`) ve `C/2017 D3` çalışıyor.
+
 ## 11. Doğrulanmamış / açık kalanlar
 - SIMBAD Strasbourg'un ne zaman geri döneceği. Teşekkür metni.
 - CAOM SIA2 (MAST).

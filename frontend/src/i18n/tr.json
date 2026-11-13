@@ -11,7 +11,17 @@
     "searching": "Aranıyor…",
     "suggestions": "Bunu mu demek istediniz?",
     "noResult": "Sonuç bulunamadı. Tam adı (ör. \"WISE J085510.83-071442.5\") ya da koordinat deneyin.",
-    "upstreamDown": "Ad çözümleme servisi şu an yanıt vermiyor; koordinatla arayabilirsiniz."
+    "upstreamDown": "Ad çözümleme servisi şu an yanıt vermiyor; koordinatla arayabilirsiniz.",
+    "suggestLabel": "Öneriler",
+    "searchHere": "Bu koordinatta ara: {{q}}",
+    "moreComing": "SIMBAD ve JPL'den öneriler geliyor…",
+    "partial": "Bazı kaynaklara şu an ulaşılamıyor; liste eksik olabilir.",
+    "count": "{{count}} öneri",
+    "source": {
+      "local": "Türkçe liste",
+      "SIMBAD": "SIMBAD",
+      "JPL": "JPL"
+    }
   },
   "release": {
     "label": "Veri sürümü",

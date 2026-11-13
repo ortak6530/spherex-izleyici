@@ -63,6 +63,24 @@ export interface Candidate {
   solar_system?: boolean;
 }
 
+export interface Suggestion {
+  kind: "name" | "coordinate";
+  label: string;
+  query: string; // what /resolve receives when the suggestion is picked
+  detail?: string | null;
+  source: "local" | "Sesame" | "SIMBAD" | "JPL" | "input";
+  main_id?: string;
+  solar_system?: boolean;
+  ra?: number;
+  dec?: number;
+}
+
+export interface SuggestResponse {
+  items: Suggestion[];
+  unavailable: string[];
+  partial?: boolean;
+}
+
 export interface ResolveResponse {
   kind: "object" | "coordinate" | "solar_system" | "ambiguous" | "not_found";
   target?: Target;

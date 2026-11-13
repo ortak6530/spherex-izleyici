@@ -31,14 +31,20 @@ def _fnum(el: ET.Element, path: str) -> float | None:
         return None
 
 
-async def sesame(name: str) -> dict | None:
+async def sesame(name: str, simbad_only: bool = False, timeout: float = 12) -> dict | None:
+    """Resolve a name (SIMBAD -> NED -> VizieR). simbad_only=True is the fast path for autocomplete:
+    unknown names fall through NED/VizieR slowly and NED adds noise (e.g. 'barnard' -> a galaxy)."""
     key = name.strip().lower()
-    if (hit := cache.get_json("_external/sesame", key, 7 * DAY)) is not None:
+    ns = "_external/sesame_s" if simbad_only else "_external/sesame"
+    if (hit := cache.get_json(ns, key, 7 * DAY)) is not None:
         return hit.get("result")
     base = getattr(
         upstreams().groups["cds"], "sesame_url", "https://cds.unistra.fr/cgi-bin/nph-sesame/-oxp/SNV"
     )
-    r = await http.get(base + "?" + urllib.parse.quote(name.strip()), timeout=12, retries=1)
+    if simbad_only:
+        base = base.rsplit("/", 1)[0] + "/S"
+    url = base + "?" + urllib.parse.quote(name.strip())
+    r = await http.get(url, timeout=timeout, retries=0 if simbad_only else 1)
     if r.status_code != 200:
         raise UpstreamError("UPSTREAM_UNAVAILABLE", "sesame", str(r.status_code))
     root = ET.fromstring(r.content)  # noqa: S314
@@ -62,7 +68,7 @@ async def sesame(name: str) -> dict | None:
             "resolver": res.get("name"),
         }
         break
-    cache.put_json("_external/sesame", key, {"result": result})
+    cache.put_json(ns, key, {"result": result})
     return result
 
 

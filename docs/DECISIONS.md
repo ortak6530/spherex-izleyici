@@ -195,6 +195,23 @@ Hesaplar ve admin paneli **Cuma (14 Kasım) öğlene kadar** biter. 8–11. madd
 
 **Aşama 4 (14 Kasım akşam, vakit kalırsa):** n) Gaia (ESA TAP, `gaiadr3.gaia_source`, pyvo) · o) CADC SSOIS (`search=bynameCADC`, BÜYÜK HARF, `format=tsv`; bynameHorizons/MPC kullanılmaz) · p) NEOSSat (CADC CAOM/TAP) · q) dış bağlantılar paneli · r) isteğe bağlı unWISE.
 
+**Aşama 4 eki (2026-11-13 gece; Gaia ve dipol işine uygulanır)**
+- **Eski prototip:** kullanıcıdaki "NASA SON" klasörü. Siteye birleştirilmez, çalıştırılmaz, paket kurulmaz; **yalnızca referans** olarak okunur.
+- **Kendi altyapımızla yeniden yazılacaklar:**
+  1. Gaia DR3 ADQL ve AllWISE (`allwise_p3as_psd`) alan sorguları → Gaia katmanı. Eksik öz hareket 0.0 yapılmaz; `None` kalır ve "veri yok" gösterilir. AllWISE sorgusu yaklaşık 48 sn sürdü: zaman aşımı + önbellek + arka plan işi (job) olarak çalışır, istek içinde bekletilmez.
+  2. Artı/eksi çift (dipol) ile aday arama: yalnızca **aynı dedektör ve aynı kanal** çiftlerinde, WCS tabanlı hizalamayla; hizalama/PSF kaynaklı dipoller elenir.
+- **Eşleştirme:**
+  - Tesadüfi eşleşme olasılığı (kaynak yoğunluğu × eşleştirme dairesi alanı) hesaplanır ve her adayda gösterilir.
+  - "Katalogda eşleşmesi yok" sonucu **"yeni keşif" diye adlandırılmaz, "aday" denir.**
+  - Eşleştirme yarıçapı kaynağın konum belirsizliğine göre ayarlanır (SPHEREx 6,2″/px).
+- **Kullanılmayacaklar:**
+  - dedektörler arası medyan fark alma, T2'yi gürültüyle ölçekleme, dedektöre "orta bant" dalga boyu atama
+  - kendi 8×8 zodyak bastırması
+  - "güvenilirlik %" / "bütünlük %" skorları (SNR formülü ya da sabit sayı)
+  - metan çukuru / kahverengi cüce sınıflaması
+  - `CORS *` + credentials; hata metnini kullanıcıya göstermek
+- Gösterilen her sayı ölçülmüş ya da hesaplanmış olmalı ve kaynağı belli olmalı.
+
 **Donma:** 14 Kasım (Cumartesi) 21:00'den sonra yeni özellik yok; yalnızca hata düzeltme, güvenlik kontrolü, testler ve SOURCES.md eksiksizliği. 15 Kasım (Pazar): Render uyandırma, canlı tam deneme, 16:00'dan önce teslim.
 
 ## 5. Teknik sonuçlar (bu kararlardan çıkan)
