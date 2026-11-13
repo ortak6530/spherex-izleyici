@@ -76,6 +76,6 @@ def search_local(text: str, limit: int = 8) -> list[dict]:
             hits.append((s, i, e))
     hits.sort(key=lambda h: (h[0], h[1]))
     return [
-        {"label": e["name"], "query": e["query"], "detail": e.get("kind"), "source": "local"}
-        for _, _, e in hits[:limit]
+        {"label": e["name"], "query": e["query"], "detail": e.get("kind"), "source": "local", "exact": s == 0}
+        for s, _, e in hits[:limit]
     ]

@@ -366,7 +366,7 @@ Test: `astroquery.mast.Observations.query_criteria(coordinates=..., radius=2′,
 
 **WCS**
 - Kılavuzdaki WCS alanları: `WCSNAME` (sabit `celestial`), `WCSAXES`, `CRPIX`, `CTYPE`, `CUNIT`, `CDELT`, `CRVAL`, `CROTA2`, `CDx_y`. Başlık tablosunda `CRTYPE1` adı da geçiyor; bu yüzden **`CTYPE1` ve `CRTYPE1` ikisi de denenecek**, ölçek ve dönme için **CD matrisi** kullanılacak.
-- WCS'nin uydu yönelim tahmininden geldiği ve plaka çözümü olmadığı proje talimatında yazıyor; kılavuzda bunu açıkça söyleyen bir cümle bulamadım (arama: "WCS", "accuracy"). Arayüzde her durumda "**konum doğruluğu sınırlı**" notu gösterilecek.
+- WCS başlığı uzay aracının yönelim tahminlerine dayanıyor: `CRVAL1`/`CRVAL2` için kılavuzda "Right Ascension / Declination of reference pixel, **based on spacecraft ACS estimates**" yazıyor. Ayrı bir yıldız çözümü (plate solution) belirtilmiyor, dolayısıyla konum doğruluğu sınırlı olabilir. Arayüzde her durumda "**konum doğruluğu sınırlı**" notu gösterilecek. (İlk okumada bu cümle PDF metninde satırlara bölündüğü için gözden kaçmıştı; 2026-11-13'te düzeltildi.)
 
 **Kare süzgeci** (kılavuzdaki başlık anahtarları)
 - `OBSTYPE = OBJECT`.

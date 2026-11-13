@@ -131,6 +131,53 @@ def test_merge_dedupes_and_limits(client, monkeypatch):
     assert "Barnard's star" not in labels  # same object as the local entry -> merged away
 
 
+def _upstreams(monkeypatch, ses=None, sb=(), jpl=None):
+    async def _ses(*a, **k):
+        return ses
+
+    async def _sb(*a, **k):
+        return list(sb)
+
+    async def _jpl(*a, **k):
+        return jpl
+
+    monkeypatch.setattr(resolvers, "sesame", _ses)
+    monkeypatch.setattr(simbad, "suggest", _sb)
+    monkeypatch.setattr(resolvers, "jpl_sbdb", _jpl)
+    monkeypatch.setattr(S.cache, "get_json", lambda *a, **k: None)
+    monkeypatch.setattr(S.cache, "put_json", lambda *a, **k: None)
+
+
+def test_exact_match_comes_before_partial_local_matches(client, monkeypatch):
+    # "m3": the local list only has partial hits (M31, M33); Sesame resolves M 3 itself
+    sb = [{"label": "M  34", "main_id": "NGC  1039", "otype": "OpC"}]
+    _upstreams(monkeypatch, ses={"main_id": "M 3", "otype": "GlC"}, sb=sb)
+    items = client.get("/api/v1/suggest", params={"q": "m3"}).json()["items"]
+    labels = [i["label"] for i in items]
+    assert labels[0] == "M 3" and items[0]["exact"] is True
+    assert labels.index("Andromeda Galaksisi") > 0 and labels.index("Üçgen Galaksisi") > 0
+    assert labels.index("M  34") > labels.index("M 3")
+
+
+def test_exact_simbad_identifier_is_promoted(client, monkeypatch):
+    # "ngc 70": local "Kuzey Amerika Bulutsusu" (alias NGC 7000) is only a prefix match
+    sb = [
+        {"label": "NGC  6709     3", "main_id": "NGC  6709     3", "otype": "*"},
+        {"label": "NGC    70", "main_id": "NGC    70", "otype": "G"},
+    ]
+    _upstreams(monkeypatch, sb=sb)
+    labels = [i["label"] for i in client.get("/api/v1/suggest", params={"q": "ngc 70"}).json()["items"]]
+    assert labels[0] == "NGC    70"
+    assert labels.index("Kuzey Amerika Bulutsusu") < labels.index("NGC  6709     3")  # rest keeps its order
+
+
+def test_exact_local_name_stays_first(client, monkeypatch):
+    _upstreams(monkeypatch, ses={"main_id": "M  31", "otype": "AGN"})
+    items = client.get("/api/v1/suggest", params={"q": "m31"}).json()["items"]
+    assert items[0]["label"] == "Andromeda Galaksisi" and items[0]["exact"] is True
+    assert [i["label"] for i in items].count("M  31") == 0  # same object, merged into the local entry
+
+
 def test_exact_turkish_name_maps_to_catalogue_query():
     assert names.exact_query("Kutup Yıldızı") == "Polaris"
     assert names.exact_query("barnard yildizi") == "Barnard's Star"

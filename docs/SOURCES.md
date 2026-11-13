@@ -188,7 +188,7 @@ Başvurulan belgeler:
 
 Metnin alındığı yer: https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/en/neossat/, 2026-11-13 tarihinde doğrulandı.
 
-_Not:_ Lisans sayfası 2026-11-13'te otomatik erişimi reddetti; lisans adı proje talimatından ve CSA açık veri yayınından alınmıştır.
+_Not:_ Lisans adı kullanıcı tarafından verildi; lisans sayfasına erişilemedi (2026-11-13, otomatik erişim reddedildi).
 
 Başvurulan belgeler:
 

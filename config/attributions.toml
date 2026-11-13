@@ -170,7 +170,7 @@ text = "Based on data from the NEOSSat satellite, a joint mission of the Canadia
 text_source = "https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/en/neossat/"
 verified = "2026-11-13"
 license = "Open Government Licence – Canada (https://open.canada.ca/en/open-government-licence-canada)."
-note = "Lisans sayfası 2026-11-13'te otomatik erişimi reddetti; lisans adı proje talimatından ve CSA açık veri yayınından alınmıştır."
+note = "Lisans adı kullanıcı tarafından verildi; lisans sayfasına erişilemedi (2026-11-13, otomatik erişim reddedildi)."
 references = [
   { label = "NEOSSat FITS Image User's Guide, CSA-NEOSSAT-MAN-0002 v4.00", url = "https://data.asc-csa.gc.ca/users/OpenData_DonneesOuvertes/pub/NEOSSAT/Supporting%20Documents/CSA-NEOSSAT-MAN-0002_FITS_IMAGE_UGUIDE-v4-00.pdf" },
   { label = "CSA: NEOSSat tanıtım sayfası", url = "https://www.asc-csa.gc.ca/eng/satellites/neossat/" },

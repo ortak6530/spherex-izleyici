@@ -96,28 +96,36 @@ async def suggest(
         _guarded("jpl", resolvers.jpl_sbdb(text), down) if len(text) >= 3 else asyncio.sleep(0),
     )
 
+    typed = names.normalize(text).replace(" ", "")
     remote: list[dict] = []
+    # Sesame and a single SBDB object resolve the typed text itself, so they are exact matches
     if ses and ses.get("main_id"):
         mid = ses["main_id"].removeprefix("NAME ")
         remote.append({"label": mid, "query": text, "main_id": ses["main_id"], "detail": ses.get("otype"),
-                       "source": "Sesame"})  # fmt: skip
+                       "source": "Sesame", "exact": True})  # fmt: skip
     if jpl and jpl.get("fullname"):
         remote.append({"label": jpl["fullname"], "query": jpl.get("designation") or text,
-                       "detail": jpl.get("orbit_class"), "source": "JPL", "solar_system": True})  # fmt: skip
+                       "detail": jpl.get("orbit_class"), "source": "JPL", "solar_system": True,
+                       "exact": True})  # fmt: skip
     elif jpl and jpl.get("ambiguous"):
         for n in jpl["ambiguous"][:4]:
-            remote.append({"label": n, "query": jpl_query(n), "source": "JPL", "solar_system": True})
+            remote.append({"label": n, "query": jpl_query(n), "source": "JPL", "solar_system": True,
+                           "exact": _key({"label": jpl_query(n)}) == typed})  # fmt: skip
     for s in sb or []:
         remote.append({"label": s["label"], "query": s["main_id"], "main_id": s["main_id"],
-                       "detail": s.get("otype"), "source": "SIMBAD"})  # fmt: skip
+                       "detail": s.get("otype"), "source": "SIMBAD",
+                       "exact": typed in (_key({"label": s["label"]}), _key(s))})  # fmt: skip
 
-    out, seen = [], set()
+    merged, seen = [], set()
     for s in local_hits + remote:
         k = _key(s)
         if k in seen:
+            # the same object found again as an exact match keeps the first entry but promotes it
+            if s.get("exact"):
+                next(m for m in merged if _key(m) == k)["exact"] = True
             continue
         seen.add(k)
-        out.append({"kind": "name", **s})
-        if len(out) >= LIMIT:
-            break
-    return {"items": out, "unavailable": sorted(set(down))}
+        merged.append({"kind": "name", **s})
+    # Exact matches first ("m3" -> M 3 above M 31 / M 33), otherwise the source order is kept
+    merged.sort(key=lambda s: not s.get("exact"))
+    return {"items": merged[:LIMIT], "unavailable": sorted(set(down))}
