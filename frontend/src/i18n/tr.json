@@ -10,6 +10,16 @@
     "privacyLogin": "Giriş yaparsan arama ve liste etkinliğin site yöneticisi tarafından görülebilir.",
     "privacyGuest": "Misafir olarak devam edersen etkinliğin e-posta gibi kişisel bir veriyle eşleştirilmez."
   },
+  "export": {
+    "button": "Excel olarak indir",
+    "listTitle": "Excel'e aktar",
+    "listNote": "Seçtiğiniz cisimler tek dosyada indirilir (en fazla {{max}}). Dosyada ham piksel yoktur; her görüntünün FITS bağlantısı vardır.",
+    "listButton": "Seçilenleri indir ({{n}})",
+    "progress": {
+      "export_object": "Excel: {{name}} hazırlanıyor ({{i}}/{{n}})…",
+      "export_build": "Excel dosyası oluşturuluyor…"
+    }
+  },
   "search": {
     "label": "Cisim adı veya koordinat",
     "placeholder": "M31, Betelgeuse, 10.684 41.269, 00h42m44s +41d16m09s…",
@@ -229,6 +239,8 @@
     "INVALID_COORDINATE": "Koordinat anlaşılamadı.",
     "INVALID_NAME": "Ad geçersiz karakter içeriyor.",
     "RATE_LIMITED": "Çok hızlı istek gönderildi; birkaç saniye sonra tekrar deneyin.",
+    "LOGIN_REQUIRED_MULTI": "Birden çok cismi tek dosyada indirmek için giriş yapın; misafirler açık olan cismi indirebilir.",
+    "EXPORT_EXPIRED": "Dosyanın süresi doldu; lütfen yeniden indirin.",
     "UPSTREAM_BUSY": "Veri sunucusu (IRSA) şu an meşgul; biraz sonra tekrar deneyin.",
     "UPSTREAM_UNAVAILABLE": "Veri kaynağına şu an ulaşılamıyor.",
     "UPSTREAM_TIMEOUT": "Veri kaynağı zamanında yanıt vermedi.",

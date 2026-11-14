@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { ApiError } from "../lib/api";
 import { auth, savedHref, useAuth, type SavedItem } from "../lib/auth";
 import { syncDialog } from "../lib/dialog";
+import ExcelButton from "./ExcelButton";
 
 const input =
   "h-11 w-full rounded-lg border border-white/10 bg-space-950/70 px-3 text-base text-ink-100 focus:border-nebula-400 focus:outline-none";
@@ -245,6 +246,56 @@ function SavedList({ items, title, empty }: { items: SavedItem[]; title: string;
   );
 }
 
+const MAX_EXPORT = 20; // server limit for one signed-in export
+
+/** Several saved objects in one .xlsx (signed-in users only; guests export the open object). */
+function ListExport({ items }: { items: SavedItem[] }) {
+  const { t } = useTranslation();
+  const objects = items.filter((s) => s.kind === "object" && typeof s.data?.q === "string" && s.data.q);
+  const [picked, setPicked] = useState<Set<number>>(
+    () => new Set(objects.slice(0, MAX_EXPORT).map((s) => s.id)),
+  );
+  if (objects.length === 0) return null;
+  const chosen = objects.filter((s) => picked.has(s.id));
+  const toggle = (id: number) =>
+    setPicked((p) => {
+      const n = new Set(p);
+      if (n.has(id)) n.delete(id);
+      else if (n.size < MAX_EXPORT) n.add(id);
+      return n;
+    });
+  return (
+    <section className="space-y-2" aria-labelledby="list-export-title">
+      <h3 id="list-export-title" className="text-sm font-semibold text-ink-100">
+        {t("export.listTitle")}
+      </h3>
+      <p className="text-xs text-ink-400">{t("export.listNote", { max: MAX_EXPORT })}</p>
+      <ul className="max-h-40 space-y-1 overflow-y-auto">
+        {objects.map((s) => (
+          <li key={s.id}>
+            <label className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1 text-sm hover:bg-white/5">
+              <input
+                type="checkbox"
+                checked={picked.has(s.id)}
+                onChange={() => toggle(s.id)}
+                className="size-4 accent-nebula-500"
+              />
+              <span className="min-w-0 truncate">{s.label}</span>
+            </label>
+          </li>
+        ))}
+      </ul>
+      <ExcelButton
+        items={chosen.map((s) => ({
+          q: String(s.data!.q),
+          ...(typeof s.data?.d === "number" ? { d: s.data.d } : {}),
+        }))}
+        label={t("export.listButton", { n: chosen.length })}
+      />
+    </section>
+  );
+}
+
 /** Top-bar button: "Giriş" when signed out, the account dialog (lists, sign-out) when signed in. */
 export default function AccountButton() {
   const { t } = useTranslation();
@@ -306,6 +357,7 @@ export default function AccountButton() {
               title={t("account.objects")}
               empty={t("account.noObjects")}
             />
+            <ListExport items={saved} />
             <SavedList
               items={saved.filter((s) => s.kind === "comparison")}
               title={t("account.studies")}

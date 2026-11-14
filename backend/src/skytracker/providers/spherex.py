@@ -161,10 +161,18 @@ def _parse_wcs_wave_tail(tail: bytes) -> fits.BinTableHDU:
         return fits.BinTableHDU.fromstring(tail[i:])
 
 
+def _sample_slot(img: SpherexImage, ra: float, dec: float) -> tuple[str, str]:
+    return f"{img.release}/samples", f"{img.obs_id}_D{img.detector}_{target_key(ra, dec)}"
+
+
+def cached_sample(img: SpherexImage, ra: float, dec: float) -> dict | None:
+    """target_sample() only if it is already cached (no request to IRSA)."""
+    return cache.get_json(*_sample_slot(img, ra, dec), None)
+
+
 async def target_sample(img: SpherexImage, ra: float, dec: float) -> dict:
     """Detector position, wavelength and bandwidth of the target in one exposure (cached)."""
-    ns = f"{img.release}/samples"
-    key = f"{img.obs_id}_D{img.detector}_{target_key(ra, dec)}"
+    ns, key = _sample_slot(img, ra, dec)
     if (hit := cache.get_json(ns, key, None)) is not None:
         return hit
     head, tail = await asyncio.gather(

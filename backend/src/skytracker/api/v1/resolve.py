@@ -49,6 +49,58 @@ def target_from_sesame(r: dict, query: str) -> dict:
     }
 
 
+def coordinate_target(c, text: str) -> dict:
+    return {
+        "kind": "coordinate",
+        "key": f"coord-{c.ra:.4f}{c.dec:+.4f}",
+        "name": f"{c.ra:.5f} {c.dec:+.5f}",
+        "main_id": None,
+        "query": text,
+        "ra": c.ra,
+        "dec": c.dec,
+        "otype": None,
+        "input_format": c.input_format,
+        "galactic": c.galactic,
+        "source": "girdi",
+    }
+
+
+def solar_target(sbdb: dict | None, text: str) -> dict | None:
+    if not (sbdb and sbdb.get("fullname")):
+        return None
+    return {
+        "kind": "solar_system",
+        "key": object_key(sbdb["fullname"]),
+        "name": sbdb["fullname"],
+        "designation": sbdb.get("designation"),
+        "body_kind": sbdb.get("kind"),
+        "orbit_class": sbdb.get("orbit_class"),
+        "query": text,
+        "source": "JPL SBDB",
+    }
+
+
+async def resolve_target(text: str) -> dict | None:
+    """The single target the search bar would open for `text` (no suggestions); None if not found.
+
+    Used by the Excel export, which re-resolves saved queries on the server instead of trusting
+    coordinates sent by the browser. Raises CoordinateError for malformed coordinates.
+    """
+    text = text.strip()
+    c = parse_coordinates(text)
+    if c:
+        return coordinate_target(c, text)
+    if not _NAME_OK.match(text):
+        return None
+    lookup = names.exact_query(text) or text
+    ses, sbdb = await asyncio.gather(
+        resolvers.sesame(lookup), resolvers.jpl_sbdb(lookup), return_exceptions=True
+    )
+    if isinstance(ses, dict):
+        return target_from_sesame(ses, text)
+    return solar_target(sbdb if isinstance(sbdb, dict) else None, text)
+
+
 @router.get("/resolve")
 async def resolve(request: Request, q: str = Query(min_length=1, max_length=100)) -> dict:
     if not _limiter.allow(request.state.session_id):
@@ -59,19 +111,7 @@ async def resolve(request: Request, q: str = Query(min_length=1, max_length=100)
     except CoordinateError as e:
         raise HTTPException(400, {"code": e.code}) from e
     if c:
-        target = {
-            "kind": "coordinate",
-            "key": f"coord-{c.ra:.4f}{c.dec:+.4f}",
-            "name": f"{c.ra:.5f} {c.dec:+.5f}",
-            "main_id": None,
-            "query": text,
-            "ra": c.ra,
-            "dec": c.dec,
-            "otype": None,
-            "input_format": c.input_format,
-            "galactic": c.galactic,
-            "source": "girdi",
-        }
+        target = coordinate_target(c, text)
         log_action(request, "search", object_key=target["key"], payload={"kind": "coordinate"})
         return {"kind": "coordinate", "target": target}
 
@@ -87,18 +127,7 @@ async def resolve(request: Request, q: str = Query(min_length=1, max_length=100)
     ses = None if isinstance(ses, BaseException) else ses
     sbdb = None if isinstance(sbdb, BaseException) else sbdb
 
-    solar = None
-    if sbdb and sbdb.get("fullname"):
-        solar = {
-            "kind": "solar_system",
-            "key": object_key(sbdb["fullname"]),
-            "name": sbdb["fullname"],
-            "designation": sbdb.get("designation"),
-            "body_kind": sbdb.get("kind"),
-            "orbit_class": sbdb.get("orbit_class"),
-            "query": text,
-            "source": "JPL SBDB",
-        }
+    solar = solar_target(sbdb, text)
 
     if ses:
         target = target_from_sesame(ses, text)

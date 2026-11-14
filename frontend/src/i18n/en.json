@@ -10,6 +10,16 @@
     "privacyLogin": "If you sign in, your search and list activity can be seen by the site administrator.",
     "privacyGuest": "As a guest, your activity is not linked to personal data such as an e-mail address."
   },
+  "export": {
+    "button": "Download as Excel",
+    "listTitle": "Export to Excel",
+    "listNote": "The selected objects are downloaded in one file (at most {{max}}). The file has no raw pixels; every image has its FITS link.",
+    "listButton": "Download selected ({{n}})",
+    "progress": {
+      "export_object": "Excel: preparing {{name}} ({{i}}/{{n}})…",
+      "export_build": "Building the Excel file…"
+    }
+  },
   "search": {
     "label": "Object name or coordinates",
     "placeholder": "M31, Betelgeuse, 10.684 41.269, 00h42m44s +41d16m09s…",
@@ -229,6 +239,8 @@
     "INVALID_COORDINATE": "Coordinates not understood.",
     "INVALID_NAME": "The name contains invalid characters.",
     "RATE_LIMITED": "Too many requests; try again in a few seconds.",
+    "LOGIN_REQUIRED_MULTI": "Sign in to download several objects in one file; guests can download the open object.",
+    "EXPORT_EXPIRED": "The file has expired; please download it again.",
     "UPSTREAM_BUSY": "The data server (IRSA) is busy; try again shortly.",
     "UPSTREAM_UNAVAILABLE": "The data source is unreachable right now.",
     "UPSTREAM_TIMEOUT": "The data source did not answer in time.",

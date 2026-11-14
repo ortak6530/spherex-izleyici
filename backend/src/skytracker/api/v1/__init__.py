@@ -5,6 +5,7 @@ from . import (
     auth,
     compare,
     events,
+    export,
     feedback,
     health,
     jobs_api,
@@ -30,3 +31,4 @@ router.include_router(feedback.router)
 router.include_router(suggest.router)
 router.include_router(auth.router)
 router.include_router(admin.router)
+router.include_router(export.router)

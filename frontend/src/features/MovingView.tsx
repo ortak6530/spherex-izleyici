@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import CutoutView, { decodeCutout, type DecodedCutout } from "../components/CutoutView";
+import ExcelButton from "../components/ExcelButton";
 import ProgressLine from "../components/ProgressLine";
 import SaveButton from "../components/SaveButton";
 import {
@@ -266,7 +267,10 @@ export default function MovingView({ target }: { target: Target }) {
             <h2 id="mv-title" className="font-display text-2xl font-semibold text-ink-100">
               {target.name}
             </h2>
-            <SaveButton kind="object" refId={target.key} label={target.name} data={{ q: target.query }} />
+            <div className="flex flex-wrap items-center gap-2">
+              <SaveButton kind="object" refId={target.key} label={target.name} data={{ q: target.query }} />
+              <ExcelButton items={[{ q: target.query }]} />
+            </div>
           </div>
           <p className="text-sm text-ink-300">
             {[target.orbit_class, designation && `${t("moving.designation")}: ${designation}`, target.source]

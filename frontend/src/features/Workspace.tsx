@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import CutoutView, { decodeCutout, type DecodedCutout } from "../components/CutoutView";
+import ExcelButton from "../components/ExcelButton";
 import ProgressLine from "../components/ProgressLine";
 import SaveButton from "../components/SaveButton";
 import {
@@ -240,12 +241,17 @@ export default function Workspace({ target }: { target: Target }) {
             <h2 id="ws-title" className="font-display text-2xl font-semibold text-ink-100">
               {target.name}
             </h2>
-            <SaveButton
-              kind="object"
-              refId={target.key}
-              label={target.name}
-              data={{ q: target.kind === "coordinate" ? target.query : target.name, d: detector }}
-            />
+            <div className="flex flex-wrap items-center gap-2">
+              <SaveButton
+                kind="object"
+                refId={target.key}
+                label={target.name}
+                data={{ q: target.kind === "coordinate" ? target.query : target.name, d: detector }}
+              />
+              <ExcelButton
+                items={[{ q: target.kind === "coordinate" ? target.query : target.name, d: detector }]}
+              />
+            </div>
           </div>
           <p className="font-mono text-sm text-ink-300">
             {raDecText(target.ra!, target.dec!)} · {target.otype ?? ""} · {target.source}
