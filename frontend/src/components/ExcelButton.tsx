@@ -10,8 +10,13 @@ export type ExportItem = { q: string; d?: number };
 type ExportResult = { file_id: string; filename: string; size_bytes: number; rows: Record<string, number> };
 
 /** The server builds the .xlsx (openpyxl) as a job; the file is then fetched by this same browser. */
-async function downloadXlsx(items: ExportItem[], onProgress?: (s: ProgressStep) => void) {
-  const r = await runJob<ExportResult>(() => apiPost("/export/xlsx", { items }), onProgress);
+async function downloadXlsx(
+  items: ExportItem[],
+  filters: Record<string, unknown> | undefined,
+  onProgress?: (s: ProgressStep) => void,
+) {
+  const body = filters && Object.keys(filters).length ? { items, filters } : { items };
+  const r = await runJob<ExportResult>(() => apiPost("/export/xlsx", body), onProgress);
   const a = document.createElement("a");
   a.href = `/api/v1/export/${encodeURIComponent(r.file_id)}`;
   a.download = r.filename;
@@ -21,7 +26,15 @@ async function downloadXlsx(items: ExportItem[], onProgress?: (s: ProgressStep) 
   return r;
 }
 
-export default function ExcelButton({ items, label }: { items: ExportItem[]; label?: string }) {
+export default function ExcelButton({
+  items,
+  label,
+  filters,
+}: {
+  items: ExportItem[];
+  label?: string;
+  filters?: Record<string, unknown>; // the page's observation filters (date / release / λ)
+}) {
   const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
   const [step, setStep] = useState<string | null>(null);
@@ -31,7 +44,7 @@ export default function ExcelButton({ items, label }: { items: ExportItem[]; lab
     setBusy(true);
     setError(null);
     try {
-      await downloadXlsx(items, (s) =>
+      await downloadXlsx(items, filters, (s) =>
         setStep(
           t(`export.progress.${s.step}`, {
             ...s,

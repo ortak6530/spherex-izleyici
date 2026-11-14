@@ -45,6 +45,7 @@ export interface TimeCompareResult {
   diff_limit: number;
   background: { a: number | null; b: number | null };
   normalization: { enabled: boolean; factor: number | null };
+  flux_corrected_image?: string | null; // QR2 (R6) image multiplied by IRSA's QR3 correction
   shift: { arcsec: number; px: number; pa_deg: number } | null;
   expected_shift: { arcsec: number; px: number; pm_mas_yr: number; source: string } | null;
   photometry: {

@@ -10,6 +10,33 @@
     "privacyLogin": "Giriş yaparsan arama ve liste etkinliğin site yöneticisi tarafından görülebilir.",
     "privacyGuest": "Misafir olarak devam edersen etkinliğin e-posta gibi kişisel bir veriyle eşleştirilmez."
   },
+  "filters": {
+    "title": "Gözlem filtreleri",
+    "from": "Başlangıç tarihi",
+    "to": "Bitiş tarihi",
+    "releases": "Veri sürümü",
+    "lamMin": "En küçük λ (µm)",
+    "lamMax": "En büyük λ (µm)",
+    "clear": "Filtreleri temizle",
+    "none": "Filtre yok: {{total}} pozlamanın hepsi listeleniyor",
+    "shown": "{{total}} pozlamadan {{shown}} tanesi listeleniyor",
+    "excelNote": "Excel indirmesine de uygulanır",
+    "empty": "Bu filtrelerle hiçbir pozlama kalmadı; filtreleri gevşetin."
+  },
+  "quality": {
+    "title": "Veri kalitesi",
+    "masked": "maskeli piksel %{{pct}} (gri)",
+    "maskedAB": "maskeli piksel A %{{a}} / B %{{b}} (gri)",
+    "zodiSub": "zodyak ışığı çıkarıldı ({{model}})",
+    "zodiSubShort": "zodyak ışığı çıkarıldı",
+    "zodiRaw": "zodyak ışığı çıkarılmadı (ham)",
+    "pipeline": "boru hattı {{v}}, {{rel}}",
+    "background": "yerel arka plan çıkarıldı",
+    "normalized": "göreli normalleştirme B × {{k}}",
+    "notNormalized": "normalleştirme yok",
+    "fluxCorrected": "QR2 görüntüsüne QR3 akı düzeltmesi uygulandı",
+    "properMotion": "hedef konumu öz hareketle düzeltildi"
+  },
   "status": {
     "label": "Veri durumu",
     "releases": "Veri",

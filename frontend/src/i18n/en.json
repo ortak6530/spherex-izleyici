@@ -10,6 +10,33 @@
     "privacyLogin": "If you sign in, your search and list activity can be seen by the site administrator.",
     "privacyGuest": "As a guest, your activity is not linked to personal data such as an e-mail address."
   },
+  "filters": {
+    "title": "Observation filters",
+    "from": "From",
+    "to": "To",
+    "releases": "Data release",
+    "lamMin": "Min λ (µm)",
+    "lamMax": "Max λ (µm)",
+    "clear": "Clear filters",
+    "none": "No filter: all {{total}} exposures listed",
+    "shown": "{{shown}} of {{total}} exposures listed",
+    "excelNote": "also applied to the Excel download",
+    "empty": "No exposure is left with these filters; loosen them."
+  },
+  "quality": {
+    "title": "Data quality",
+    "masked": "masked pixels {{pct}} % (grey)",
+    "maskedAB": "masked pixels A {{a}} % / B {{b}} % (grey)",
+    "zodiSub": "zodiacal light subtracted ({{model}})",
+    "zodiSubShort": "zodiacal light subtracted",
+    "zodiRaw": "zodiacal light not subtracted (raw)",
+    "pipeline": "pipeline {{v}}, {{rel}}",
+    "background": "local background subtracted",
+    "normalized": "relative normalisation B × {{k}}",
+    "notNormalized": "no normalisation",
+    "fluxCorrected": "QR3 flux correction applied to the QR2 image",
+    "properMotion": "target position corrected for proper motion"
+  },
   "status": {
     "label": "Data status",
     "releases": "Data",

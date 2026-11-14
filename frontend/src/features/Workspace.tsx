@@ -1,9 +1,12 @@
 import { GitCompareArrows, Image as ImageIcon, Info, Loader2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 
 import CutoutView, { decodeCutout, type DecodedCutout } from "../components/CutoutView";
 import ExcelButton from "../components/ExcelButton";
+import ObsFilterBar from "../components/ObsFilterBar";
+import QualityLine from "../components/QualityLine";
 import ProgressLine from "../components/ProgressLine";
 import SaveButton from "../components/SaveButton";
 import {
@@ -17,6 +20,7 @@ import { BANDS } from "../lib/bands";
 import { errorText, fmt, raDecText } from "../lib/format";
 import { runJob, type ProgressStep } from "../lib/jobs";
 import { lastComparison } from "../lib/lastComparison";
+import { NO_FILTERS, passes, toExport, type ObsFilters } from "../lib/obsFilters";
 import { percentileLimits, type Colormap, type Stretch } from "../render/image";
 import CompareView, { ViewControls } from "./CompareView";
 import type { TimeCompareResult } from "./compareTypes";
@@ -64,6 +68,32 @@ function bestPair(imagesA: ObservationImage[], imagesB: ObservationImage[]) {
 
 const URL_PARAMS = new URLSearchParams(window.location.search);
 
+/** Data-quality line of one cutout (decodeCutout keeps the whole server response in `raw`). */
+function singleQuality(t: TFunction, c: CutoutResult): string[] {
+  return [
+    t("quality.masked", { pct: fmt(c.meta.bad_fraction * 100, 1) }),
+    c.meta.zodi === "sub" ? t("quality.zodiSub", { model: c.meta.zodi_model ?? "?" }) : t("quality.zodiRaw"),
+    t("quality.pipeline", { v: c.meta.pipeline_version ?? "?", rel: c.release.toUpperCase() }),
+  ];
+}
+
+/** Data-quality line of a time comparison: masked share per epoch and every correction applied. */
+function compareQuality(t: TFunction, r: TimeCompareResult): string[] {
+  const out = [
+    t("quality.maskedAB", { a: fmt(r.a.bad_fraction * 100, 1), b: fmt(r.b.bad_fraction * 100, 1) }),
+    r.zodi === "sub" ? t("quality.zodiSubShort") : t("quality.zodiRaw"),
+  ];
+  if (r.background.a !== null && r.background.b !== null) out.push(t("quality.background"));
+  out.push(
+    r.normalization.factor
+      ? t("quality.normalized", { k: fmt(r.normalization.factor, 3) })
+      : t("quality.notNormalized"),
+  );
+  if (r.flux_corrected_image) out.push(t("quality.fluxCorrected"));
+  if (r.warnings.some((w) => w.code === "PROPER_MOTION_APPLIED")) out.push(t("quality.properMotion"));
+  return out;
+}
+
 export default function Workspace({ target }: { target: Target }) {
   const { t } = useTranslation();
   const [detector, setDetector] = useState(() => {
@@ -86,6 +116,7 @@ export default function Workspace({ target }: { target: Target }) {
   const [result, setResult] = useState<TimeCompareResult | null>(null);
   const [stretch, setStretch] = useState<Stretch>("asinh");
   const [cmap, setCmap] = useState<Colormap>("inferno");
+  const [filters, setFilters] = useState<ObsFilters>(NO_FILTERS);
 
   const progressText = (s: ProgressStep) => t(`workspace.progress.${s.step}`, { ...s, defaultValue: s.step });
 
@@ -120,6 +151,25 @@ export default function Workspace({ target }: { target: Target }) {
   }, [target.key, target.ra, target.dec, detector]);
 
   const visits = obs?.visits ?? [];
+  // Observation filters (date / release / λ): the lists show only passing exposures; Excel gets the same
+  const imagesOf = (vi: number) => (visits[vi]?.images ?? []).filter((i) => passes(filters, i));
+  const shownVisits = visits.map((v, i) => ({ v, i })).filter(({ i }) => imagesOf(i).length > 0);
+  const shownCount = shownVisits.reduce((n, { i }) => n + imagesOf(i).length, 0);
+  const totalCount = visits.reduce((n, v) => n + v.images.length, 0);
+  const applyFilters = (f: ObsFilters) => {
+    setFilters(f);
+    if (!visits.length) return;
+    const keep = (vi: number) => (visits[vi]?.images ?? []).filter((i) => passes(f, i));
+    const idx = visits.map((_, i) => i).filter((i) => keep(i).length > 0);
+    if (!idx.length) return;
+    const va = idx.includes(visitA) ? visitA : idx[0];
+    const vb = idx.includes(visitB) ? visitB : idx[idx.length - 1];
+    setVisitA(va);
+    setVisitB(vb);
+    const pair = bestPair(keep(va), keep(vb));
+    setImgA(pair?.a.image_id ?? usable(keep(va))[0]?.image_id ?? null);
+    setImgB(pair?.b.image_id ?? null);
+  };
   const a = useMemo(
     () => visits[visitA]?.images.find((i) => i.image_id === imgA) ?? null,
     [visits, visitA, imgA],
@@ -145,19 +195,19 @@ export default function Workspace({ target }: { target: Target }) {
   const pickA = (id: string) => {
     setImgA(id);
     const img = visits[visitA].images.find((i) => i.image_id === id);
-    if (img?.wavelength_um) setImgB(closest(visits[visitB].images, img.wavelength_um)?.image_id ?? null);
+    if (img?.wavelength_um) setImgB(closest(imagesOf(visitB), img.wavelength_um)?.image_id ?? null);
   };
   const pickVisitB = (v: number) => {
     setVisitB(v);
-    if (a?.wavelength_um) setImgB(closest(visits[v].images, a.wavelength_um)?.image_id ?? null);
+    if (a?.wavelength_um) setImgB(closest(imagesOf(v), a.wavelength_um)?.image_id ?? null);
   };
   const pickVisitA = (v: number) => {
     setVisitA(v);
-    const list = usable(visits[v].images);
-    const pick = a?.wavelength_um ? closest(visits[v].images, a.wavelength_um) : list[0];
+    const list = usable(imagesOf(v));
+    const pick = a?.wavelength_um ? closest(imagesOf(v), a.wavelength_um) : list[0];
     if (pick) {
       setImgA(pick.image_id);
-      setImgB(closest(visits[visitB].images, pick.wavelength_um!)?.image_id ?? null);
+      setImgB(closest(imagesOf(visitB), pick.wavelength_um!)?.image_id ?? null);
     }
   };
 
@@ -253,6 +303,7 @@ export default function Workspace({ target }: { target: Target }) {
               />
               <ExcelButton
                 items={[{ q: target.kind === "coordinate" ? target.query : target.name, d: detector }]}
+                filters={toExport(filters)}
               />
             </div>
           </div>
@@ -304,6 +355,14 @@ export default function Workspace({ target }: { target: Target }) {
             <p className="text-sm text-ink-300">
               {t("workspace.visits", { n: visits.length, total: obs?.total_images ?? 0 })}
             </p>
+            <ObsFilterBar
+              value={filters}
+              onChange={applyFilters}
+              releases={Object.entries(obs?.releases ?? {}).map(([id, r]) => ({ id, label: r.label }))}
+              shown={shownCount}
+              total={totalCount}
+            />
+            {shownVisits.length === 0 && <p className="text-sm text-warn-400">{t("filters.empty")}</p>}
             <div className="grid gap-4 md:grid-cols-2">
               {(["A", "B"] as const).map((which) => {
                 const vi = which === "A" ? visitA : visitB;
@@ -320,7 +379,7 @@ export default function Workspace({ target }: { target: Target }) {
                         value={vi}
                         onChange={(e) => (which === "A" ? pickVisitA : pickVisitB)(Number(e.target.value))}
                       >
-                        {visits.map((v, i) => (
+                        {shownVisits.map(({ v, i }) => (
                           <option key={v.label + i} value={i}>
                             {v.label} ({v.start} – {v.end}) · {v.releases.join("+").toUpperCase()}
                           </option>
@@ -334,7 +393,7 @@ export default function Workspace({ target }: { target: Target }) {
                         value={cur ?? ""}
                         onChange={(e) => (which === "A" ? pickA(e.target.value) : setImgB(e.target.value))}
                       >
-                        {visits[vi]?.images.map((i) => (
+                        {imagesOf(vi).map((i) => (
                           <option
                             key={i.image_id}
                             value={i.image_id}
@@ -455,13 +514,15 @@ export default function Workspace({ target }: { target: Target }) {
               })}
             </p>
           )}
+          <QualityLine items={singleQuality(t, single.raw as unknown as CutoutResult)} />
         </div>
       )}
 
       {result && (
         <>
-          <div className="glass rounded-2xl p-5">
+          <div className="glass space-y-3 rounded-2xl p-5">
             <CompareView result={result} />
+            <QualityLine items={compareQuality(t, result)} />
           </div>
           <ResultPanel
             r={result}
