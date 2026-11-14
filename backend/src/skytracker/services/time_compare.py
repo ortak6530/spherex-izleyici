@@ -27,7 +27,7 @@ from astropy.wcs.utils import proj_plane_pixel_scales
 from ..config_loader import releases
 from ..domain import compare as C
 from ..domain import flags as F
-from ..domain.astrometry import propagate
+from ..domain.astrometry import jyear_to_mjd, propagate
 from ..domain.wavelength import celestial_wcs, wave_wcs
 from ..jobs import JobError
 from ..providers import spherex as S
@@ -102,6 +102,43 @@ def _parse(img: S.SpherexImage, raw: bytes, ra: float, dec: float, zodi: str) ->
         zodi_median=float(np.nanmedian(z)),
         pixel_scale=float(np.sqrt(abs(np.linalg.det(proj_plane_pixel_area_matrix(cw)))) * 3600),
     )
+
+
+TRACK_EPOCHS = (2010.0, 2016.0)  # WISE era and Gaia DR3 reference epoch
+
+
+def motion_track(pm: dict | None, ea: Epoch, eb: Epoch, shift: dict | None) -> dict | None:
+    """Expected positions from the known proper motion at 2010.0, 2016.0 and the two SPHEREx dates, plus
+    the measured centroids, all as pixels of A's grid (B is resampled onto it). Display only: the line is
+    the expected position, not a measurement."""
+    if not pm or pm.get("ra_j2000") is None or not (pm.get("pmra_mas_yr") or pm.get("pmdec_mas_yr")):
+        return None
+
+    def px(ra: float, dec: float) -> list[float]:
+        x, y = ea.wcs.world_to_pixel_values(ra, dec)
+        return [round(float(x), 2), round(float(y), 2)]
+
+    def expected(label: str, mjd: float) -> dict:
+        ra, dec = propagate(
+            pm["ra_j2000"], pm["dec_j2000"], pm.get("pmra_mas_yr"), pm.get("pmdec_mas_yr"), mjd
+        )
+        return {"label": label, "mjd": mjd, "px": px(ra, dec)}
+
+    pts = [expected(f"{y:.1f}", jyear_to_mjd(y)) for y in TRACK_EPOCHS]
+    pts += [expected("A", ea.mjd), expected("B", eb.mjd)]
+    pts.sort(key=lambda p: p["mjd"])
+    measured = []
+    if shift:
+        measured = [
+            {"label": "A", "px": px(*shift["a_centroid"])},
+            {"label": "B", "px": px(*shift["b_centroid"])},
+        ]
+    return {
+        "expected": pts,
+        "measured": measured,
+        "source": "SIMBAD J2000 + öz hareket (paralaks ihmal)",
+        "note": "Çizgi, bilinen hareketten hesaplanan beklenen konumdur; ölçüm değildir.",
+    }
 
 
 async def _apply_flux_correction(e: Epoch) -> bool:
@@ -322,7 +359,9 @@ async def compare_time(
 
     # Display geometry (N/E arrows, scale bar) comes from A's grid, which both images now share
     orient = S._sky_orientation(ea.wcs, *ea.data.shape)  # noqa: SLF001 - shared helper
+    track = motion_track(proper_motion, ea, eb, analysis.get("shift"))
     return {
+        "track": track,
         "id": secrets.token_hex(8),
         "kind": "time",
         "target": {"ra": ra, "dec": dec},

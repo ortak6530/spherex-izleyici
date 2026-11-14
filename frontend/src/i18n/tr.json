@@ -419,7 +419,7 @@
     "vmag": "Öngörülen V parlaklığı",
     "frame": "Kare",
     "trackLabel": "Cismin gökyüzündeki yolu",
-    "trackCaption": "Gri: JPL Horizons yolu (dönem ±3 gün) · mor: bu dönemdeki kareler · sarı: gösterilen kare. Doğu solda.",
+    "trackCaption": "Gri: JPL Horizons yolu (dönem ±3 gün) · mor: bu dönemdeki karelerde IRSA MOST konumları · sarı: gösterilen kare. Doğu solda. Çizgi, bilinen hareketten hesaplanan beklenen konumdur; ölçüm değildir.",
     "notes": "SPHEREx'in filtresi dedektör boyunca dalga boyu değiştirir; bu yüzden her kare farklı bir dalga boyundadır (λ). Kuyruklu yıldızlar sönük ve yaygın olduğundan sinyal gürültüye yakın olabilir.",
     "source": "Kaynak: {{source}}",
     "progress": {
@@ -444,7 +444,9 @@
     "blinkRate": "Hız",
     "lambdaNote": "Bu bir spektral görüntüdür: dalga boyu görüntü boyunca {{min}}–{{max}} µm arasında değişir (hedefte {{lam}} µm).",
     "sharedScale": "İki görüntü aynı parlaklık ölçeğinde.",
-    "diffLegend": "Mavi: B'de daha sönük · Kırmızı: B'de daha parlak (MJy/sr)"
+    "diffLegend": "Mavi: B'de daha sönük · Kırmızı: B'de daha parlak (MJy/sr)",
+    "track": "Hareket izini göster",
+    "trackLegend": "Mavi kesikli çizgi ve noktalar: 2010.0, 2016.0, A ve B tarihlerinde beklenen konum · ×: ölçülen ağırlık merkezi (A, B). Kesit dışında kalan noktalar görünmez."
   },
   "result": {
     "title": "Karşılaştırma sonucu",

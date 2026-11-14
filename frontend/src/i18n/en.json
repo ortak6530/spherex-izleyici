@@ -419,7 +419,7 @@
     "vmag": "Predicted V magnitude",
     "frame": "Frame",
     "trackLabel": "Path of the object on the sky",
-    "trackCaption": "Grey: JPL Horizons path (visit ±3 days) · purple: frames in this visit · yellow: frame shown. East is left.",
+    "trackCaption": "Grey: JPL Horizons path (visit ±3 days) · purple: IRSA MOST positions in this visit's frames · yellow: frame shown. East is left. The line is the expected position from the known motion, not a measurement.",
     "notes": "SPHEREx's filter changes wavelength across the detector, so every frame is at a different wavelength (λ). Comets are faint and extended, so the signal may be close to the noise.",
     "source": "Source: {{source}}",
     "progress": {
@@ -444,7 +444,9 @@
     "blinkRate": "Speed",
     "lambdaNote": "This is a spectral image: the wavelength changes across the image from {{min}} to {{max}} µm ({{lam}} µm at the target).",
     "sharedScale": "Both images use the same brightness scale.",
-    "diffLegend": "Blue: fainter in B · Red: brighter in B (MJy/sr)"
+    "diffLegend": "Blue: fainter in B · Red: brighter in B (MJy/sr)",
+    "track": "Show the motion track",
+    "trackLegend": "Blue dashed line and dots: expected position at 2010.0, 2016.0 and the A and B dates · ×: measured centroid (A, B). Points outside the cutout are not visible."
   },
   "result": {
     "title": "Comparison result",

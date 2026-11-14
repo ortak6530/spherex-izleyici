@@ -28,7 +28,16 @@ interface Props {
   label?: string;
   unit?: string;
   showOverlays?: boolean;
+  track?: MotionTrack | null;
 }
+
+/** Expected positions from the known motion (server, A's grid) and the measured centroids. */
+export type MotionTrack = {
+  expected: { label: string; mjd: number; px: [number, number] }[];
+  measured: { label: string; px: [number, number] }[];
+  source: string;
+  note: string;
+};
 
 /** One SPHEREx cutout on a canvas (pixelated), with scale bar, N/E arrows and a hover readout. */
 export default function CutoutView({
@@ -40,6 +49,7 @@ export default function CutoutView({
   label,
   unit,
   showOverlays = true,
+  track = null,
 }: Props) {
   const { t } = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -111,6 +121,43 @@ export default function CutoutView({
             className="pointer-events-none absolute inset-0 h-full w-full"
             aria-hidden="true"
           >
+            {track && track.expected.length > 1 && (
+              <g fontSize={w * 0.045} fontFamily="Inter Variable">
+                <polyline
+                  points={track.expected.map((p) => `${p.px[0] + 0.5},${h - (p.px[1] + 0.5)}`).join(" ")}
+                  fill="none"
+                  stroke="#93c5fd"
+                  strokeWidth={Math.max(w / 260, 0.2)}
+                  strokeDasharray={`${w * 0.02} ${w * 0.015}`}
+                />
+                {track.expected.map((p) => (
+                  <g key={p.label} transform={`translate(${p.px[0] + 0.5} ${h - (p.px[1] + 0.5)})`}>
+                    <circle r={w * 0.012} fill="#93c5fd" stroke="#050816" strokeWidth={w / 400} />
+                    <text
+                      x={w * 0.02}
+                      y={-w * 0.015}
+                      fill="#e8edf7"
+                      stroke="#050816"
+                      strokeWidth={w / 500}
+                      paintOrder="stroke"
+                    >
+                      {p.label}
+                    </text>
+                  </g>
+                ))}
+                {track.measured.map((m) => (
+                  <g
+                    key={`m-${m.label}`}
+                    transform={`translate(${m.px[0] + 0.5} ${h - (m.px[1] + 0.5)})`}
+                    stroke="#f9fafb"
+                    strokeWidth={Math.max(w / 300, 0.2)}
+                  >
+                    <line x1={-w * 0.018} y1={-w * 0.018} x2={w * 0.018} y2={w * 0.018} />
+                    <line x1={-w * 0.018} y1={w * 0.018} x2={w * 0.018} y2={-w * 0.018} />
+                  </g>
+                ))}
+              </g>
+            )}
             <g stroke="#fcd34d" strokeWidth={Math.max(w / 220, 0.25)} fill="none">
               <circle cx={overlay.target[0]} cy={overlay.target[1]} r={w * 0.06} />
               <line

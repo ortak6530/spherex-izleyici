@@ -95,7 +95,13 @@ export default function CompareView({ result }: { result: TimeCompareResult }) {
     return () => window.clearInterval(id);
   }, [mode, rateMs]);
 
-  const common = { limits: result.shared_limits, stretch, cmap };
+  const [showTrack, setShowTrack] = useState(true);
+  const common = {
+    limits: result.shared_limits,
+    stretch,
+    cmap,
+    track: showTrack ? (result.track ?? null) : null,
+  };
   const tabCls = (m: Mode) =>
     `h-9 cursor-pointer rounded-lg px-3 text-sm transition-colors duration-200 ${
       mode === m ? "bg-nebula-500 text-white" : "border border-white/10 text-ink-300 hover:text-ink-100"
@@ -185,11 +191,30 @@ export default function CompareView({ result }: { result: TimeCompareResult }) {
             limits={[-result.diff_limit, result.diff_limit]}
             stretch="linear"
             cmap="diverging"
+            track={common.track}
           />
           <p className="text-xs text-ink-400">{t("viewer.diffLegend")}</p>
         </div>
       )}
       {mode !== "diff" && <p className="text-xs text-ink-400">{t("viewer.sharedScale")}</p>}
+      {result.track && (
+        <div className="space-y-1 text-xs text-ink-300">
+          <label className="inline-flex cursor-pointer items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={showTrack}
+              onChange={(e) => setShowTrack(e.target.checked)}
+              className="size-4 accent-nebula-500"
+            />
+            {t("viewer.track")}
+          </label>
+          {showTrack && (
+            <p>
+              {t("viewer.trackLegend")} {result.track.note} ({result.track.source})
+            </p>
+          )}
+        </div>
+      )}
     </section>
   );
 }

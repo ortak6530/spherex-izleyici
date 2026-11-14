@@ -1,3 +1,4 @@
+import type { MotionTrack } from "../components/CutoutView";
 import type { Warning } from "../lib/format";
 
 export interface EpochMeta {
@@ -46,6 +47,7 @@ export interface TimeCompareResult {
   background: { a: number | null; b: number | null };
   normalization: { enabled: boolean; factor: number | null };
   flux_corrected_image?: string | null; // QR2 (R6) image multiplied by IRSA's QR3 correction
+  track?: MotionTrack | null; // expected positions from proper motion (stars only)
   shift: { arcsec: number; px: number; pa_deg: number } | null;
   expected_shift: { arcsec: number; px: number; pm_mas_yr: number; source: string } | null;
   photometry: {
