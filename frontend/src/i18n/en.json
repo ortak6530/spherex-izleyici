@@ -42,6 +42,7 @@
     "unavailable": "Gaia DR3 is not reachable right now; the comparison is shown without the Gaia layer.",
     "candidate": "Possible counterpart (candidate): Gaia DR3 {{id}}, G = {{g}}; its 2016.0 position is {{sep}}″ from SIMBAD's expectation. Chance of an unrelated Gaia source this close: {{p}} ({{pr}} anywhere within the {{r}}″ match radius).",
     "astrometry": "Gaia: parallax {{plx}}, proper motion {{pm}}.",
+    "probHow": "How the probability is computed: {{n}} Gaia sources with G < {{g}} lie in the {{rf}}″-radius field circle (density ρ = {{rho}} sources/arcmin²); P = 1 − exp(−π·r²·ρ), with r = the observed separation ({{sep}}″, at least 0.1″) or the match radius ({{r}}″).",
     "noData": "no data",
     "noMotion": "Gaia DR3 has no proper motion or parallax for this source (2-parameter solution): no expected position computed (no data).",
     "expected": "Expected shift from proper motion + annual parallax {{exp}}″; measured {{meas}}″, difference {{diff}} px. The centroid measured in A is {{sepa}}″ from Gaia's expected position.",
@@ -491,6 +492,10 @@
     "lambdaNote": "This is a spectral image: the wavelength changes across the image from {{min}} to {{max}} µm ({{lam}} µm at the target).",
     "sharedScale": "Both images use the same brightness scale.",
     "diffLegend": "Blue: fainter in B · Red: brighter in B (MJy/sr)",
+    "diffKind": "Difference image type",
+    "diffKinds": { "flux": "Difference (MJy/sr)", "sigma": "Significance (σ)" },
+    "sigmaLabel": "(B − A) / noise (σ)",
+    "sigmaLegend": "Each pixel's difference divided by its own noise (VARIANCE); colour scale ±{{s}}σ. Below about ±3σ is usually noise.",
     "track": "Show the motion track",
     "trackLegend": "Blue dashed line and dots: expected position at 2010.0, 2016.0 and the A and B dates · ×: measured centroid (A, B). Points outside the cutout are not visible."
   },

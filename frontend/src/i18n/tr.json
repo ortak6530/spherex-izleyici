@@ -42,6 +42,7 @@
     "unavailable": "Gaia DR3 şu an erişilemedi; karşılaştırma Gaia katmanı olmadan gösteriliyor.",
     "candidate": "Olası karşılık (aday): Gaia DR3 {{id}}, G = {{g}}; 2016.0 konumu SIMBAD'dan beklenene {{sep}}″ uzaklıkta. Bu kadar yakında tesadüfen bir Gaia kaynağı bulunma olasılığı {{p}} ({{r}}″ eşleştirme yarıçapının tamamında {{pr}}).",
     "astrometry": "Gaia: paralaks {{plx}}, öz hareket {{pm}}.",
+    "probHow": "Olasılık nasıl hesaplandı: alanda {{rf}}″ yarıçaplı dairede G < {{g}} olan {{n}} Gaia kaynağı var (yoğunluk ρ = {{rho}} kaynak/yay dakikası²); P = 1 − exp(−π·r²·ρ), r = gözlenen ayrım ({{sep}}″, en az 0,1″) ya da eşleştirme yarıçapı ({{r}}″).",
     "noData": "veri yok",
     "noMotion": "Gaia DR3'te bu kaynağın öz hareketi ve paralaksı yok (2 parametreli çözüm): beklenen konum hesaplanmadı (veri yok).",
     "expected": "Öz hareket + yıllık paralaksla beklenen kayma {{exp}}″; ölçülen {{meas}}″, fark {{diff}} piksel. A'da ölçülen ağırlık merkezi Gaia'nın beklediği konuma {{sepa}}″ uzaklıkta.",
@@ -491,6 +492,10 @@
     "lambdaNote": "Bu bir spektral görüntüdür: dalga boyu görüntü boyunca {{min}}–{{max}} µm arasında değişir (hedefte {{lam}} µm).",
     "sharedScale": "İki görüntü aynı parlaklık ölçeğinde.",
     "diffLegend": "Mavi: B'de daha sönük · Kırmızı: B'de daha parlak (MJy/sr)",
+    "diffKind": "Fark görüntüsü türü",
+    "diffKinds": { "flux": "Fark (MJy/sr)", "sigma": "Anlamlılık (σ)" },
+    "sigmaLabel": "(B − A) / gürültü (σ)",
+    "sigmaLegend": "Her piksel farkının kendi gürültüsüne bölünmüşü (VARIANCE); renk ölçeği ±{{s}}σ. Yaklaşık ±3σ'nın altı genellikle gürültüdür.",
     "track": "Hareket izini göster",
     "trackLegend": "Mavi kesikli çizgi ve noktalar: 2010.0, 2016.0, A ve B tarihlerinde beklenen konum · ×: ölçülen ağırlık merkezi (A, B). Kesit dışında kalan noktalar görünmez."
   },

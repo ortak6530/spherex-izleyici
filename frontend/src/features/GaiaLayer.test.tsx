@@ -95,6 +95,11 @@ describe("Gaia layer", () => {
     expect(screen.getByText(/< %0,1 \(6\.15″ eşleştirme yarıçapının tamamında %21\.8\)/)).toBeTruthy();
     expect(screen.getByText(/beklenen kayma 11\.07″; ölçülen 12\.50″, fark 0\.23 piksel/)).toBeTruthy();
     expect(screen.getByText(/kesin eşleşme değildir/)).toBeTruthy();
+    // the one-sentence explanation shows the density and radii the number comes from
+    const how = screen.getByText(/Olasılık nasıl hesaplandı/).textContent!;
+    expect(how).toMatch(/255″ yarıçaplı dairede G < 19 olan 422 Gaia kaynağı/);
+    expect(how).toMatch(/ρ = 7\.4\d kaynak\/yay dakikası²/);
+    expect(how).toMatch(/P = 1 − exp\(−π·r²·ρ\)/);
   });
 
   it("says 'veri yok' when Gaia has no motion, never 'yeni keşif' when nothing matches", () => {

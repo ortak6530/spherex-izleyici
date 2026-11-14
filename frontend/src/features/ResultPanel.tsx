@@ -40,6 +40,16 @@ function GaiaSection({ r }: { r: TimeCompareResult }) {
               r: fmt(tg.match_radius_arcsec, 2),
             })}
           </p>
+          <p className="text-xs text-ink-400">
+            {t("gaia.probHow", {
+              n: g.n_field,
+              g: g.g_limit,
+              rf: fmt(g.radius_deg * 3600, 0),
+              rho: fmt(g.n_field / (Math.PI * (g.radius_deg * 60) ** 2), 2),
+              sep: fmt(Math.max(tg.separation_2016_arcsec, 0.1), 2),
+              r: fmt(tg.match_radius_arcsec, 2),
+            })}
+          </p>
           <p className="text-ink-300">
             {tg.has_pm
               ? t("gaia.astrometry", {
