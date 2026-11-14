@@ -118,6 +118,20 @@ async def coverage(ra: float, dec: float, progress: Progress | None = None) -> l
     return images
 
 
+def cached_coverage_count(ra: float, dec: float) -> int | None:
+    """Number of images at (ra, dec) if every active collection is already cached; None otherwise.
+
+    Never queries IRSA (the assistant uses it to mention how many images the open object has)."""
+    total = 0
+    for rel in releases().active:
+        for coll in rel.sia_collections:
+            hit = cache.get_json(f"{rel.id}/coverage", f"{coll}_{target_key(ra, dec)}", 24 * 3600)
+            if hit is None:
+                return None
+            total += len(hit)
+    return total
+
+
 def get_image(image_id: str) -> SpherexImage | None:
     d = cache.get_json("_index/images", image_id.replace(":", "_"), None)
     return SpherexImage(**d) if d else None

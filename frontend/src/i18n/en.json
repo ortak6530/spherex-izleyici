@@ -133,7 +133,11 @@
       "compare": "Observations and comparisons",
       "download": "Downloads",
       "account": "Account",
-      "feedback": "Feedback"
+      "feedback": "Feedback",
+      "assistant": "Assistant"
+    },
+    "eventTypes": {
+      "assistant_question": "Assistant question"
     },
     "reload": "Reload",
     "liveOn": "Live: new events arrive instantly over WebSocket.",

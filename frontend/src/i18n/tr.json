@@ -133,7 +133,11 @@
       "compare": "Gözlem ve karşılaştırma",
       "download": "İndirme",
       "account": "Hesap",
-      "feedback": "Geri bildirim"
+      "feedback": "Geri bildirim",
+      "assistant": "Asistan"
+    },
+    "eventTypes": {
+      "assistant_question": "Asistan sorusu"
     },
     "reload": "Yenile",
     "liveOn": "Canlı: yeni olaylar anında WebSocket ile gelir.",

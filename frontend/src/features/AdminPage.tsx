@@ -221,7 +221,7 @@ function LiveTab() {
             {items.map((e, i) => (
               <tr key={e.id ?? `live-${i}-${e.ts}`} className={e.live ? "bg-nebula-500/10" : ""}>
                 <td className={`${td} font-mono text-xs whitespace-nowrap`}>{when(e.ts)}</td>
-                <td className={td}>{e.type}</td>
+                <td className={td}>{t(`admin.eventTypes.${e.type}`, { defaultValue: e.type })}</td>
                 <td className={td}>{e.object_key ?? "—"}</td>
                 <td className={`${td} text-xs`}>{e.user ?? (e.session ? `#${e.session}` : "—")}</td>
                 <td className={`${td} font-mono text-xs break-all text-ink-300`}>

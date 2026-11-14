@@ -40,7 +40,15 @@ async def lifespan(_app: FastAPI):
                 log.info("purged %d events older than %d days", n, s.event_retention_days)
     except Exception:  # noqa: BLE001 - DB may not be migrated yet in a fresh dev checkout
         log.exception("event retention purge failed (did you run 'alembic upgrade head'?)")
+    # Newest observation in the archive (for the assistant), checked in the background every 12 h
+    fresh_task = None
+    if s.archive_freshness_check:
+        from .services import freshness
+
+        fresh_task = asyncio.create_task(freshness.run_forever())
     yield
+    if fresh_task:
+        fresh_task.cancel()
     from .http import http
 
     await http.aclose()

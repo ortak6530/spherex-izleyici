@@ -9,6 +9,7 @@ _tmp = Path(tempfile.mkdtemp(prefix="skytracker-test-"))
 os.environ["DATABASE_URL"] = f"sqlite:///{(_tmp / 'test.db').as_posix()}"
 os.environ["APP_ENV"] = "development"
 os.environ["IP_HASH_SALT"] = "test-salt"
+os.environ["ARCHIVE_FRESHNESS_CHECK"] = "false"  # no live IRSA TAP query from the test app
 
 
 @pytest.fixture(scope="session")

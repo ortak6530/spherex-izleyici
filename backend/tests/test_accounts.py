@@ -233,7 +233,9 @@ def test_saving_a_comparison_from_this_browser(client, sent):
     _login(client, sent, _email("cmp"))
     sid = client.cookies.get("sid")
     with session_scope() as db:
-        db.add(Comparison(id="cafe0001", session_id=sid, kind="time", object_key="m-31", params={}, result={}))  # noqa: E501
+        db.add(
+            Comparison(id="cafe0001", session_id=sid, kind="time", object_key="m-31", params={}, result={})
+        )  # noqa: E501
     r = client.post("/api/v1/me/saved", json={"kind": "comparison", "ref": "cafe0001", "label": "M 31 zaman"})
     assert r.status_code == 201
     with session_scope() as db:

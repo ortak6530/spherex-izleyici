@@ -34,6 +34,8 @@ class Context:
     object: dict | None = None  # target labels from the page (name, kind, key, main_id, designation)
     comparison: dict | None = None  # stored result (no pixel arrays), see api/v1/compare.py
     object_info: dict | None = None  # cached /objects/info result
+    n_images: int | None = None  # SPHEREx images at the open object (cached coverage / MOST frames)
+    freshness: dict | None = None  # services/freshness.latest(): newest observation in the archive
 
 
 @dataclass
@@ -86,7 +88,8 @@ def _phrase_in(words: list[str], phrase: list[str]) -> bool:
 
 
 def score(message: str) -> list[tuple[float, dict]]:
-    words = names.normalize(message).split()
+    # "/" and "-" separate words here ("3i/atlas" -> "3i atlas"); names.normalize keeps them for names
+    words = re.split(r"[\s/\-]+", names.normalize(message).strip())
     out = []
     for e in faq()["entries"]:
         s = sum(w for phrase, w in e["_kw"] if phrase and _phrase_in(words, phrase))
@@ -232,7 +235,59 @@ def interpret_object(c: dict) -> str:
     return "\n\n".join(parts)
 
 
-def describe_object(obj: dict | None, info: dict | None) -> str | None:
+def images_text(n: int | None, kind: str | None) -> str:
+    if n is None:
+        return "SPHEREx görüntü sayısı henüz hesaplanmadı (bir bant seçince listelenir)."
+    what = "kare" if kind == "solar_system" else "görüntü"
+    return f"SPHEREx arşivinde (etkin sürümler) bu cisim için {n} {what} var."
+
+
+def object_type(obj: dict, info: dict | None) -> str | None:
+    sim = (info or {}).get("simbad") or {}
+    if obj.get("kind") == "solar_system":
+        return obj.get("orbit_class") or "Güneş Sistemi cismi"
+    if obj.get("kind") == "coordinate":
+        return "koordinat"
+    return sim.get("otype_desc") or sim.get("otype") or obj.get("otype")
+
+
+def object_line(ctx: Context) -> str | None:
+    """One line about the open object, appended to 'personalize' answers."""
+    if not ctx.object:
+        return None
+    t = object_type(ctx.object, ctx.object_info)
+    name = ctx.object.get("name") or "Açık cisim"
+    return (
+        f"Şu an açık: {name}"
+        + (f" ({t})" if t else "")
+        + ". "
+        + images_text(ctx.n_images, ctx.object.get("kind"))
+    )
+
+
+def freshness_text(f: dict | None) -> str:
+    if not f or not f.get("newest"):
+        return (
+            "Arşivdeki en yeni gözlem tarihi şu an IRSA'dan okunuyor (bu sorgu birkaç dakika sürüyor); "
+            "biraz sonra tekrar sor."
+        )
+    n = f["newest"]
+    others = [
+        f"{v.get('release')}: {day(v.get('date_utc'))}"
+        for k, v in (f.get("per_release") or {}).items()
+        if v is not n and v.get("date_utc") != n.get("date_utc")
+    ]
+    checked = str(f.get("checked_at") or "?").replace("T", " ").removesuffix("Z")
+    s = (
+        f"Arşivdeki en yeni SPHEREx gözlemi: {day(n.get('date_utc'))} ({n.get('release')}). "
+        f"Son kontrol {checked} UTC, {f.get('source')}."
+    )
+    if others:
+        s += " Diğer sürümler: " + ", ".join(others) + "."
+    return s
+
+
+def describe_object(obj: dict | None, info: dict | None, n_images: int | None = None) -> str | None:
     if not obj:
         return None
     name = obj.get("name") or "Seçili cisim"
@@ -243,12 +298,11 @@ def describe_object(obj: dict | None, info: dict | None) -> str | None:
         return (
             " ".join(bits)
             + ". Konumu her gün değiştiği için site IRSA MOST ile her SPHEREx karesindeki öngörülen konumu "
-            "kullanır; kareleri kare kare oynatabilirsin."
+            "kullanır; kareleri kare kare oynatabilirsin. " + images_text(n_images, "solar_system")
         )
     if obj.get("kind") == "coordinate":
-        return (
-            f"Seçili hedef bir koordinat ({name}); katalog bilgisi yok. "
-            "SPHEREx görüntüleri bu konum için listelenir."
+        return f"Seçili hedef bir koordinat ({name}); katalog bilgisi yok. " + images_text(
+            n_images, "coordinate"
         )
     sim = (info or {}).get("simbad") or {}
     parts = []
@@ -273,6 +327,7 @@ def describe_object(obj: dict | None, info: dict | None) -> str | None:
         parts.append(" ".join(sentences[:2]) + f" (Vikipedi, {wk.get('lang', '?')})")
     if not info:
         parts.append("Ayrıntılı bilgi şu an alınamadı; bilgi panelinde tekrar deneyebilirsin.")
+    parts.append(images_text(n_images, "object"))
     return " ".join(parts)
 
 
@@ -298,7 +353,7 @@ class RuleBasedAssistant:
         if not norm:
             return self._fallback()
         if _GREETING.match(norm) and len(norm.split()) <= 3:
-            return Answer(data["greeting"], "greeting", _suggest(["site", "howto", "spherex"]))
+            return Answer(data["greeting"], "greeting", _suggest(["spherex", "timecompare", "data"]))
 
         ranked = score(text)
         best = ranked[0] if ranked else None
@@ -307,7 +362,7 @@ class RuleBasedAssistant:
             return Answer(
                 f"{mention['name']} açılıyor…",
                 "open_object",
-                _suggest(["object", "howto"]),
+                _suggest(["object", "timecompare"]),
                 {"type": "open_object", "q": mention["query"]},
             )
         if best and best[0] >= data["min_score"]:
@@ -321,7 +376,7 @@ class RuleBasedAssistant:
                 return Answer(
                     f"{target.get('name') or text} açılıyor…",
                     "open_object",
-                    _suggest(["object", "howto"]),
+                    _suggest(["object", "timecompare"]),
                     {"type": "open_object", "q": target.get("query") or text},
                 )
         return self._fallback()
@@ -337,10 +392,15 @@ class RuleBasedAssistant:
             text = interpret_object(c) if c.get("kind") == "object" else interpret_time(c)
             return Answer(text, "interpret", related)
         if e.get("dynamic") == "object":
-            d = describe_object(ctx.object, ctx.object_info)
+            d = describe_object(ctx.object, ctx.object_info, ctx.n_images)
             if d:
-                return Answer(d, "object", _suggest(["interpret", "howto"]))
-        return Answer(e["answer"], f"faq:{e['id']}", related)
+                return Answer(d, "object", _suggest(["interpret", "timecompare"]))
+        text = e["answer"]
+        if e.get("dynamic") == "freshness":
+            text += "\n\n" + freshness_text(ctx.freshness)
+        if e.get("personalize") and (line := object_line(ctx)):
+            text += "\n\n" + line
+        return Answer(text, f"faq:{e['id']}", related)
 
     async def reply(
         self, message: str | None, quick: str | None, ctx: Context

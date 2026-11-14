@@ -73,7 +73,9 @@ export default function AssistantPanel({
           ? {
               key: target.key,
               name: target.name,
+              query: target.query,
               kind: target.kind,
+              otype: target.otype ?? null,
               main_id: target.main_id ?? null,
               designation: target.designation ?? null,
               orbit_class: target.orbit_class ?? null,

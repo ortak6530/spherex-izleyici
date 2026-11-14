@@ -36,6 +36,8 @@ class Settings(BaseSettings):
     emailjs_private_key: str = ""
 
     wikimedia_user_agent: str = "SPHEREx-Gokyuzu-Izleyici/0.1"
+    # Background check of the archive's newest SPHEREx observation (IRSA TAP, ~2 min per query)
+    archive_freshness_check: bool = True
 
     config_dir: Path = Field(default=REPO_ROOT / "config")
     frontend_dist: Path = Field(default=REPO_ROOT / "frontend" / "dist")

@@ -1,158 +1,161 @@
 {
-  "_comment": "Rule-based assistant (no external AI). Edit freely, no code change needed. Matching: the message is normalised (lower case, ı/i ş/s ğ/g ü/u ö/o ç/c, punctuation removed); each keyword found adds its weight (keywords of 4+ letters also match Turkish suffixes: 'piksel' matches 'pikselli'). The entry with the highest score >= min_score answers. 'quick' entries get a button in the panel (in this order). Entries with 'dynamic' are answered by the server from real data: 'interpret' (the last comparison) and 'object' (the selected object). Answers must stay factual; never put measured numbers here.",
+  "_comment": "Rule-based assistant (no external AI). Edit freely, no code change needed. Matching: the message is normalised (lower case, ı/i ş/s ğ/g ü/u ö/o ç/c, punctuation removed); each keyword found adds its weight (keywords of 4+ letters also match Turkish suffixes: 'piksel' matches 'pikselli'). The entry with the highest score >= min_score answers. 'quick' entries get a button in the panel (in this order). 'dynamic' entries are filled by the server from real data: 'interpret' (the last comparison), 'object' (the open object), 'freshness' (the archive's newest observation, read live from IRSA in the background). 'personalize': true appends one line about the open object (name, type, number of SPHEREx images). Answers must stay short and factual; never put measured numbers, percentages or certainties here.",
   "min_score": 2,
-  "fallback": "Bunu tam anlayamadım. Aşağıdaki sorulardan birini seçebilir ya da bir cisim adı yazabilirsin (ör. \"Barnard Yıldızı\", \"M31\", \"3I/ATLAS\").",
-  "greeting": "Merhaba! Ben bu sitenin yardımcısıyım. Siteyi tanıtabilir, nasıl kullanılacağını anlatabilir ve yaptığın karşılaştırmayı sitenin hesapladığı değerlerle yorumlayabilirim.",
-  "suggest_after_fallback": ["site", "howto", "search", "spherex", "interpret", "pixelated"],
+  "fallback": "Bunu bilmiyorum. Şu sorulardan birini dene:",
+  "greeting": "Merhaba! Bu sitenin yardımcısıyım. Hazır sorulardan birini seçebilir ya da sorunu yazabilirsin; bir karşılaştırma yaptıysan sitenin hesapladığı değerlerle yorumlarım.",
+  "suggest_after_fallback": ["spherex", "colors", "timecompare", "moving", "data", "hubble_webb"],
   "entries": [
-    {
-      "id": "site",
-      "quick": "Site tanıtımı",
-      "question": "Bu site ne işe yarıyor?",
-      "keywords": { "site": 2, "ne ise yarar": 3, "ne ise yariyor": 3, "amac": 2, "tanit": 3, "hakkinda": 1, "bu ne": 1 },
-      "answer": "SPHEREx Gökyüzü İzleyici, NASA'nın SPHEREx teleskobunun gökyüzü görüntülerinde bir cismi bulmanı ve aynı bölgenin farklı tarihlerdeki görüntülerini karşılaştırmanı sağlar. Böylece yakın yıldızların öz hareketini, kuyruklu yıldız ve asteroitlerin yer değiştirmesini ya da parlaklık değişimlerini kendi gözünle görebilirsin. Tüm veriler herkese açık arşivlerden (IRSA, SIMBAD, JPL) gelir; site ölçümleri kendisi hesaplar ve her sayının kaynağını gösterir.",
-      "related": ["howto", "spherex"]
-    },
-    {
-      "id": "howto",
-      "quick": "Nasıl kullanılır?",
-      "question": "Site nasıl kullanılır?",
-      "keywords": { "nasil kullan": 4, "kullanim": 3, "baslangic": 2, "ne yapmaliyim": 3, "adim": 2, "yardim": 2 },
-      "answer": "Üç adımda: 1) Üstteki arama kutusuna bir cisim adı ya da koordinat yaz. 2) Bir dalga boyu bandı (D1–D6) seç; site o konumdaki SPHEREx ziyaretlerini listeler. 3) Dönem A ve Dönem B için iki ziyaret seçip \"Karşılaştır\"a bas. Sonuçta yan yana, yanıp sönme, kaydırma ve fark görünümleri ile ölçülen kayma ve parlaklık farkı çıkar. İstersen ikinci bir cisim seçip iki cismi aynı kanalda karşılaştırabilir, sonucu Excel olarak indirebilirsin.",
-      "related": ["search", "views", "interpret"]
-    },
-    {
-      "id": "search",
-      "quick": "Nasıl arama yapılır?",
-      "question": "Nasıl arama yapılır?",
-      "keywords": { "ara": 1, "arama": 3, "nasil ara": 4, "bul": 1, "koordinat": 3, "isim": 1, "ad yaz": 2 },
-      "answer": "Arama kutusuna Türkçe ya da katalog adıyla yazabilirsin: \"Barnard Yıldızı\", \"Andromeda\", \"M31\", \"Betelgeuse\", \"3I/ATLAS\". Koordinat da olur: derece (\"10.684 41.269\") ya da saat/derece (\"00h42m44s +41d16m09s\"). İki harf yazınca öneriler çıkar; ok tuşlarıyla seçip Enter'a basabilirsin. Adlar SIMBAD (yıldızlar, gökadalar) ve JPL (Güneş Sistemi cisimleri) ile çözülür.",
-      "related": ["howto", "moving"]
-    },
     {
       "id": "spherex",
       "quick": "SPHEREx nedir?",
-      "question": "SPHEREx nedir?",
       "keywords": { "spherex": 3, "teleskop": 2, "uydu": 2, "nasa": 1, "nedir": 1 },
-      "answer": "SPHEREx, NASA'nın 2025'te fırlatılan kızılötesi uzay teleskobudur. Tüm gökyüzünü 0,75–5 mikrometre arasında 102 farklı renkte (spektral kanalda) tarar ve aynı haritayı yaklaşık altı ayda bir yeniler. Amacı evrenin ilk anlarına dair izleri, gökadaların tarihini ve yıldızlararası buzları incelemektir. Proje JPL ve Caltech tarafından yürütülür; veriler NASA/IPAC Kızılötesi Bilim Arşivi'nde (IRSA) herkese açıktır.",
-      "related": ["lvf", "releases", "pixelated"]
+      "answer": "SPHEREx, NASA'nın 2025'te fırlatılan kızılötesi uzay teleskobu. Tüm gökyüzünü 0,75–5 mikrometre arasında 102 renkte (spektral kanalda) tarar ve haritayı yaklaşık altı ayda bir yeniler. Görev JPL ve Caltech tarafından yürütülür; veriler IRSA arşivinde herkese açıktır.",
+      "related": ["colors", "data"]
     },
     {
-      "id": "views",
-      "quick": "Görünümler ne demek?",
-      "question": "Yan yana, yanıp sönme ve fark görünümleri ne demek?",
-      "keywords": { "gorunum": 3, "yanip son": 4, "blink": 3, "fark goruntu": 4, "kaydir": 2, "yan yana": 3, "sigma": 2, "renk olcegi": 2 },
-      "answer": "Yan yana: Dönem A ve Dönem B aynı parlaklık ölçeğinde. Yanıp sönme: iki görüntü sırayla gösterilir; yer değiştiren cisim zıplıyormuş gibi görünür. Kaydırma: bir çizgiyi sürükleyerek iki dönem arasında geçiş yaparsın. Fark: B − A; koyu/açık çift (dipol) hareketi, tek renkli leke parlaklık değişimini gösterir. σ haritası farkı gürültüye böler; ±3σ'nın altı genellikle gürültüdür.",
-      "related": ["interpret", "grey"]
+      "id": "colors",
+      "quick": "Bu görüntüdeki renkler ne anlama geliyor?",
+      "personalize": true,
+      "keywords": { "renk": 3, "renkler": 3, "sari": 2, "mor": 2, "siyah": 2, "parlak": 1, "ne anlama": 1, "renk olcegi": 4 },
+      "answer": "Renkler gerçek renk değildir. SPHEREx her pikselde tek bir dalga boyunda parlaklık ölçer; site bu parlaklığı bir renk ölçeğiyle boyar: koyu = sönük, açık/sarı = parlak. Gri pikseller güvenilmez ya da maskelenmiş piksellerdir. Fark görünümünde iki zıt renk, iki tarih arasında parlaklığın arttığı ve azaldığı yerleri gösterir. Görüntünün bir kenarından diğerine dalga boyu da değişir; hedefin kendi dalga boyu (λ) görüntünün altında yazar.",
+      "related": ["timecompare", "grey"]
+    },
+    {
+      "id": "timecompare",
+      "quick": "Zaman karşılaştırmasını nasıl kullanırım?",
+      "personalize": true,
+      "keywords": { "zaman karsilastir": 5, "nasil karsilastir": 4, "iki donem": 4, "donem": 2, "nasil kullan": 3, "karsilastirma": 1, "kullanim": 2 },
+      "answer": "1) Bir cisim ara ve bir bant (D1–D6) seç. 2) Dönem A ve Dönem B için iki ziyaret seç; site dalga boyları en yakın görüntü çiftini önerir. 3) \"Karşılaştır\"a bas. Sonuçta yan yana, yanıp sönme, kaydırma ve fark görünümleri ile ölçülen kayma ve parlaklık farkı çıkar. Ardından bana \"Karşılaştırmayı yorumla\" de.",
+      "related": ["interpret", "views"]
+    },
+    {
+      "id": "moving",
+      "quick": "Hareketli cisim nedir, 3I/ATLAS neden özel?",
+      "keywords": { "hareketli": 4, "kuyruklu": 4, "asteroit": 4, "3i": 3, "atlas": 3, "yildizlararasi": 4, "ozel": 1, "gunes sistemi": 3 },
+      "answer": "Hareketli cisimler (kuyruklu yıldızlar, asteroitler) Güneş Sistemi'nde dolaştıkları için her gün gökyüzünde başka bir yerdedir. Site bunlar için IRSA'nın MOST aracını kullanır: JPL yörüngesiyle cismin her SPHEREx karesindeki konumu hesaplanır, kesit cisme ortalanır ve kareler sırayla oynatılır. Bu konumlar öngörüdür, ölçüm değildir. 3I/ATLAS, Temmuz 2025'te keşfedilen ve bilinen üçüncü yıldızlararası cisimdir (1I/ʻOumuamua ve 2I/Borisov'dan sonra): Güneş'e bağlı olmayan bir yörüngeyle başka bir yıldız sisteminden gelmiştir. Denemek için \"3I/ATLAS\" yaz.",
+      "related": ["search", "data"]
+    },
+    {
+      "id": "data",
+      "quick": "Veri nereden geliyor, ne kadar güncel?",
+      "dynamic": "freshness",
+      "keywords": { "nereden": 3, "kaynak": 3, "guncel": 4, "en yeni": 4, "son gozlem": 4, "ne zaman": 2, "tarih": 1, "irsa": 2, "veri": 1 },
+      "answer": "SPHEREx görüntüleri NASA/IPAC Kızılötesi Bilim Arşivi'nden (IRSA), cisim bilgileri SIMBAD'dan, Güneş Sistemi cisimleri JPL'den, kısa açıklamalar Vikipedi'den gelir. Her kaynak ve teşekkür metni alt bilgideki \"Kaynaklar\" sayfasındadır.",
+      "related": ["releases", "spherex"]
+    },
+    {
+      "id": "hubble_webb",
+      "quick": "Hubble ve Webb karşılaştırması nedir?",
+      "keywords": { "hubble": 4, "webb": 4, "jwst": 4, "hst": 3, "mast": 2 },
+      "answer": "Hubble ve Webb, küçük bir alanı çok keskin gören teleskoplardır; SPHEREx ise tüm gökyüzünü daha kaba piksellerle ama 102 renkte tarar. Bu sitede Hubble ↔ Webb yan yana görünümü henüz yok. Eklendiğinde, MAST arşivindeki herkese açık önizlemeler kayıt bilgileriyle (tarih, alet, süzgeç) gösterilecek; görüntü yoksa bu açıkça yazılacak.",
+      "related": ["pixelated", "spherex"]
     },
     {
       "id": "interpret",
       "quick": "Karşılaştırmayı yorumla",
-      "question": "Karşılaştırmayı yorumla",
       "dynamic": "interpret",
-      "keywords": { "yorumla": 4, "yorum": 3, "sonuc": 2, "karsilastirma": 2, "acikla": 2, "ne anlama": 2 },
+      "keywords": { "yorumla": 4, "yorum": 3, "sonuc": 2, "acikla": 2, "sonucu": 2 },
       "answer": "Önce bir karşılaştırma yap: bir cisim arayıp iki dönem seç ve \"Karşılaştır\"a bas (ya da cisim–cisim karşılaştırması yap). Sonra bana tekrar sor; sitenin hesapladığı değerlerle yorumlarım.",
-      "related": ["views", "channel"]
+      "related": ["timecompare", "channel"]
     },
     {
       "id": "object",
       "quick": "Seçili cisim",
-      "question": "Seçili cisim hakkında bilgi",
       "dynamic": "object",
       "keywords": { "secili cisim": 4, "bu cisim": 4, "bu yildiz": 3, "cisim hakkinda": 4, "bilgi ver": 2 },
       "answer": "Henüz bir cisim seçmedin. Üstteki arama kutusuna bir ad yaz ya da bana yaz (ör. \"Barnard Yıldızı\"), ben açayım.",
       "related": ["search"]
     },
     {
-      "id": "pixelated",
-      "question": "Görüntü neden pikselli?",
-      "keywords": { "piksel": 4, "bulanik": 3, "netlik": 2, "cozunurluk": 4, "kalite": 2, "neden boyle": 1 },
-      "answer": "SPHEREx'in her pikseli gökyüzünde yaklaşık 6,2 yay saniyesi kaplar. Bu, Hubble ve Webb'in piksellerinden yaklaşık 100 kat daha büyüktür. SPHEREx keskin portreler için değil, tüm gökyüzünü 102 renkte hızlıca taramak için tasarlandı: geniş ve az ayrıntılı ama eksiksiz bir harita. Bu yüzden yakından bakınca yıldızlar birkaç piksellik kareler gibi görünür; ölçümler yine de bu ham piksellerle yapılır.",
-      "related": ["spherex", "grey"]
+      "id": "site",
+      "question": "Bu site ne işe yarıyor?",
+      "keywords": { "site": 2, "ne ise yarar": 3, "ne ise yariyor": 3, "amac": 2, "tanit": 3 },
+      "answer": "Bu site, SPHEREx görüntülerinde bir cismi bulmanı ve aynı bölgenin farklı tarihlerdeki görüntülerini karşılaştırmanı sağlar: yakın yıldızların öz hareketini, kuyruklu yıldız ve asteroitlerin yer değiştirmesini ya da parlaklık değişimlerini görebilirsin. Ölçümleri site kendisi hesaplar ve her sayının kaynağını gösterir.",
+      "related": ["timecompare", "spherex"]
     },
     {
-      "id": "lvf",
-      "question": "Neden görüntünün her yerinde dalga boyu farklı?",
-      "keywords": { "dalga boyu": 3, "lambda": 2, "renk": 1, "kanal": 2, "suzgec": 3, "lvf": 3, "102": 2 },
-      "answer": "SPHEREx görüntüleri tek renkli fotoğraflar değildir. Dedektörün önündeki doğrusal değişken süzgeç (LVF) yüzünden görüntünün bir kenarından diğerine dalga boyu değişir. Site bu yüzden her görüntüde hedefin tam bulunduğu pikseldeki dalga boyunu (λ) hesaplar ve iki dönemi yalnızca λ'ları yakınsa karşılaştırır.",
-      "related": ["channel", "spherex"]
+      "id": "search",
+      "question": "Nasıl arama yapılır?",
+      "keywords": { "arama": 3, "nasil ara": 4, "koordinat": 3, "ad yaz": 2 },
+      "answer": "Arama kutusuna Türkçe ya da katalog adı yaz (\"Barnard Yıldızı\", \"Andromeda\", \"M31\", \"3I/ATLAS\") ya da koordinat gir (\"10.684 41.269\" veya \"00h42m44s +41d16m09s\"). İki harf yazınca öneriler çıkar.",
+      "related": ["timecompare"]
+    },
+    {
+      "id": "views",
+      "question": "Yan yana, yanıp sönme ve fark görünümleri ne demek?",
+      "keywords": { "gorunum": 3, "yanip son": 4, "blink": 3, "fark goruntu": 4, "kaydir": 2, "yan yana": 3, "sigma": 2 },
+      "answer": "Yan yana: iki dönem aynı ölçekte. Yanıp sönme: iki görüntü sırayla gösterilir, yer değiştiren cisim zıplar. Kaydırma: çizgiyi sürükleyerek geçiş yaparsın. Fark: B − A; yan yana zıt renkli çift hareketi, tek renkli leke parlaklık değişimini gösterir. σ haritası farkı gürültüye böler.",
+      "related": ["colors", "interpret"]
+    },
+    {
+      "id": "pixelated",
+      "question": "Görüntü neden pikselli?",
+      "keywords": { "piksel": 4, "bulanik": 3, "netlik": 2, "cozunurluk": 4, "kalite": 2 },
+      "answer": "SPHEREx'in her pikseli gökyüzünde yaklaşık 6,2 yay saniyesi kaplar; bu, Hubble ve Webb'in piksellerinden çok daha büyüktür. SPHEREx keskin portreler için değil, tüm gökyüzünü 102 renkte taramak için tasarlandı. Bu yüzden yıldızlar birkaç piksellik kareler gibi görünür; ölçümler yine bu ham piksellerle yapılır.",
+      "related": ["hubble_webb", "colors"]
     },
     {
       "id": "channel",
       "question": "\"Aynı kanal\" ne demek?",
-      "keywords": { "ayni kanal": 4, "yakin kanal": 4, "farkli kanal": 4, "bant genisligi": 3, "kanal eslesme": 4 },
-      "answer": "İki görüntüde hedefin dalga boyları arasındaki fark (Δλ) bant genişliğinin yarısından küçükse \"aynı kanal\" sayılır. Yarısı ile bir katı arasındaysa \"yakın kanal\" uyarısı verilir: tayfı eğimli cisimlerde bu tek başına parlaklık farkı yaratabilir. Bir bant genişliğinden fazlaysa site karşılaştırma yapmaz.",
-      "related": ["lvf", "interpret"]
+      "keywords": { "ayni kanal": 4, "yakin kanal": 4, "farkli kanal": 4, "bant genisligi": 3, "kanal": 2, "dalga boyu": 2 },
+      "answer": "İki görüntüde hedefin dalga boyları arasındaki fark (Δλ) bant genişliğinin yarısından küçükse \"aynı kanal\" sayılır. Yarısı ile bir katı arasındaysa \"yakın kanal\" uyarısı çıkar; bir bant genişliğinden fazlaysa site karşılaştırma yapmaz.",
+      "related": ["colors", "interpret"]
     },
     {
       "id": "releases",
       "question": "DR1, QR3 gibi veri sürümleri nedir?",
-      "keywords": { "dr1": 3, "qr3": 3, "qr2": 3, "surum": 3, "veri surumu": 4, "release": 2 },
-      "answer": "SPHEREx verisi sürümler halinde yayımlanır. DR1 (Data Release 1, 12 Kasım 2026) görevin ilk yılını (2025 Nisan – 2026 Mayıs) güncel kalibrasyonla yeniden işler. QR3 (Quick Release 3) sonraki ayları kapsar. Eski QR2'nin yerini DR1 aldı; site yeni aramalarda QR2'yi kullanmaz. Farklı kalibrasyon ailelerinden iki görüntü karşılaştırılırsa site uyarı gösterir.",
-      "related": ["spherex"]
-    },
-    {
-      "id": "moving",
-      "question": "Kuyruklu yıldız ve asteroitler nasıl izleniyor?",
-      "keywords": { "kuyruklu": 4, "asteroit": 4, "kuyrukluyildiz": 4, "gezegen": 2, "hareketli": 3, "atlas": 3, "most": 2, "gunes sistemi": 3 },
-      "answer": "Güneş Sistemi cisimleri her gün başka bir yerdedir, bu yüzden site sabit bir konum yerine IRSA'nın MOST aracını kullanır: JPL Horizons yörüngesiyle cismin her SPHEREx karesindeki konumu hesaplanır ve kesit cisme ortalanır. Kareleri kare kare oynatabilirsin. Gösterilen konumlar öngörüdür, ölçüm değildir. Denemek için \"3I/ATLAS\" yaz.",
-      "related": ["search"]
+      "keywords": { "dr1": 3, "qr3": 3, "qr2": 3, "surum": 3, "veri surumu": 4 },
+      "answer": "SPHEREx verisi sürümler halinde yayımlanır. DR1 (12 Kasım 2026) görevin ilk yılını güncel kalibrasyonla yeniden işler; QR3 sonraki ayları kapsar. Eski QR2'nin yerini DR1 aldı; site yeni aramalarda QR2'yi kullanmaz.",
+      "related": ["data"]
     },
     {
       "id": "proper_motion",
       "question": "Öz hareket nedir?",
-      "keywords": { "oz hareket": 4, "kayma": 3, "kaymis": 3, "hareket": 1, "yer degistir": 3 },
-      "answer": "Öz hareket, bir yıldızın gökyüzünde yıllar içinde yavaşça yer değiştirmesidir. Çoğu yıldız için çok küçüktür, ama yakın yıldızlarda ölçülebilir: Barnard Yıldızı yılda yaklaşık 10 yay saniyesi kayar, bu da bir yılda SPHEREx'in yaklaşık 1,7 pikseli eder. Site iki dönem arasındaki ölçülen kaymayı SIMBAD'daki öz hareketten beklenen kaymayla karşılaştırır.",
-      "related": ["interpret", "views"]
+      "keywords": { "oz hareket": 4, "kayma": 3, "kaymis": 3, "yer degistir": 3 },
+      "answer": "Öz hareket, bir yıldızın gökyüzünde yıllar içinde yavaşça yer değiştirmesidir. Yakın yıldızlarda ölçülebilir; site iki dönem arasındaki ölçülen kaymayı SIMBAD'daki öz hareketten beklenen kaymayla karşılaştırır.",
+      "related": ["interpret", "timecompare"]
     },
     {
       "id": "grey",
       "question": "Gri pikseller ne?",
-      "keywords": { "gri": 4, "gri piksel": 3, "maske": 4, "maskeli": 4, "bos piksel": 3, "dolu": 1, "doymus": 4 },
-      "answer": "Gri pikseller güvenilmez ya da maskelenmiş piksellerdir: kozmik ışın izleri, yansıma hayaletleri, doymuş (çok parlak) yıldız merkezleri gibi. Bu pikseller ölçümlere katılmaz. Parlak bir yıldızın merkezi doymuşsa site parlaklık farkını \"ölçülemedi\" olarak gösterir; uydurma değer vermez.",
-      "related": ["pixelated", "views"]
+      "keywords": { "gri": 4, "gri piksel": 3, "maske": 4, "maskeli": 4, "doymus": 4 },
+      "answer": "Gri pikseller güvenilmez ya da maskelenmiş piksellerdir (kozmik ışın izi, yansıma, doymuş parlak yıldız merkezi gibi). Ölçümlere katılmazlar; merkez doymuşsa site parlaklık farkını \"ölçülemedi\" diye gösterir.",
+      "related": ["colors"]
     },
     {
       "id": "zodi",
       "question": "Zodyak ışığı nedir?",
-      "keywords": { "zodyak": 4, "zodi": 4, "toz": 2, "arka plan": 3 },
-      "answer": "Zodyak ışığı, Güneş Sistemi'ndeki toz parçacıklarının yansıttığı ve yaydığı soluk ışıktır; kızılötesinde gökyüzünün en büyük arka plan kaynağıdır. SPHEREx her görüntü için bir zodyak modeli verir; site varsayılan olarak bunu çıkarır. İstersen ham görüntüyü de seçebilirsin.",
-      "related": ["views"]
+      "keywords": { "zodyak": 4, "zodi": 4, "arka plan": 3 },
+      "answer": "Zodyak ışığı, Güneş Sistemi'ndeki tozun yansıttığı ve yaydığı soluk ışıktır; kızılötesinde en büyük arka plan kaynağıdır. Site varsayılan olarak SPHEREx'in zodyak modelini çıkarır; istersen ham görüntüyü seçebilirsin.",
+      "related": ["colors"]
     },
     {
       "id": "object_compare",
       "question": "İki cismi nasıl karşılaştırırım?",
-      "keywords": { "iki cisim": 4, "cisim karsilastir": 4, "benzer": 2, "ayni tur": 3, "kahverengi cuce": 3, "baska cisim": 3 },
-      "answer": "Bir cisim açtıktan sonra sayfanın altındaki \"Cisim–cisim karşılaştırması\" bölümünden ikinci bir cisim seç. Site aynı türden cisimleri öne çıkarır (ör. iki kahverengi cüce). İki görüntü aynı dalga boyu kanalında, aynı boyutta ve aynı parlaklık ölçeğinde gösterilir; yanında SIMBAD bilgileri ve SPHEREx akıları vardır. Farklı türler seçilebilir ama uyarı çıkar.",
+      "keywords": { "iki cisim": 4, "cisim karsilastir": 4, "benzer": 2, "ayni tur": 3, "baska cisim": 3 },
+      "answer": "Bir cisim açtıktan sonra \"Cisim–cisim karşılaştırması\" bölümünden ikinci bir cisim seç. Site aynı türden cisimleri öne çıkarır; iki görüntü aynı kanalda ve aynı ölçekte, yanında SIMBAD bilgileri ve SPHEREx akılarıyla gösterilir. Farklı türlerde uyarı çıkar.",
       "related": ["interpret"]
     },
     {
       "id": "excel",
       "question": "Verileri nasıl indiririm?",
-      "keywords": { "excel": 4, "indir": 3, "xlsx": 4, "veri indir": 4, "tablo": 2, "fits": 2 },
-      "answer": "Cisim başlığındaki \"Excel olarak indir\" düğmesi bir .xlsx dosyası hazırlar: özet, gözlemler (her görüntünün FITS bağlantısıyla), yaptığın karşılaştırmalar ve hareketli cisimlerde konumlar. Ham piksel dosyada yoktur; FITS bağlantısından IRSA'dan indirilebilir. Giriş yaparsan kayıtlı listenden birden çok cismi tek dosyada indirebilirsin.",
+      "keywords": { "excel": 4, "indir": 3, "xlsx": 4, "tablo": 2, "fits": 2 },
+      "answer": "Cisim başlığındaki \"Excel olarak indir\" düğmesi özet, gözlemler (FITS bağlantılarıyla), karşılaştırmaların ve hareketli cisim konumlarının olduğu bir .xlsx hazırlar. Ham piksel dosyada yoktur. Giriş yaparsan listendeki birden çok cismi tek dosyada indirebilirsin.",
       "related": ["account"]
     },
     {
       "id": "account",
       "question": "Neden giriş yapayım?",
-      "keywords": { "giris": 3, "hesap": 3, "uye": 2, "kayit ol": 3, "kod": 1, "liste": 2, "kaydet": 2 },
-      "answer": "Giriş zorunlu değil. Giriş yaparsan cisimleri listene ekleyebilir, karşılaştırmaları kaydedebilir ve listendeki cisimleri tek Excel dosyasında indirebilirsin. Şifre yoktur: e-postana 6 haneli, 10 dakika geçerli bir kod gelir. Giriş yaptığında arama ve liste etkinliğin site yöneticisi tarafından görülebilir.",
+      "keywords": { "giris": 3, "hesap": 3, "uye": 2, "kayit ol": 3, "kaydet": 2 },
+      "answer": "Giriş zorunlu değil. Giriş yaparsan cisimleri listene ekleyebilir, karşılaştırmaları kaydedebilir ve listeni tek Excel dosyasında indirebilirsin. Şifre yok: e-postana 10 dakika geçerli 6 haneli bir kod gelir. Giriş yaptığında arama ve liste etkinliğin site yöneticisi tarafından görülebilir.",
       "related": ["privacy", "excel"]
     },
     {
       "id": "privacy",
       "question": "Hangi veriler kaydediliyor?",
-      "keywords": { "gizlilik": 4, "kvkk": 4, "cerez": 3, "kisisel veri": 4, "takip": 2, "kaydedil": 2 },
-      "answer": "Gizlilik bildirimini kabul edersen site anonim kullanım olayları kaydeder: rastgele bir oturum kimliği, hangi sayfanın açıldığı, aranan cisim, tarayıcı ailesi ve IP adresinin her gün değişen tuzlanmış özeti. IP adresinin kendisi saklanmaz, kayıtlar 90 gün sonra silinir. E-posta yalnızca giriş yaparsan ve yalnızca kod göndermek için kullanılır. Bu asistana yazdıkların kaydedilmez.",
+      "keywords": { "gizlilik": 4, "kvkk": 4, "cerez": 3, "kisisel veri": 4, "takip": 2 },
+      "answer": "Gizlilik bildirimini kabul edersen site anonim kullanım olayları kaydeder (rastgele oturum kimliği, açılan sayfa, aranan cisim, tarayıcı ailesi, IP adresinin her gün değişen özeti); kayıtlar 90 gün sonra silinir. Bu asistana yazdıkların kaydedilmez; yönetici yalnızca \"asistan sorusu\" sorulduğunu görür.",
       "related": ["account"]
-    },
-    {
-      "id": "sources",
-      "question": "Veriler nereden geliyor?",
-      "keywords": { "kaynak": 3, "nereden": 2, "atif": 3, "tesekkur": 3, "lisans": 3, "irsa": 3, "simbad": 3 },
-      "answer": "SPHEREx görüntüleri NASA/IPAC Kızılötesi Bilim Arşivi'nden (IRSA), cisim bilgileri SIMBAD'dan (CDS, Strasbourg), Güneş Sistemi cisimleri JPL'den, kısa açıklamalar Vikipedi'den gelir. Her kaynağın adı, kullanım amacı ve orijinal teşekkür metni alt bilgideki \"Kaynaklar\" sayfasındadır.",
-      "related": ["spherex"]
     },
     {
       "id": "thanks",

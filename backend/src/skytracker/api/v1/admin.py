@@ -29,6 +29,7 @@ ACTIVITY_TYPES = {
     "download": ["download"],
     "account": ["login", "login_code_requested", "saved"],
     "feedback": ["feedback"],
+    "assistant": ["assistant_question"],  # no question text is ever stored
 }
 
 
@@ -209,9 +210,7 @@ class CacheRefresh(BaseModel):
 
 
 @router.post("/cache/refresh")
-def refresh_cache(
-    body: CacheRefresh, request: Request, _: User = Depends(require_admin)
-) -> dict:
+def refresh_cache(body: CacheRefresh, request: Request, _: User = Depends(require_admin)) -> dict:
     """Delete a cache scope; the next visitor (or tools/prewarm.py) fetches fresh data from IRSA etc."""
     _same_origin(request)
     allowed = {"all", "external"} | {r.id for r in releases().release}

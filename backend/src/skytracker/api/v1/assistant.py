@@ -3,13 +3,16 @@
 polling alone also works. GET /assistant/quick lists the quick-question buttons (from the FAQ file).
 
 What the assistant may read is loaded here, on the server: the comparison by id (only this browser's
-or the signed-in user's) or else this browser's latest one, and the cached object info. The message
-text itself is not stored; the event log keeps only which kind of answer was given.
+or the signed-in user's) or else this browser's latest one, the cached object info, the number of
+SPHEREx images from the cache (never a new archive query) and the archive's newest observation
+(services/freshness.py). The question text is never stored: the admin log only gets an
+"assistant_question" event without payload.
 """
 
 from __future__ import annotations
 
 import asyncio
+import datetime as dt
 
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
@@ -19,15 +22,20 @@ from ... import cache, jobs
 from ...db import session_scope
 from ...db.models import Comparison
 from ...events import _user_id, log_action
+from ...providers import most
+from ...providers import spherex as S
 from ...realtime import manager
 from ...security import TokenBucket
 from ...services import assistant as AS
+from ...services import freshness
 from .objects import DAY, build_info
+from .resolve import resolve_target
 
 router = APIRouter(prefix="/assistant", tags=["assistant"])
 _limiter = TokenBucket(rate_per_min=20, burst=10)
 CHUNK_DELAY_S = 0.035  # pacing of the typing effect
 SUBSCRIBE_WAIT_S = 1.0  # give the browser time to subscribe to the job topic before streaming
+EVENT_TYPE = "assistant_question"
 
 
 class PageObject(BaseModel):
@@ -35,8 +43,10 @@ class PageObject(BaseModel):
 
     key: str | None = Field(default=None, max_length=120)
     name: str | None = Field(default=None, max_length=120)
+    query: str | None = Field(default=None, max_length=100)  # re-resolved on the server for counts
     kind: str | None = Field(default=None, pattern="^(object|coordinate|solar_system)$")
     main_id: str | None = Field(default=None, max_length=100)
+    otype: str | None = Field(default=None, max_length=40)
     designation: str | None = Field(default=None, max_length=40)
     orbit_class: str | None = Field(default=None, max_length=80)
 
@@ -68,6 +78,33 @@ def load_comparison(
         return dict(row.result or {}, kind=row.kind) if row else None
 
 
+async def image_count(obj: dict | None) -> int | None:
+    """SPHEREx images for the open object, from cached results only (None = not computed yet)."""
+    if not obj:
+        return None
+    if obj.get("kind") == "solar_system":
+        des = obj.get("designation")
+        today = dt.datetime.now(dt.UTC).date().isoformat()
+        if (
+            not des
+            or cache.get_bytes("_external/most", f"{des}_{most.MISSION_START}_{today}", ".xml") is None
+        ):
+            return None
+        try:  # served from the cache checked above
+            return len((await most.moving_frames(des, most.MISSION_START, today))["frames"])
+        except Exception:  # noqa: BLE001
+            return None
+    if not obj.get("query"):
+        return None
+    try:
+        t = await resolve_target(obj["query"])  # cached name resolution (Sesame / SBDB)
+    except Exception:  # noqa: BLE001
+        return None
+    if not t or t.get("ra") is None:
+        return None
+    return S.cached_coverage_count(t["ra"], t["dec"])
+
+
 @router.get("/quick")
 def quick() -> dict:
     return {"items": AS.quick_buttons()}
@@ -84,14 +121,19 @@ async def message(req: MessageRequest, request: Request) -> dict:
         uid = _user_id(db, request)
     obj = req.context.object.model_dump() if req.context.object else None
     engine = AS.engine_from_settings()
+    topic: dict[str, str] = {}
 
     async def run(progress):
         comp = load_comparison(req.context.comparison_id, (obj or {}).get("key"), sid, uid)
-        info = None
         main_id = (obj or {}).get("main_id")
-        if main_id:
-            info = cache.get_json("_external/objinfo", main_id, DAY)
-        ctx = AS.Context(object=obj, comparison=comp, object_info=info)
+        info = cache.get_json("_external/objinfo", main_id, DAY) if main_id else None
+        ctx = AS.Context(
+            object=obj,
+            comparison=comp,
+            object_info=info,
+            n_images=await image_count(obj),
+            freshness=freshness.latest(),
+        )
         wants_object = req.quick == "object" or (
             not req.quick and any(e["id"] == "object" for _, e in AS.score(req.message or "")[:1])
         )
@@ -101,9 +143,8 @@ async def message(req: MessageRequest, request: Request) -> dict:
             except Exception:  # noqa: BLE001 - answered without the info panel then
                 ctx.object_info = None
 
-        topic = f"job:{jobs_id[0]}"
         for _ in range(int(SUBSCRIBE_WAIT_S / 0.05)):
-            if manager.has_subscribers(topic):
+            if manager.has_subscribers(topic["name"]):
                 break
             await asyncio.sleep(0.05)
         final: AS.Answer | None = None
@@ -114,9 +155,10 @@ async def message(req: MessageRequest, request: Request) -> dict:
                 await progress("assistant_chunk", {"text": piece})
                 await asyncio.sleep(CHUNK_DELAY_S)
         assert final is not None
-        log_action(request, "assistant", object_key=(obj or {}).get("key"), payload={"answer": final.source})
         return AS.to_json(final)
 
-    jobs_id = [""]
-    jobs_id[0] = jobs.start("assistant", run)
-    return {"job_id": jobs_id[0]}
+    job_id = jobs.start("assistant", run)
+    topic["name"] = f"job:{job_id}"  # set before the job's first await
+    # Admin log: only that a question was asked; no text, no object, no answer type
+    log_action(request, EVENT_TYPE)
+    return {"job_id": job_id}
