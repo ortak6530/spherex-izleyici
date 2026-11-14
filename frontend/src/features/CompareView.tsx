@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import CutoutView, { type DecodedCutout } from "../components/CutoutView";
+import CutoutView, { type DecodedCutout, type GaiaOverlay } from "../components/CutoutView";
 import { track } from "../lib/events";
 import { COLORMAPS, decodeFloat32, STRETCHES, type Colormap, type Stretch } from "../render/image";
 import type { TimeCompareResult } from "./compareTypes";
@@ -96,11 +96,26 @@ export default function CompareView({ result }: { result: TimeCompareResult }) {
   }, [mode, rateMs]);
 
   const [showTrack, setShowTrack] = useState(true);
+  const [showGaia, setShowGaia] = useState(false);
+  const gaia = result.gaia && !("unavailable" in result.gaia) ? result.gaia : null;
+  const gaiaOverlay: GaiaOverlay | null =
+    showGaia && gaia
+      ? {
+          markers: gaia.markers,
+          expected: gaia.target?.expected_a_px
+            ? [
+                { label: "Gaia A", px: gaia.target.expected_a_px },
+                { label: "Gaia B", px: gaia.target.expected_b_px! },
+              ]
+            : [],
+        }
+      : null;
   const common = {
     limits: result.shared_limits,
     stretch,
     cmap,
     track: showTrack ? (result.track ?? null) : null,
+    gaia: gaiaOverlay,
   };
   const tabCls = (m: Mode) =>
     `h-9 cursor-pointer rounded-lg px-3 text-sm transition-colors duration-200 ${
@@ -213,6 +228,20 @@ export default function CompareView({ result }: { result: TimeCompareResult }) {
               {t("viewer.trackLegend")} {result.track.note} ({result.track.source})
             </p>
           )}
+        </div>
+      )}
+      {gaia && (
+        <div className="space-y-1 text-xs text-ink-300">
+          <label className="inline-flex cursor-pointer items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={showGaia}
+              onChange={(e) => setShowGaia(e.target.checked)}
+              className="size-4 accent-nebula-500"
+            />
+            {t("gaia.toggle", { n: gaia.markers.length })}
+          </label>
+          {showGaia && <p>{t("gaia.legend")}</p>}
         </div>
       )}
     </section>

@@ -30,7 +30,9 @@ from ..domain import flags as F
 from ..domain.astrometry import jyear_to_mjd, propagate
 from ..domain.wavelength import celestial_wcs, wave_wcs
 from ..jobs import JobError
+from ..providers import gaia
 from ..providers import spherex as S
+from . import gaia_layer
 
 
 def proj_plane_pixel_area_matrix(wcs) -> np.ndarray:
@@ -102,6 +104,13 @@ def _parse(img: S.SpherexImage, raw: bytes, ra: float, dec: float, zodi: str) ->
         zodi_median=float(np.nanmedian(z)),
         pixel_scale=float(np.sqrt(abs(np.linalg.det(proj_plane_pixel_area_matrix(cw)))) * 3600),
     )
+
+
+async def _gaia_field(ra: float, dec: float, radius_deg: float, near: tuple[float, float]) -> dict | None:
+    try:
+        return await gaia.cone(ra, dec, radius_deg, near)
+    except Exception:  # noqa: BLE001 - Gaia is an extra layer; the comparison stands without it
+        return None
 
 
 TRACK_EPOCHS = (2010.0, 2016.0)  # WISE era and Gaia DR3 reference epoch
@@ -201,6 +210,17 @@ async def compare_time(
         pos_b = propagate(
             pm["ra_j2000"], pm["dec_j2000"], pm.get("pmra_mas_yr"), pm.get("pmdec_mas_yr"), ib.t_start_mjd
         )
+    # Gaia DR3 field (cutout half-diagonal) runs while the cutouts download; failure never blocks
+    ref_2016 = (ra, dec)
+    if pm.get("ra_j2000") is not None:
+        ref_2016 = propagate(
+            pm["ra_j2000"],
+            pm["dec_j2000"],
+            pm.get("pmra_mas_yr"),
+            pm.get("pmdec_mas_yr"),
+            jyear_to_mjd(2016.0),
+        )
+    gaia_task = asyncio.create_task(_gaia_field(ra, dec, size * 0.5 * math.sqrt(2), ref_2016))
     raw_a, raw_b = await asyncio.gather(
         S.fetch_cutout_fits(ia, ra, dec, size), S.fetch_cutout_fits(ib, ra, dec, size)
     )
@@ -362,8 +382,25 @@ async def compare_time(
     # Display geometry (N/E arrows, scale bar) comes from A's grid, which both images now share
     orient = S._sky_orientation(ea.wcs, *ea.data.shape)  # noqa: SLF001 - shared helper
     track = motion_track(proper_motion, ea, eb, analysis.get("shift"))
+    field = await gaia_task
+    gaia = None
+    if field is not None:
+        sh = analysis.get("shift")
+        gaia = await asyncio.to_thread(
+            gaia_layer.build,
+            field,
+            ea.wcs,
+            ea.mjd,
+            eb.mjd,
+            ref_2016,
+            tuple(sh["a_centroid"]) if sh else None,
+            sh,
+            ea.pixel_scale,
+            ea.data.shape,
+        )
     return {
         "track": track,
+        "gaia": gaia if gaia is not None else {"unavailable": True, "source": "ESA Gaia DR3"},
         "id": secrets.token_hex(8),
         "kind": "time",
         "target": {"ra": ra, "dec": dec},

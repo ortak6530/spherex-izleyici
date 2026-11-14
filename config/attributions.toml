@@ -110,8 +110,12 @@ license = "Vikipedi metinleri CC BY-SA 4.0; Wikidata CC0."
 key = "gaia"
 title = "Gaia (ESA)"
 group = "data"
-status = "planned"
-purpose = "Öz hareket ve paralaks (ESA Gaia TAP, gaiadr3.gaia_source) ve görüntü üstü Gaia kaynak katmanı (Aşama 4)."
+status = "used"
+purpose = "Zaman karşılaştırmasında Gaia DR3 katmanı (ESA Gaia arşivi TAP, gaiadr3.gaia_source, pyvo): hedefin öz hareket + yıllık paralaksla beklenen konumu ve alandaki Gaia kaynakları (aday işaretleri, tesadüfi eşleşme olasılığıyla)."
+references = [
+  { label = "Gaia data credits and acknowledgements", url = "https://www.cosmos.esa.int/web/gaia-users/credits" },
+  { label = "ESA Gaia Archive TAP (gea.esac.esa.int)", url = "https://gea.esac.esa.int/archive/" },
+]
 url = "https://www.cosmos.esa.int/gaia"
 text = "This work has made use of data from the European Space Agency (ESA) mission Gaia (https://www.cosmos.esa.int/gaia), processed by the Gaia Data Processing and Analysis Consortium (DPAC, https://www.cosmos.esa.int/web/gaia/dpac/consortium). Funding for the DPAC has been provided by national institutions, in particular the institutions participating in the Gaia Multilateral Agreement."
 text_source = "https://gea.esac.esa.int/archive/documentation/GDR3/Miscellaneous/sec_credit_and_citation_instructions/"
@@ -120,9 +124,6 @@ license = "Gaia verisi CC BY-NC 3.0 IGO lisansıyla dağıtılır (https://www.c
 citations = [
   { label = "Gaia Collaboration et al. (2016b) — The Gaia mission", url = "https://gea.esac.esa.int/archive/documentation/GDR3/Miscellaneous/sec_credit_and_citation_instructions/" },
   { label = "Gaia Collaboration et al. (2023j) — Gaia DR3: Summary of the contents and survey properties", url = "https://gea.esac.esa.int/archive/documentation/GDR3/Miscellaneous/sec_credit_and_citation_instructions/" },
-]
-references = [
-  { label = "Gaia data credits and acknowledgements", url = "https://www.cosmos.esa.int/web/gaia-users/credits" },
 ]
 
 [[item]]

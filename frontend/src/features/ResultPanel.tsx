@@ -15,6 +15,61 @@ function Stat({ label, children }: { label: string; children: React.ReactNode })
   );
 }
 
+const pct = (p: number | null | undefined) =>
+  p === null || p === undefined ? "—" : p < 0.001 ? "< %0,1" : `%${fmt(p * 100, 1)}`;
+
+/** Gaia DR3: candidate counterpart (never presented as a sure match) and parallax-corrected motion. */
+function GaiaSection({ r }: { r: TimeCompareResult }) {
+  const { t } = useTranslation();
+  const g = r.gaia;
+  if (!g) return null;
+  if ("unavailable" in g) return <p className="text-xs text-ink-400">{t("gaia.unavailable")}</p>;
+  const tg = g.target;
+  return (
+    <div className="space-y-2 rounded-xl border border-white/10 bg-space-950/35 p-3 text-sm">
+      <h4 className="font-semibold text-ink-100">{t("gaia.title")}</h4>
+      {tg ? (
+        <>
+          <p className="text-ink-300">
+            {t("gaia.candidate", {
+              id: tg.source_id,
+              g: fmt(tg.g_mag, 2),
+              sep: fmt(tg.separation_2016_arcsec, 2),
+              p: pct(tg.chance_probability),
+              pr: pct(tg.chance_probability_radius),
+              r: fmt(tg.match_radius_arcsec, 2),
+            })}
+          </p>
+          <p className="text-ink-300">
+            {tg.has_pm
+              ? t("gaia.astrometry", {
+                  plx: tg.parallax_mas === null ? t("gaia.noData") : `${fmt(tg.parallax_mas, 2)} mas`,
+                  pm: `${fmt(tg.pmra_mas_yr, 1)} / ${fmt(tg.pmdec_mas_yr, 1)} mas/yıl`,
+                })
+              : t("gaia.noMotion")}
+          </p>
+          {tg.expected_shift_arcsec !== null && (
+            <p className="text-ink-100">
+              {t("gaia.expected", {
+                exp: fmt(tg.expected_shift_arcsec, 2),
+                meas: r.shift ? fmt(r.shift.arcsec, 2) : "—",
+                diff: tg.difference_px === null ? "—" : fmt(tg.difference_px, 2),
+                sepa: tg.separation_a_arcsec === null ? "—" : fmt(tg.separation_a_arcsec, 2),
+              })}
+            </p>
+          )}
+        </>
+      ) : (
+        <p className="text-ink-300">{t("gaia.noCandidate", { sep: fmt(g.nearest_separation_arcsec, 1) })}</p>
+      )}
+      <p className="text-xs text-ink-400">
+        {t("gaia.field", { n: g.n_field, g: g.g_limit, shown: g.markers.length })} {g.note} ({g.source};{" "}
+        {g.epoch})
+      </p>
+    </div>
+  );
+}
+
 export default function ResultPanel({
   r,
   save,
@@ -83,6 +138,8 @@ export default function ResultPanel({
             : "—"}
         </Stat>
       </div>
+
+      <GaiaSection r={r} />
 
       {r.warnings.length > 0 && (
         <div>

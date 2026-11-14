@@ -10,6 +10,19 @@
     "privacyLogin": "If you sign in, your search and list activity can be seen by the site administrator.",
     "privacyGuest": "As a guest, your activity is not linked to personal data such as an e-mail address."
   },
+  "gaia": {
+    "title": "Gaia DR3 (ESA)",
+    "unavailable": "Gaia DR3 is not reachable right now; the comparison is shown without the Gaia layer.",
+    "candidate": "Possible counterpart (candidate): Gaia DR3 {{id}}, G = {{g}}; its 2016.0 position is {{sep}}″ from SIMBAD's expectation. Chance of an unrelated Gaia source this close: {{p}} ({{pr}} anywhere within the {{r}}″ match radius).",
+    "astrometry": "Gaia: parallax {{plx}}, proper motion {{pm}}.",
+    "noData": "no data",
+    "noMotion": "Gaia DR3 has no proper motion or parallax for this source (2-parameter solution): no expected position computed (no data).",
+    "expected": "Expected shift from proper motion + annual parallax {{exp}}″; measured {{meas}}″, difference {{diff}} px. The centroid measured in A is {{sepa}}″ from Gaia's expected position.",
+    "noCandidate": "No Gaia DR3 source within one SPHEREx pixel (6.15″; nearest {{sep}}″). This does not mean a \"new discovery\".",
+    "field": "{{n}} Gaia sources with G < {{g}} in the field; the brightest {{shown}} can be marked on the image.",
+    "toggle": "Show Gaia DR3 sources ({{n}} candidates)",
+    "legend": "Light-blue rings: Gaia DR3 sources (moved to date A; possible counterparts, not sure matches) · pink diamond: the target's expected position from Gaia proper motion + parallax (A and B)."
+  },
   "links": {
     "title": "External links",
     "note": "IRSA's own SPHEREx tools and documents (open in a new tab). All are also credited on the Sources page."

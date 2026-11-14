@@ -348,6 +348,13 @@ Test: `astroquery.mast.Observations.query_criteria(coordinates=..., radius=2′,
 - `TOP N` sonucu rastgele bir alt küme; kısa katalog adları her zaman listeye girmeyebilir. Bu yüzden öneride tam ad için **Sesame (yalnızca SIMBAD, `-oxp/S`)** de soruluyor. `SNV`, bilinmeyen adlarda NED/VizieR'i de denediği için yavaş ve gürültülü ("barnard" → NED'den bir galaksi).
 - **JPL SBDB:** kısmi adlarda 300 + `list` döner ("halley" → `2688 Halley (1982 HG1)`, `1P/Halley`). Ancak `sstr=1P/Halley` ve `sstr=Halley` bulunamıyor; `1P`, `2P`, sayı (`2688`) ve `C/2017 D3` çalışıyor.
 
+## 10c. Gaia DR3, ESA arşivi TAP (2026-11-14 canlı denemeler)
+- `https://gea.esac.esa.int/tap-server/tap`, pyvo `TAPService.run_sync`, tablo `gaiadr3.gaia_source`. Kullanılan sütunlar: `source_id, ra, dec, ra_error, dec_error, parallax, parallax_error, pmra, pmdec, phot_g_mean_mag, ruwe, astrometric_params_solved`. Konumlar J2016.0. astroquery kullanılmıyor.
+- **Hız:** 0,0707°'lik koni + `G < 19`, `TOP 500` → Barnard 424 satır 2,4 sn; M31 100 satır 1,9 sn. `COUNT(*)` 1,4 sn.
+- **Kesilme:** Galaksi düzlemine yakın alanlarda 500 satır yetmiyor (Luhman 16: gerçekte 709–716 kaynak). Hedef ve yoğunluk bu yüzden ayrı sorgulardan geliyor: 15″'lik, parlaklık sınırsız koni ve `COUNT(*)`.
+- **Eksik astrometri:** Luhman 16 = Gaia DR3 5353626573555863424, G 16,92, `astrometric_params_solved = 3` (yalnızca konum; öz hareket ve paralaks yok). Bu kayıtta beklenen konum "veri yok" olarak kalıyor, 0 yapılmıyor. Eşleştirme Gaia'nın kendi döneminde (J2016.0, SIMBAD konumu taşınarak) yapılıyor: ayrım 0,71″.
+- **Barnard:** 4472832130942575872, ϖ 546,98 mas. Öz hareket + yıllık paralaksla beklenen kayma (DR1 2025-08 → QR3 2026-09) 11,07″; ölçülen 12,50″, fark 0,23 piksel. A'da ölçülen ağırlık merkezi Gaia beklentisine 2,39″ (0,39 piksel) uzaklıkta. Alan yoğunluğuyla 6,15″ içinde tesadüfi kaynak olasılığı %22, gözlenen ayrımda (0,003″) ~0.
+
 ## 11. Doğrulanmamış / açık kalanlar
 - SIMBAD Strasbourg'un ne zaman geri döneceği. Teşekkür metni.
 - CAOM SIA2 (MAST).

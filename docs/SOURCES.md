@@ -15,7 +15,7 @@ sağlayıcının sayfasından **aynen** alınmıştır; nereden ve ne zaman alı
 | SIMBAD ve Sesame (CDS, Strasbourg) | Kullanılıyor | Ad çözümleme (Sesame), cisim türü, tayf türü, paralaks, öz hareket ve aynı-tür önerileri (SIMBAD TAP; CDS ve CfA aynası). |
 | JPL Solar System Dynamics (SBDB, Horizons) | Kullanılıyor | Güneş Sistemi cisimlerinin tanımı (SBDB), SPHEREx karelerindeki öngörülen konumlar (Horizons; IRSA MOST üzerinden) ve canlı konum paneli (Horizons API: şu anki RA/Dec, seçilen şehirden yükseklik ve yön). |
 | Vikipedi / Wikipedia ve Wikidata | Kullanılıyor | Cisim bilgi panelindeki kısa açıklama (önce Türkçe, yoksa İngilizce) ve tanımlayıcılar; "Benim gökyüzümde" şehir koordinatları (Wikidata P625, config/cities_tr.json). |
-| Gaia (ESA) | Planlandı | Öz hareket ve paralaks (ESA Gaia TAP, gaiadr3.gaia_source) ve görüntü üstü Gaia kaynak katmanı (Aşama 4). |
+| Gaia (ESA) | Kullanılıyor | Zaman karşılaştırmasında Gaia DR3 katmanı (ESA Gaia arşivi TAP, gaiadr3.gaia_source, pyvo): hedefin öz hareket + yıllık paralaksla beklenen konumu ve alandaki Gaia kaynakları (aday işaretleri, tesadüfi eşleşme olasılığıyla). |
 | CADC SSOIS (Solar System Object Image Search) | Planlandı | Güneş Sistemi cisimleri için "bu cismi başka hangi teleskoplar görmüş" listesi; yalnızca bağlantı, dosya indirme yok (Aşama 4). |
 | NEOSSat (CSA / DRDC; veri CADC'de) | Planlandı | Konuma ve tarihe göre NEOSSat görüntüleri (filtresiz optik): yalnızca konum, hareket ve zaman; SPHEREx ile parlaklık karşılaştırması yapılmaz (Aşama 4). |
 | WiseView (Caselden & Westin) | Planlandı | Yalnızca dış bağlantı: "Bu cismi WISE'ta yıllar boyunca izle" (Aşama 4). Gömme yok. |
@@ -120,8 +120,8 @@ Başvurulan belgeler:
 
 ### Gaia (ESA)
 
-- **Durum:** Planlandı
-- **Kullanım amacı:** Öz hareket ve paralaks (ESA Gaia TAP, gaiadr3.gaia_source) ve görüntü üstü Gaia kaynak katmanı (Aşama 4).
+- **Durum:** Kullanılıyor
+- **Kullanım amacı:** Zaman karşılaştırmasında Gaia DR3 katmanı (ESA Gaia arşivi TAP, gaiadr3.gaia_source, pyvo): hedefin öz hareket + yıllık paralaksla beklenen konumu ve alandaki Gaia kaynakları (aday işaretleri, tesadüfi eşleşme olasılığıyla).
 - **Adres:** <https://www.cosmos.esa.int/gaia>
 - **Lisans / koşullar:** Gaia verisi CC BY-NC 3.0 IGO lisansıyla dağıtılır (https://www.cosmos.esa.int/web/gaia-users/license).
 
@@ -137,6 +137,7 @@ Atıf yapılacak yayınlar:
 Başvurulan belgeler:
 
 - [Gaia data credits and acknowledgements](https://www.cosmos.esa.int/web/gaia-users/credits)
+- [ESA Gaia Archive TAP (gea.esac.esa.int)](https://gea.esac.esa.int/archive/)
 
 ### CADC SSOIS (Solar System Object Image Search)
 

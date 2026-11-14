@@ -29,7 +29,14 @@ interface Props {
   unit?: string;
   showOverlays?: boolean;
   track?: MotionTrack | null;
+  gaia?: GaiaOverlay | null;
 }
+
+/** Gaia DR3 candidate markers and the target's parallax-corrected expected positions (pixels of A). */
+export type GaiaOverlay = {
+  markers: { source_id: string; px: [number, number] }[];
+  expected?: { label: string; px: [number, number] }[];
+};
 
 /** Expected positions from the known motion (server, A's grid) and the measured centroids. */
 export type MotionTrack = {
@@ -50,6 +57,7 @@ export default function CutoutView({
   unit,
   showOverlays = true,
   track = null,
+  gaia = null,
 }: Props) {
   const { t } = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -121,6 +129,47 @@ export default function CutoutView({
             className="pointer-events-none absolute inset-0 h-full w-full"
             aria-hidden="true"
           >
+            {gaia && (
+              <g data-layer="gaia" fontSize={w * 0.04} fontFamily="Inter Variable">
+                {gaia.markers.map((m) => (
+                  <circle
+                    key={m.source_id}
+                    cx={m.px[0] + 0.5}
+                    cy={h - (m.px[1] + 0.5)}
+                    r={Math.max(w * 0.012, 0.5)}
+                    fill="none"
+                    stroke="#67e8f9"
+                    strokeOpacity={0.75}
+                    strokeWidth={Math.max(w / 400, 0.15)}
+                  />
+                ))}
+                {(gaia.expected ?? []).map((e) => {
+                  const x = e.px[0] + 0.5;
+                  const y = h - (e.px[1] + 0.5);
+                  const s = w * 0.022;
+                  return (
+                    <g key={e.label}>
+                      <path
+                        d={`M${x} ${y - s} L${x + s} ${y} L${x} ${y + s} L${x - s} ${y} Z`}
+                        fill="none"
+                        stroke="#f0abfc"
+                        strokeWidth={Math.max(w / 300, 0.2)}
+                      />
+                      <text
+                        x={x + s * 1.2}
+                        y={y + s * 1.6}
+                        fill="#f5d0fe"
+                        stroke="#050816"
+                        strokeWidth={w / 500}
+                        paintOrder="stroke"
+                      >
+                        {e.label}
+                      </text>
+                    </g>
+                  );
+                })}
+              </g>
+            )}
             {track && track.expected.length > 1 && (
               <g fontSize={w * 0.045} fontFamily="Inter Variable">
                 <polyline

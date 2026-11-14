@@ -20,6 +20,12 @@ hosts = ["ssd-api.jpl.nasa.gov", "ssd.jpl.nasa.gov"]
 timeout = 20
 concurrency = 4
 
+[groups.esa]
+# Gaia DR3 via the ESA Gaia archive TAP (pyvo; the host is checked against this list before each query)
+hosts = ["gea.esac.esa.int"]
+timeout = 30
+concurrency = 2
+
 [groups.wikimedia]
 hosts = ["www.wikidata.org", "tr.wikipedia.org", "en.wikipedia.org"]
 timeout = 10

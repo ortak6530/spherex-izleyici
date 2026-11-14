@@ -10,6 +10,19 @@
     "privacyLogin": "Giriş yaparsan arama ve liste etkinliğin site yöneticisi tarafından görülebilir.",
     "privacyGuest": "Misafir olarak devam edersen etkinliğin e-posta gibi kişisel bir veriyle eşleştirilmez."
   },
+  "gaia": {
+    "title": "Gaia DR3 (ESA)",
+    "unavailable": "Gaia DR3 şu an erişilemedi; karşılaştırma Gaia katmanı olmadan gösteriliyor.",
+    "candidate": "Olası karşılık (aday): Gaia DR3 {{id}}, G = {{g}}; 2016.0 konumu SIMBAD'dan beklenene {{sep}}″ uzaklıkta. Bu kadar yakında tesadüfen bir Gaia kaynağı bulunma olasılığı {{p}} ({{r}}″ eşleştirme yarıçapının tamamında {{pr}}).",
+    "astrometry": "Gaia: paralaks {{plx}}, öz hareket {{pm}}.",
+    "noData": "veri yok",
+    "noMotion": "Gaia DR3'te bu kaynağın öz hareketi ve paralaksı yok (2 parametreli çözüm): beklenen konum hesaplanmadı (veri yok).",
+    "expected": "Öz hareket + yıllık paralaksla beklenen kayma {{exp}}″; ölçülen {{meas}}″, fark {{diff}} piksel. A'da ölçülen ağırlık merkezi Gaia'nın beklediği konuma {{sepa}}″ uzaklıkta.",
+    "noCandidate": "1 SPHEREx pikseli (6,15″) içinde Gaia DR3 kaynağı yok (en yakını {{sep}}″). Bu bir \"yeni keşif\" anlamına gelmez.",
+    "field": "Alanda G < {{g}} olan {{n}} Gaia kaynağı; görüntüde en parlak {{shown}} tanesi işaretlenebilir.",
+    "toggle": "Gaia DR3 kaynaklarını göster ({{n}} aday)",
+    "legend": "Açık mavi halkalar: Gaia DR3 kaynakları (A tarihine taşınmış; olası karşılıklar, kesin eşleşme değildir) · pembe eşkenar dörtgen: hedefin Gaia'dan öz hareket + paralaksla beklenen konumu (A ve B)."
+  },
   "links": {
     "title": "Dış bağlantılar",
     "note": "IRSA'nın kendi SPHEREx araçları ve belgeleri (yeni sekmede açılır). Hepsi Kaynaklar sayfasında da anılır."

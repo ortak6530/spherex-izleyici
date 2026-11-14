@@ -79,6 +79,11 @@ def test_mixed_dr1_a_qr3_b_comparison_survives_a_wiped_index(wiped_index, monkey
         return None
 
     monkeypatch.setattr(S, "fetch_cutout_fits", fake_fetch)
+
+    async def no_gaia(*_):
+        return None
+
+    monkeypatch.setattr(TC, "_gaia_field", no_gaia)  # no live ESA query from the test
     with pytest.raises(Stop):
         asyncio.run(TC.compare_time(A.image_id, B.image_id, RA, DEC, 0.1, "sub", True, None, prog))
     assert sorted(seen) == ["dr1", "qr3"] and len(wiped_index) == 1

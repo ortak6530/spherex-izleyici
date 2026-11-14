@@ -48,6 +48,7 @@ export interface TimeCompareResult {
   normalization: { enabled: boolean; factor: number | null };
   flux_corrected_image?: string | null; // QR2 (R6) image multiplied by IRSA's QR3 correction
   track?: MotionTrack | null; // expected positions from proper motion (stars only)
+  gaia?: GaiaLayer | { unavailable: true; source: string } | null;
   shift: { arcsec: number; px: number; pa_deg: number } | null;
   expected_shift: { arcsec: number; px: number; pm_mas_yr: number; source: string } | null;
   photometry: {
@@ -65,4 +66,39 @@ export interface TimeCompareResult {
   };
   dt_days: number;
   object_key?: string | null;
+}
+
+export interface GaiaTarget {
+  source_id: string;
+  g_mag: number | null;
+  separation_2016_arcsec: number;
+  match_radius_arcsec: number;
+  chance_probability: number | null;
+  chance_probability_radius: number | null;
+  parallax_mas: number | null;
+  pmra_mas_yr: number | null;
+  pmdec_mas_yr: number | null;
+  ruwe: number | null;
+  has_pm: boolean;
+  has_parallax: boolean;
+  expected_a_px: [number, number] | null;
+  expected_b_px: [number, number] | null;
+  expected_shift_arcsec: number | null;
+  difference_px: number | null;
+  separation_a_arcsec: number | null;
+}
+
+/** Gaia DR3 layer: candidate markers (never sure matches) + parallax-corrected expected A/B. */
+export interface GaiaLayer {
+  markers: { source_id: string; px: [number, number]; g_mag: number | null; has_pm: boolean }[];
+  n_field: number;
+  g_limit: number;
+  radius_deg: number;
+  truncated: boolean;
+  target: GaiaTarget | null;
+  nearest_separation_arcsec: number | null;
+  chance_probability: number | null;
+  source: string;
+  epoch: string;
+  note: string;
 }
