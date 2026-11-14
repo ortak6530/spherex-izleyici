@@ -218,6 +218,17 @@ Hedefteki λ, SIP'siz WCS-WAVE ile hesaplandı:
   - **Ad biçimi:** `obj_name` için JPL SBDB'nin `des` alanı kullanılmalı. `Ceres` → 400 "Multiple matches", `2P/Encke` → 400 "HORIZONS name lookup failed", `C/2025 N1 (ATLAS)` ve `1 Ceres` → 400. Çalışanlar: `1`, `433`, `2P`, `C/2025 N1`, `2025 N1`.
   - MOST bitiş tarihini kendisi kırpıyor (`user_input_end_time` 2026-10-16 döndü).
   - Eşleşme olmayınca da 200 + VOTable döner (kare tablosu boş).
+- **2026-11-14 doğrulama (DR1 resmî duyurusundan sonra, önbellek atlanarak doğrudan IRSA'ya):**
+  - `2025 N1` (3I/ATLAS), 2025-05-01 → 2026-11-14: **364 DR1 karesi**, QR3 0, QR2 0 (6,3 sn). QR3 döneminde (2026-05-14 → 10-05) cisim SPHEREx karelerine düşmüyor.
+  - `433` (Eros): **916 DR1 + 38 QR3** karesi (15 sn) → MOST hem DR1'i hem QR3'ü döndürüyor; QR2 hiç dönmüyor.
+  - Sonuç: MOST tarafında not/uyarı gerekmiyor; durum çubuğuna ek not eklenmedi.
+
+### 4.9 DR1 duyurusu (2026-11-14 kontrolü)
+- IRSA DR1 sayfası: https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_dr1.html — "IRSA released SPHEREx Data Release 1 (DR1) in November 2026". DOI: **10.26131/IRSA678** (DR1 Spectral Images), **10.26131/IRSA679** (Spectral All-Sky Cube).
+- TAP `spherex.obscore` (175 sn süren tek sorgu): `spherex_dr1` **945 725** görüntü, ilk 2025-04-24 18:01, son **2026-05-14 11:47 UTC**; `spherex_qr3` **362 124** görüntü, 2026-05-14 12:08 → **2026-10-05 00:01 UTC**; `spherex_qr2` TAP'ta yok.
+- SIA2 (Barnard konumu, 0,001°): `spherex_dr1` 240, `spherex_qr3` 123, `spherex_qr2` 0 satır. Derin alan (kuzey ekliptik kutbu, 0,01°): `spherex_dr1_deep` 20 901, `spherex_qr3_deep` 7 898.
+- `tools/check_release.py dr1`: dosya düzeni QR3 (R7) ile aynı (VERSION 7.0.5, 7 uzantı, MSK bayrakları, 22 bayrak); M31 −1,6 ± 4,2 % (değişim yok ✓); Barnard (DR1 içi, 202 gün) 0,64 px uyumsuz — bilinen doymuş çekirdek / ağırlık merkezi sorunu (PROGRESS bilinen sorun 2).
+- `releases.toml`: DR1 `announced = true`, "duyuru bekleniyor" notu kaldırıldı, `doi`, `deep_collections = ["spherex_dr1_deep"]`. Varsayılan DR1; QR2 `superseded` (yeni aramalarda kullanılmaz).
 
 ---
 
@@ -335,7 +346,7 @@ Test: `astroquery.mast.Observations.query_criteria(coordinates=..., radius=2′,
 - CAOM SIA2 (MAST).
 - IRSA Spectrophotometry Tool'un programatik API'si var mı?
 - Kesit servisinde PSF/EPSF'yi dışarıda bırakan bir parametre var mı? Belgelerde yok.
-- DR1'in resmî yayın tarihi, TAP koleksiyon adı ve DOI'si.
+- ~~DR1'in resmî yayın tarihi, TAP koleksiyon adı ve DOI'si.~~ 2026-11-14: Kasım 2026'da duyuruldu, `spherex_dr1` / `spherex_dr1_deep`, DOI 10.26131/IRSA678 (§4.9). IRSA sayfası gün vermiyor ("November 2026"); 12 Kasım tarihi kullanıcıdan.
 - `CWAVE` haritasıyla WCS-WAVE arasındaki fark ve MWIR'deki X çevirme yönü. Faz 2'de doğrulanacak.
 - Derin alan koleksiyonlarının TAP'ta nasıl göründüğü. Faz 3'te bakılacak.
 

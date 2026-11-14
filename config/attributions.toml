@@ -25,7 +25,7 @@ text = "This publication makes use of data products from the Spectro-Photometer 
 text_source = "https://irsa.ipac.caltech.edu/Missions/spherex.html"
 verified = "2026-11-13"
 license = "IRSA'nın SPHEREx sayfasındaki zorunlu teşekkür metni yayınlarda ve bu sitede yer almalıdır."
-dois = ["10.26131/IRSA662 (QR3)", "10.26131/IRSA652 (QR2)", "DR1: henüz yayımlanmadı"]
+dois = ["10.26131/IRSA678 (DR1 Spectral Images)", "10.26131/IRSA679 (DR1 Spectral All-Sky Cube)", "10.26131/IRSA662 (QR3)", "10.26131/IRSA652 (QR2)"]
 citations = [
   { label = "Bock et al. (2026) — Mission", url = "https://ui.adsabs.harvard.edu/abs/2026ApJ...999..139B/abstract" },
   { label = "Akeson et al. (2026) — Pipeline", url = "https://ui.adsabs.harvard.edu/abs/2026ApJS..285...67A/abstract" },
@@ -34,6 +34,7 @@ citations = [
 ]
 references = [
   { label = "SPHEREx Explanatory Supplement", url = "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp.pdf" },
+  { label = "IRSA: SPHEREx Data Release 1 (DR1) overview and DOIs", url = "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_dr1.html" },
   { label = "IRSA tutorial: Introduction to SPHEREx Spectral Images (Data Overview)", url = "https://caltech-ipac.github.io/irsa-tutorials/spherex-intro/" },
   { label = "IRSA tutorial: SPHEREx Spectral Image Cutouts", url = "https://caltech-ipac.github.io/irsa-tutorials/spherex-cutouts/" },
   { label = "IRSA tutorial: SPHEREx PSF in Spectral Image Cutouts (PSF Models)", url = "https://caltech-ipac.github.io/irsa-tutorials/spherex-psf/" },

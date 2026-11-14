@@ -16,17 +16,18 @@ default_release = "dr1"
 id = "dr1"
 label = "DR1"
 status = "active"
-announced = false             # 2026-11-12: served by IRSA TAP/SIA2 (spherex_dr1) but not announced yet
-notice = "DR1, IRSA'nın veri servislerinde yayında; resmî duyuru bekleniyor."
+# Announced by IRSA in November 2026 (overview_dr1.html, checked 2026-11-14). Live 2026-11-14 (TAP obscore):
+#   945 725 images, 2025-04-24 18:01 -> 2026-05-14 11:47 UTC; QR3 continues from 2026-05-14 12:08.
+announced = true
 calib_family = "R7"
 sia_collections = ["spherex_dr1"]
-deep_collections = []         # name not verified yet
+deep_collections = ["spherex_dr1_deep"]   # SIA2 verified 2026-11-14 (north ecliptic pole)
 ibe_prefix = "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/"
 s3_prefix = "dr1/"
-doi = ""                      # not published yet
+doi = "10.26131/IRSA678"      # DR1 Spectral Images; Spectral All-Sky Cube = 10.26131/IRSA679
 flags_header_style = "auto"   # R7 uses MSKNnnnn/MSKMnnnn
 supersedes = { release = "qr2", start = "2025-05-01", end = "2026-05-15" }
-notes = "Data Release 1: Year-1 (surveys 1-2) reprocessed with pipeline R7."
+notes = "Data Release 1: Year-1 (surveys 1-2) reprocessed with pipeline R7 (VERSION 7.0.5)."
 
 [[release]]
 id = "qr3"

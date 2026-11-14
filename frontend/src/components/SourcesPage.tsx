@@ -36,7 +36,8 @@ function SourceCard({ a }: { a: Attribution }) {
       {a.purpose && <p className="mt-1 text-sm text-ink-300">{a.purpose}</p>}
       {a.text && (
         <figure className="mt-3">
-          <blockquote className="border-l-2 border-nebula-400/60 pl-3 text-sm text-ink-100">
+          {/* Acknowledgements are quoted verbatim in the provider's English original, never translated */}
+          <blockquote lang="en" className="border-l-2 border-nebula-400/60 pl-3 text-sm text-ink-100">
             {a.text}
           </blockquote>
           {a.text_source && (

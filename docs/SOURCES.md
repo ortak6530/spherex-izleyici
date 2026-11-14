@@ -32,7 +32,7 @@ sağlayıcının sayfasından **aynen** alınmıştır; nereden ve ne zaman alı
 - **Kullanım amacı:** Tüm SPHEREx spektral görüntüleri, kesitler, zaman ve cisim karşılaştırmaları, hareketli cisim kareleri.
 - **Adres:** <https://irsa.ipac.caltech.edu/Missions/spherex.html>
 - **Lisans / koşullar:** IRSA'nın SPHEREx sayfasındaki zorunlu teşekkür metni yayınlarda ve bu sitede yer almalıdır.
-- **DOI:** 10.26131/IRSA662 (QR3) · 10.26131/IRSA652 (QR2) · DR1: henüz yayımlanmadı
+- **DOI:** 10.26131/IRSA678 (DR1 Spectral Images) · 10.26131/IRSA679 (DR1 Spectral All-Sky Cube) · 10.26131/IRSA662 (QR3) · 10.26131/IRSA652 (QR2)
 
 > This publication makes use of data products from the Spectro-Photometer for the History of the Universe, Epoch of Reionization and Ices Explorer (SPHEREx), which is a joint project of the Jet Propulsion Laboratory and the California Institute of Technology, and is funded by the National Aeronautics and Space Administration.
 
@@ -48,6 +48,7 @@ Atıf yapılacak yayınlar:
 Başvurulan belgeler:
 
 - [SPHEREx Explanatory Supplement](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp.pdf)
+- [IRSA: SPHEREx Data Release 1 (DR1) overview and DOIs](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_dr1.html)
 - [IRSA tutorial: Introduction to SPHEREx Spectral Images (Data Overview)](https://caltech-ipac.github.io/irsa-tutorials/spherex-intro/)
 - [IRSA tutorial: SPHEREx Spectral Image Cutouts](https://caltech-ipac.github.io/irsa-tutorials/spherex-cutouts/)
 - [IRSA tutorial: SPHEREx PSF in Spectral Image Cutouts (PSF Models)](https://caltech-ipac.github.io/irsa-tutorials/spherex-psf/)
