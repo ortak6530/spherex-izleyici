@@ -10,6 +10,34 @@
     "privacyLogin": "If you sign in, your search and list activity can be seen by the site administrator.",
     "privacyGuest": "As a guest, your activity is not linked to personal data such as an e-mail address."
   },
+  "status": {
+    "label": "Data status",
+    "releases": "Data",
+    "default": "default",
+    "loading": "loading…",
+    "unavailable": "server unreachable",
+    "newest": "Newest observation in the archive",
+    "checked": "checked {{at}} UTC",
+    "checking": "being read from IRSA (can take a few minutes)",
+    "notTried": "No request made yet",
+    "state": { "ok": "working", "error": "last request failed", "unknown": "not tried yet" }
+  },
+  "spectrum": {
+    "title": "Spectrum (this visit, 6 bands)",
+    "intro": "Measures the target in every exposure of the epoch A visit (about 100 exposures; the first run can take 1–2 minutes, then it comes from the cache).",
+    "run": "Draw the spectrum",
+    "start": "Visit {{label}}: measuring {{total}} exposures…",
+    "progress": "Spectrum: {{done}}/{{total}} exposures",
+    "counts": "{{ok}} points · not measurable in {{no_photometry}} · target off the detector in {{off_detector}} · {{error}} errors",
+    "none": "No measurable point in this visit (e.g. saturated or masked core).",
+    "axisX": "Wavelength λ (µm)",
+    "axisY": "Flux (µJy)",
+    "log": "Logarithmic flux axis",
+    "detector": "Detector",
+    "table": "Table / chart",
+    "date": "Date",
+    "point": "λ {{lam}} µm · {{flux}} ± {{err}} µJy · D{{det}} · {{date}}"
+  },
   "assistant": {
     "open": "Assistant",
     "title": "Assistant",

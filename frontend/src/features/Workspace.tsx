@@ -23,6 +23,7 @@ import type { TimeCompareResult } from "./compareTypes";
 import MovingView from "./MovingView";
 import ObjectCompare from "./ObjectCompare";
 import ResultPanel from "./ResultPanel";
+import SpectrumPanel from "./SpectrumPanel";
 
 const SIZES = [0.05, 0.1, 0.25, 0.5];
 
@@ -472,6 +473,9 @@ export default function Workspace({ target }: { target: Target }) {
         </>
       )}
 
+      {visits[visitA] && (
+        <SpectrumPanel key={`${target.key}-${visits[visitA].index}`} target={target} visit={visits[visitA]} />
+      )}
       {visits.length > 0 && <ObjectCompare target={target} imageA={imgA} size={size} zodi={zodi} />}
     </section>
   );

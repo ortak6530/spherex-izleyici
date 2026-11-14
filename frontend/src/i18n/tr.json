@@ -10,6 +10,34 @@
     "privacyLogin": "Giriş yaparsan arama ve liste etkinliğin site yöneticisi tarafından görülebilir.",
     "privacyGuest": "Misafir olarak devam edersen etkinliğin e-posta gibi kişisel bir veriyle eşleştirilmez."
   },
+  "status": {
+    "label": "Veri durumu",
+    "releases": "Veri",
+    "default": "varsayılan",
+    "loading": "yükleniyor…",
+    "unavailable": "sunucuya ulaşılamadı",
+    "newest": "Arşivdeki en yeni gözlem",
+    "checked": "son kontrol {{at}} UTC",
+    "checking": "IRSA'dan okunuyor (birkaç dakika sürebilir)",
+    "notTried": "Bu oturumda henüz istek yapılmadı",
+    "state": { "ok": "çalışıyor", "error": "son istek başarısız", "unknown": "henüz denenmedi" }
+  },
+  "spectrum": {
+    "title": "Spektrum (bu ziyaret, 6 bant)",
+    "intro": "Dönem A ziyaretindeki tüm pozlamalarda hedefin parlaklığını ölçer (yaklaşık 100 pozlama; ilk seferde 1–2 dakika sürebilir, sonra önbellekten gelir).",
+    "run": "Spektrumu çiz",
+    "start": "{{label}} ziyareti: {{total}} pozlama ölçülecek…",
+    "progress": "Spektrum: {{done}}/{{total}} pozlama",
+    "counts": "{{ok}} nokta · {{no_photometry}} pozlamada ölçülemedi · {{off_detector}} pozlamada hedef dedektör dışında · {{error}} hata",
+    "none": "Bu ziyarette ölçülebilen nokta yok (ör. merkez doymuş ya da maskeli).",
+    "axisX": "Dalga boyu λ (µm)",
+    "axisY": "Akı (µJy)",
+    "log": "Logaritmik akı ekseni",
+    "detector": "Dedektör",
+    "table": "Tablo / grafik",
+    "date": "Tarih",
+    "point": "λ {{lam}} µm · {{flux}} ± {{err}} µJy · D{{det}} · {{date}}"
+  },
   "assistant": {
     "open": "Asistan",
     "title": "Asistan",

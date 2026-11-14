@@ -11,6 +11,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import random
+import time
 from urllib.parse import urlparse
 
 import certifi
@@ -50,6 +51,18 @@ class Http:
     def __init__(self) -> None:
         self._client: httpx.AsyncClient | None = None
         self._sems: dict[str, asyncio.Semaphore] = {}
+        # Passive health per upstream group: the outcome of the server's own last request (no pings)
+        self._health: dict[str, dict] = {}
+
+    def _note(self, group: str, ok: bool, detail: str) -> None:
+        self._health[group] = {
+            "ok": ok,
+            "detail": detail,
+            "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        }
+
+    def health(self) -> dict[str, dict]:
+        return dict(self._health)
 
     def client(self) -> httpx.AsyncClient:
         if self._client is None:
@@ -111,6 +124,8 @@ class Http:
                 wait = min(2**attempt, 8) + random.random()  # noqa: S311 - jitter, not crypto
             else:
                 if resp.status_code not in RETRY_STATUS or attempt == retries:
+                    # 4xx is the request's fault (e.g. unknown name), not the service's
+                    self._note(group, resp.status_code < 500, f"HTTP {resp.status_code}")
                     return resp
                 ra = resp.headers.get("retry-after", "")
                 wait = float(ra) if ra.replace(".", "", 1).isdigit() else min(2**attempt, 8)
@@ -119,7 +134,9 @@ class Http:
             if attempt < retries:
                 await asyncio.sleep(wait)
         if isinstance(last_exc, httpx.TimeoutException):
+            self._note(group, False, "timeout")
             raise UpstreamError("UPSTREAM_TIMEOUT", group, str(last_exc))
+        self._note(group, False, "unreachable")
         raise UpstreamError("UPSTREAM_UNAVAILABLE", group, str(last_exc))
 
     async def get(self, url: str, **kw) -> httpx.Response:

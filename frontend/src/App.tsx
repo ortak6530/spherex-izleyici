@@ -5,6 +5,7 @@ import Hero from "./components/Hero";
 import PrivacyNotice from "./components/PrivacyNotice";
 import type { SearchRequest } from "./components/SearchBox";
 import SourcesPage from "./components/SourcesPage";
+import StatusBar from "./components/StatusBar";
 import TopBar from "./components/TopBar";
 import EntryGate from "./components/Welcome";
 import AssistantPanel from "./features/AssistantPanel";
@@ -64,6 +65,7 @@ export default function App() {
       </Suspense>
       <EntryGate bypass={page !== null}>
         <TopBar onTarget={pickTarget} searchRequest={searchRequest} target={target} />
+        <StatusBar />
         {page === "sources" ? (
           <main className="flex flex-1 justify-center px-3 py-6 sm:px-6">
             <SourcesPage onBack={closePage} />

@@ -25,7 +25,7 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 FEEDBACK_STATUS = ("new", "read", "done")
 ACTIVITY_TYPES = {
     "search": ["search", "search_submitted"],
-    "compare": ["compare_time", "compare_objects", "observations", "cutout", "moving_frames"],
+    "compare": ["compare_time", "compare_objects", "observations", "cutout", "moving_frames", "spectrum"],
     "download": ["download"],
     "account": ["login", "login_code_requested", "saved"],
     "feedback": ["feedback"],

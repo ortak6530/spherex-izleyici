@@ -125,6 +125,27 @@ async def observations(req: ObservationsRequest, request: Request) -> dict:
     return {"job_id": jobs.start("observations", run)}
 
 
+class SpectrumRequest(BaseModel):
+    ra: float = Field(ge=0, lt=360)
+    dec: float = Field(ge=-90, le=90)
+    visit: int = Field(ge=1, le=100)  # the visit's "index" from /sky/observations
+    object_key: str | None = Field(default=None, max_length=120)
+
+
+@router.post("/spectrum")
+async def spectrum(req: SpectrumRequest, request: Request) -> dict:
+    """Start a job: aperture photometry at the target in every exposure of one visit (all 6 detectors)."""
+    _guard(request)
+    log_action(request, "spectrum", object_key=req.object_key, payload={"visit": req.visit})
+
+    async def run(progress):
+        from ...services.spectrum import visit_spectrum
+
+        return await visit_spectrum(req.ra, req.dec, req.visit, progress)
+
+    return {"job_id": jobs.start("spectrum", run)}
+
+
 class CutoutRequest(BaseModel):
     image_id: str = Field(max_length=80, pattern=r"^[a-z0-9]+:[0-9A-Za-z_]+:D[1-6]$")
     ra: float = Field(ge=0, lt=360)
