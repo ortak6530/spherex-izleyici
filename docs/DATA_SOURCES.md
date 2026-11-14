@@ -348,6 +348,20 @@ Test: `astroquery.mast.Observations.query_criteria(coordinates=..., radius=2′,
 - `TOP N` sonucu rastgele bir alt küme; kısa katalog adları her zaman listeye girmeyebilir. Bu yüzden öneride tam ad için **Sesame (yalnızca SIMBAD, `-oxp/S`)** de soruluyor. `SNV`, bilinmeyen adlarda NED/VizieR'i de denediği için yavaş ve gürültülü ("barnard" → NED'den bir galaksi).
 - **JPL SBDB:** kısmi adlarda 300 + `list` döner ("halley" → `2688 Halley (1982 HG1)`, `1P/Halley`). Ancak `sstr=1P/Halley` ve `sstr=Halley` bulunamıyor; `1P`, `2P`, sayı (`2688`) ve `C/2017 D3` çalışıyor.
 
+## 10d. CADC SSOIS (2026-11-14 canlı denemeler)
+- **Uç nokta:** `https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/cadcbin/ssos/ssosclf.pl`. API sayfasındaki örnek adres boş; formun `results.js` dosyası bu yolu çağırıyor. Daha önce varsayılan `/cadcbin/ssos/ssos.pl` → **404**.
+- **Parametreler:** `lang=en&object=<AD>&search=bynameCADC&epoch1=1990-01-01&epoch2=<bugün>&eellipse=&eunits=arcseconds&extres=no&xyres=no&format=tsv`. `eunits` yalnızca `arcseconds`/`arcminutes` kabul ediyor; `bary` → **HTTP 500**.
+- **Kapsam:** `bynameCADC`, MPCORB.DAT kullanıyor. CADC'nin kendi mesajı: "this file does not contain planets, planetary satellites, or comets".
+  - Çalışanlar (asteroit): `EROS`, `433`, `CERES`, `1`, `2024 YR4`, `99942`.
+  - Bulunamayanlar: `C/2025 N1` ("C/2025+N1" olarak ayrıştırıldı), `2025 N1`, `3I`, `3I/ATLAS`, `ATLAS`, `1P`.
+  - `HALLEY` adı 2688 Halley asteroidini bulmuş olabilir; bu yüzden SBDB tanımı kullanılıyor.
+  - Kuyruklu yıldızlar (SBDB `kind` cn/cu) **sorgulanmıyor**, "kapsam dışı" gösteriliyor. `bynameHorizons`/`bynameMPC` API sayfasının isteğiyle kullanılmıyor.
+- **TSV:** `Image, MJD, Filter, Exptime, Object_RA, Object_Dec, Image_target, Telescope/Instrument, Datalink`.
+  - Bulunamayınca aynı yanıt türünde HTML mesajı dönüyor.
+  - Büyük yanıtlar: Eros 7 283 satır (1,2 MB, 7 sn); 99942 Apophis 15 027 satır (aralarında 300 NEOSSat karesi).
+  - Yalnızca özet saklanıyor (toplam, alet dağılımı, ilk/son tarih, en yeni 50).
+  - `Datalink` bazen `http://` (CASU), bazen boş. Yalnızca `https` bağlantı olarak gösteriliyor.
+
 ## 10c. Gaia DR3, ESA arşivi TAP (2026-11-14 canlı denemeler)
 - `https://gea.esac.esa.int/tap-server/tap`, pyvo `TAPService.run_sync`, tablo `gaiadr3.gaia_source`. Kullanılan sütunlar: `source_id, ra, dec, ra_error, dec_error, parallax, parallax_error, pmra, pmdec, phot_g_mean_mag, ruwe, astrometric_params_solved`. Konumlar J2016.0. astroquery kullanılmıyor.
 - **Hız:** 0,0707°'lik koni + `G < 19`, `TOP 500` → Barnard 424 satır 2,4 sn; M31 100 satır 1,9 sn. `COUNT(*)` 1,4 sn.

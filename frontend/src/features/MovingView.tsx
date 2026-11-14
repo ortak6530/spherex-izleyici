@@ -19,6 +19,7 @@ import { errorText, fmt, raDecText } from "../lib/format";
 import { runJob, type ProgressStep } from "../lib/jobs";
 import { percentileLimits, type Colormap, type Stretch } from "../render/image";
 import { ViewControls } from "./CompareView";
+import OtherTelescopes from "./OtherTelescopes";
 
 const SIZES = [0.05, 0.1, 0.25];
 const SPEEDS = [1, 2, 4];
@@ -531,6 +532,7 @@ export default function MovingView({ target }: { target: Target }) {
           </div>
         </div>
       )}
+      {designation && <OtherTelescopes designation={designation} kind={target.body_kind} />}
     </section>
   );
 }

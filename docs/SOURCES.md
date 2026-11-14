@@ -16,7 +16,7 @@ sağlayıcının sayfasından **aynen** alınmıştır; nereden ve ne zaman alı
 | JPL Solar System Dynamics (SBDB, Horizons) | Kullanılıyor | Güneş Sistemi cisimlerinin tanımı (SBDB), SPHEREx karelerindeki öngörülen konumlar (Horizons; IRSA MOST üzerinden) ve canlı konum paneli (Horizons API: şu anki RA/Dec, seçilen şehirden yükseklik ve yön). |
 | Vikipedi / Wikipedia ve Wikidata | Kullanılıyor | Cisim bilgi panelindeki kısa açıklama (önce Türkçe, yoksa İngilizce) ve tanımlayıcılar; "Benim gökyüzümde" şehir koordinatları (Wikidata P625, config/cities_tr.json). |
 | Gaia (ESA) | Kullanılıyor | Zaman karşılaştırmasında Gaia DR3 katmanı (ESA Gaia arşivi TAP, gaiadr3.gaia_source, pyvo): hedefin öz hareket + yıllık paralaksla beklenen konumu ve alandaki Gaia kaynakları (aday işaretleri, tesadüfi eşleşme olasılığıyla). |
-| CADC SSOIS (Solar System Object Image Search) | Planlandı | Güneş Sistemi cisimleri için "bu cismi başka hangi teleskoplar görmüş" listesi; yalnızca bağlantı, dosya indirme yok (Aşama 4). |
+| CADC SSOIS (Solar System Object Image Search) | Kullanılıyor | Hareketli cisim görünümünde "başka teleskoplar" listesi: cismin öngörülen konumunun düştüğü arşiv kareleri (bynameCADC, yalnızca asteroitler; kuyruklu yıldızlar kapsam dışı). Yalnızca bağlantı, dosya indirme yok. |
 | NEOSSat (CSA / DRDC; veri CADC'de) | Planlandı | Konuma ve tarihe göre NEOSSat görüntüleri (filtresiz optik): yalnızca konum, hareket ve zaman; SPHEREx ile parlaklık karşılaştırması yapılmaz (Aşama 4). |
 | WiseView (Caselden & Westin) | Planlandı | Yalnızca dış bağlantı: "Bu cismi WISE'ta yıllar boyunca izle" (Aşama 4). Gömme yok. |
 | Astropy | Kullanılıyor | FITS okuma, WCS, VOTable ayrıştırma, zaman dönüşümleri. |
@@ -141,8 +141,8 @@ Başvurulan belgeler:
 
 ### CADC SSOIS (Solar System Object Image Search)
 
-- **Durum:** Planlandı
-- **Kullanım amacı:** Güneş Sistemi cisimleri için "bu cismi başka hangi teleskoplar görmüş" listesi; yalnızca bağlantı, dosya indirme yok (Aşama 4).
+- **Durum:** Kullanılıyor
+- **Kullanım amacı:** Hareketli cisim görünümünde "başka teleskoplar" listesi: cismin öngörülen konumunun düştüğü arşiv kareleri (bynameCADC, yalnızca asteroitler; kuyruklu yıldızlar kapsam dışı). Yalnızca bağlantı, dosya indirme yok.
 - **Adres:** <https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/en/ssois/>
 
 > This research used the facilities of the Canadian Astronomy Data Centre operated by the National Research Council of Canada with the support of the Canadian Space Agency.

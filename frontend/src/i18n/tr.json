@@ -10,6 +10,21 @@
     "privacyLogin": "Giriş yaparsan arama ve liste etkinliğin site yöneticisi tarafından görülebilir.",
     "privacyGuest": "Misafir olarak devam edersen etkinliğin e-posta gibi kişisel bir veriyle eşleştirilmez."
   },
+  "ssois": {
+    "title": "Başka teleskoplar (CADC SSOIS)",
+    "intro": "Bu cismin öngörülen konumunun düştüğü, başka teleskopların arşiv karelerini CADC SSOIS ile listeler (yalnızca bağlantı; dosya indirilmez).",
+    "run": "Listele",
+    "searching": "CADC SSOIS sorgulanıyor…",
+    "comet": "CADC'nin adla araması (bynameCADC) yalnızca asteroitleri kapsıyor (MPCORB.DAT; kuyruklu yıldız, gezegen ve uydu yok). Bu kuyruklu yıldız için liste gösterilemiyor.",
+    "notFound": "CADC SSOIS \"{{q}}\" adını bulamadı.",
+    "summary": "{{n}} arşiv karesi, {{k}} farklı teleskop/alet, {{first}} – {{last}}.",
+    "recent": "En yeni {{n}} kare",
+    "date": "Tarih",
+    "instrument": "Teleskop / alet",
+    "filter": "Süzgeç",
+    "image": "Kare (https bağlantısı varsa)",
+    "source": "Kaynak: {{src}}; Gwyn, Hill & Kavelaars (2012)."
+  },
   "gaia": {
     "title": "Gaia DR3 (ESA)",
     "unavailable": "Gaia DR3 şu an erişilemedi; karşılaştırma Gaia katmanı olmadan gösteriliyor.",

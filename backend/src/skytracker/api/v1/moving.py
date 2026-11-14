@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 
 from ... import jobs
 from ...events import log_action
-from ...providers import most
+from ...providers import most, ssois
 from ...providers import spherex as S
 from ...security import TokenBucket
 from .sky import CUTOUT_SIZES, build_cutout
@@ -61,6 +61,27 @@ async def frames(
         return out
 
     return {"job_id": jobs.start("moving_frames", run)}
+
+
+@router.get("/{designation:path}/ssois")
+async def other_telescopes(
+    request: Request,
+    designation: str = Path(max_length=40),
+    kind: str | None = Query(default=None, max_length=4, pattern="^[a-z]{1,4}$"),
+) -> dict:
+    """Start a job: archive images of other telescopes that could contain the body (CADC SSOIS)."""
+    if not _limiter.allow(request.state.session_id):
+        raise HTTPException(429, {"code": "RATE_LIMITED"})
+    des = " ".join(designation.split())
+    if not most.DESIGNATION_RE.match(des):
+        raise HTTPException(400, {"code": "INVALID_NAME"})
+    log_action(request, "ssois", object_key=des)
+
+    async def run(progress):
+        await progress("ssois_query", {"designation": des})
+        return await ssois.search(des, kind)
+
+    return {"job_id": jobs.start("ssois", run)}
 
 
 class FrameCutoutRequest(BaseModel):

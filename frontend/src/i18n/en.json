@@ -10,6 +10,21 @@
     "privacyLogin": "If you sign in, your search and list activity can be seen by the site administrator.",
     "privacyGuest": "As a guest, your activity is not linked to personal data such as an e-mail address."
   },
+  "ssois": {
+    "title": "Other telescopes (CADC SSOIS)",
+    "intro": "Lists other telescopes' archive frames where this object's predicted position falls, using CADC SSOIS (links only; nothing is downloaded).",
+    "run": "List",
+    "searching": "Querying CADC SSOIS…",
+    "comet": "CADC's search by name (bynameCADC) covers asteroids only (MPCORB.DAT; no comets, planets or satellites). No list can be shown for this comet.",
+    "notFound": "CADC SSOIS did not find \"{{q}}\".",
+    "summary": "{{n}} archive frames, {{k}} telescopes/instruments, {{first}} – {{last}}.",
+    "recent": "Newest {{n}} frames",
+    "date": "Date",
+    "instrument": "Telescope / instrument",
+    "filter": "Filter",
+    "image": "Frame (link when https)",
+    "source": "Source: {{src}}; Gwyn, Hill & Kavelaars (2012)."
+  },
   "gaia": {
     "title": "Gaia DR3 (ESA)",
     "unavailable": "Gaia DR3 is not reachable right now; the comparison is shown without the Gaia layer.",
