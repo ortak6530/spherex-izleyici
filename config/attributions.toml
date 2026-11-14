@@ -35,6 +35,8 @@ citations = [
 ]
 references = [
   { label = "SPHEREx Explanatory Supplement", url = "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp.pdf" },
+  { label = "IRSA SPHEREx Data Explorer", url = "https://irsa.ipac.caltech.edu/applications/spherex/" },
+  { label = "SPHEREx Archive User Guide (IRSA)", url = "https://irsa.ipac.caltech.edu/spherex-archive-documentation/" },
   { label = "IRSA: SPHEREx Data Release 1 (DR1) overview and DOIs", url = "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_dr1.html" },
   { label = "IRSA tutorial: Introduction to SPHEREx Spectral Images (Data Overview)", url = "https://caltech-ipac.github.io/irsa-tutorials/spherex-intro/" },
   { label = "IRSA tutorial: SPHEREx Spectral Image Cutouts", url = "https://caltech-ipac.github.io/irsa-tutorials/spherex-cutouts/" },
@@ -196,3 +198,35 @@ status = "used"
 purpose = "Sitenin yapımında kullanılan kütüphaneler (sürüm ve lisans, paket bilgisinden)."
 url = "https://github.com/ortak6530/spherex-izleyici"
 note = "Arka uç: FastAPI (MIT), Uvicorn (BSD-3-Clause), NumPy (BSD-3-Clause), PyVO (BSD-3-Clause), HTTPX (BSD-3-Clause), SQLAlchemy (MIT), Alembic (MIT), Pydantic (MIT), openpyxl (MIT), Pillow (MIT-CMU), psycopg (LGPL-3.0), argon2-cffi (MIT). Ön uç: React (MIT), three.js (MIT), Framer Motion (MIT), i18next ve react-i18next (MIT), Lucide (ISC). Yazı tipleri: Inter, Exo 2, Roboto Mono (SIL OFL 1.1)."
+
+# "Dış bağlantılar" panel. Only links checked live (HTTP 200 on the date given); every URL also appears
+# above (an item's url or references), so the panel and the Sources page agree (tests/test_sources.py).
+# Not listed on purpose: WiseView (its link format was not verified).
+
+[[link]]
+key = "spherex_explorer"
+label = "IRSA SPHEREx Veri Gezgini (Data Explorer)"
+purpose = "SPHEREx görüntülerini IRSA'nın kendi aracında aramak, görmek ve indirmek."
+url = "https://irsa.ipac.caltech.edu/applications/spherex/"
+verified = "2026-11-14"
+
+[[link]]
+key = "spherex_irsa"
+label = "IRSA SPHEREx sayfası"
+purpose = "Görev, veri sürümleri (DR1, QR3), DOI'ler ve zorunlu teşekkür metni."
+url = "https://irsa.ipac.caltech.edu/Missions/spherex.html"
+verified = "2026-11-14"
+
+[[link]]
+key = "spherex_expsupp"
+label = "Açıklayıcı Ek Belge (Explanatory Supplement, PDF)"
+purpose = "Veri ürünleri, bayraklar (FLAGS), kalibrasyon ve zodyak modeli."
+url = "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp.pdf"
+verified = "2026-11-14"
+
+[[link]]
+key = "spherex_archive_guide"
+label = "SPHEREx Arşiv Kullanım Kılavuzu (IRSA)"
+purpose = "IRSA'da SPHEREx verisine erişim yolları: arama, kesit, TAP/SIA, bulut."
+url = "https://irsa.ipac.caltech.edu/spherex-archive-documentation/"
+verified = "2026-11-14"

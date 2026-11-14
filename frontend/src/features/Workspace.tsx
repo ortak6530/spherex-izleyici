@@ -10,6 +10,7 @@ import QualityLine from "../components/QualityLine";
 import ProgressLine from "../components/ProgressLine";
 import SaveButton from "../components/SaveButton";
 import {
+  ApiError,
   apiPost,
   type CutoutResult,
   type ObservationImage,
@@ -117,8 +118,25 @@ export default function Workspace({ target }: { target: Target }) {
   const [stretch, setStretch] = useState<Stretch>("asinh");
   const [cmap, setCmap] = useState<Colormap>("inferno");
   const [filters, setFilters] = useState<ObsFilters>(NO_FILTERS);
+  // "Görüntü bilgisi bulunamadı": the server re-indexes by itself; if it still fails, redo the search
+  // once without showing an error, keep the chosen pair and repeat the action
+  const [reload, setReload] = useState(0);
+  const retried = useRef(false);
+  const pendingView = useRef(false);
+  const keepPair = useRef<{ a: string | null; b: string | null } | null>(null);
 
   const progressText = (s: ProgressStep) => t(`workspace.progress.${s.step}`, { ...s, defaultValue: s.step });
+
+  const retryOnce = (e: unknown, action: "view" | "compare") => {
+    if (!(e instanceof ApiError) || e.code !== "UNKNOWN_IMAGE" || retried.current) return false;
+    retried.current = true;
+    keepPair.current = { a: imgA, b: imgB };
+    if (action === "compare") autoCompare.current = true;
+    else pendingView.current = true;
+    setStep(t("workspace.progress.research"));
+    setReload((n) => n + 1);
+    return true;
+  };
 
   // Observations (coverage + wavelength at the target) whenever the target or detector changes
   useEffect(() => {
@@ -134,6 +152,18 @@ export default function Workspace({ target }: { target: Target }) {
       .then((r) => {
         setObs(r);
         if (!r.visits.length) return;
+        // After a silent re-search keep the user's pair if both exposures still exist
+        const keep = keepPair.current;
+        keepPair.current = null;
+        const where = (id: string | null) =>
+          r.visits.findIndex((v) => v.images.some((i) => i.image_id === id));
+        if (keep && where(keep.a) >= 0 && where(keep.b) >= 0) {
+          setVisitA(where(keep.a));
+          setVisitB(where(keep.b));
+          setImgA(keep.a);
+          setImgB(keep.b);
+          return;
+        }
         const a = 0;
         const b = r.visits.length - 1;
         setVisitA(a);
@@ -148,7 +178,7 @@ export default function Workspace({ target }: { target: Target }) {
       .finally(() => setStep(null));
     return () => ctrl.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [target.key, target.ra, target.dec, detector]);
+  }, [target.key, target.ra, target.dec, detector, reload]);
 
   const visits = obs?.visits ?? [];
   // Observation filters (date / release / λ): the lists show only passing exposures; Excel gets the same
@@ -230,7 +260,7 @@ export default function Workspace({ target }: { target: Target }) {
       );
       setSingle(decodeCutout(c));
     } catch (e) {
-      setError(errorText(t, e));
+      if (!retryOnce(e, "view")) setError(errorText(t, e));
     } finally {
       setBusy(null);
       setStep(null);
@@ -261,7 +291,7 @@ export default function Workspace({ target }: { target: Target }) {
       setResult(r);
       lastComparison.set(r.id);
     } catch (e) {
-      setError(errorText(t, e));
+      if (!retryOnce(e, "compare")) setError(errorText(t, e));
     } finally {
       setBusy(null);
       setStep(null);
@@ -270,6 +300,11 @@ export default function Workspace({ target }: { target: Target }) {
 
   // Shareable link ?compare=1: run the comparison once the default pair is known
   useEffect(() => {
+    if (pendingView.current && a) {
+      pendingView.current = false; // repeat "Görüntüle (A)" after the silent re-search
+      const id = window.setTimeout(() => void view(), 0);
+      return () => window.clearTimeout(id);
+    }
     if (!autoCompare.current || !a || !b || a.image_id === b.image_id) return;
     autoCompare.current = false;
     const id = window.setTimeout(() => void compare(), 0);

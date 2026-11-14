@@ -187,14 +187,18 @@ async def cutout(req: CutoutRequest, request: Request) -> dict:
     _guard(request)
     if req.size_deg not in CUTOUT_SIZES:
         raise HTTPException(400, {"code": "INVALID_SIZE", "allowed": CUTOUT_SIZES})
-    img = S.get_image(req.image_id)
-    if img is None:
-        raise HTTPException(404, {"code": "UNKNOWN_IMAGE"})
     log_action(
-        request, "cutout", release_id=img.release, payload={"image_id": req.image_id, "size": req.size_deg}
+        request,
+        "cutout",
+        release_id=req.image_id.split(":", 1)[0],
+        payload={"image_id": req.image_id, "size": req.size_deg},
     )
 
     async def run(progress):
+        # Re-indexes once if the cache was wiped (deploy/restart) while the page was open
+        img = await S.find_image(req.image_id, req.ra, req.dec, progress)
+        if img is None:
+            raise jobs.JobError("UNKNOWN_IMAGE")
         await progress("cutout_request", {"image_id": img.image_id})
         return await build_cutout(img, req.ra, req.dec, req.size_deg, req.zodi)
 

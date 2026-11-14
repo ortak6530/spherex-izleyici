@@ -78,11 +78,12 @@ async def frame_cutout(req: FrameCutoutRequest, request: Request) -> dict:
         raise HTTPException(429, {"code": "RATE_LIMITED"})
     if req.size_deg not in CUTOUT_SIZES:
         raise HTTPException(400, {"code": "INVALID_SIZE", "allowed": CUTOUT_SIZES})
-    img = S.get_image(req.image_id)
-    if img is None:
-        raise HTTPException(404, {"code": "UNKNOWN_IMAGE"})
 
     async def run(progress):
+        # The frame contains the predicted position, so a coverage query there re-indexes it if needed
+        img = await S.find_image(req.image_id, req.ra, req.dec, progress)
+        if img is None:
+            raise jobs.JobError("UNKNOWN_IMAGE")
         await progress("cutout_request", {"image_id": img.image_id})
         return await build_cutout(img, req.ra, req.dec, req.size_deg, req.zodi)
 

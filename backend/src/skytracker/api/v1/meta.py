@@ -34,6 +34,12 @@ def list_attributions() -> dict:
     return {"items": attributions().get("item", [])}
 
 
+@router.get("/links")
+def list_links() -> dict:
+    """External links panel: only links verified live, each also credited on the Sources page."""
+    return {"items": attributions().get("link", [])}
+
+
 # Upstreams shown in the status bar (group name in upstreams.toml -> label)
 STATUS_UPSTREAMS = {"irsa": "IRSA", "cds": "SIMBAD", "jpl": "JPL"}
 

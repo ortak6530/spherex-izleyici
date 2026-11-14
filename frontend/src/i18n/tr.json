@@ -10,6 +10,10 @@
     "privacyLogin": "Giriş yaparsan arama ve liste etkinliğin site yöneticisi tarafından görülebilir.",
     "privacyGuest": "Misafir olarak devam edersen etkinliğin e-posta gibi kişisel bir veriyle eşleştirilmez."
   },
+  "links": {
+    "title": "Dış bağlantılar",
+    "note": "IRSA'nın kendi SPHEREx araçları ve belgeleri (yeni sekmede açılır). Hepsi Kaynaklar sayfasında da anılır."
+  },
   "live": {
     "title": "Şu an nerede?",
     "loading": "Güncel konum hesaplanıyor…",
@@ -362,6 +366,8 @@
       "index_start": "D{{detector}} için hedefteki dalga boyu hesaplanıyor ({{total}} pozlama)…",
       "index": "Dalga boyu: {{done}}/{{total}}",
       "cutouts": "Kesitler IRSA'dan alınıyor…",
+      "reindex": "Görüntü listesi yenileniyor (sunucu yeniden başlamış olabilir)…",
+      "research": "Arama yenileniyor, işlem birazdan tekrarlanacak…",
       "flux_correction": "QR2→QR3 akı düzeltmesi uygulanıyor…",
       "analysis": "Hizalama ve fark hesaplanıyor…",
       "cutout_request": "Kesit alınıyor…"

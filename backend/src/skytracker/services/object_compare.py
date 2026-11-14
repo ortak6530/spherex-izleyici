@@ -73,7 +73,7 @@ def _distance(info: dict | None) -> dict | None:
 
 async def compare_objects(a: dict, b: dict, image_a: str, size: float, zodi: str, progress) -> dict:
     """a/b: {name, main_id, ra, dec, key}. image_a: the exposure already chosen for object A."""
-    ia = S.get_image(image_a)
+    ia = await S.find_image(image_a, a["ra"], a["dec"], progress)  # re-indexes after a cache wipe
     if ia is None:
         raise JobError("UNKNOWN_IMAGE")
     info_a, info_b = await asyncio.gather(_info(a.get("main_id")), _info(b.get("main_id")))

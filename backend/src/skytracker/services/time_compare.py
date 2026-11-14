@@ -182,7 +182,9 @@ async def compare_time(
     proper_motion: dict | None,
     progress,
 ) -> dict:
-    ia, ib = S.get_image(image_a), S.get_image(image_b)
+    # Both epochs contain the search position; one coverage query re-indexes both (e.g. DR1 A + QR3 B)
+    ia = await S.find_image(image_a, ra, dec, progress)
+    ib = S.get_image(image_b) or await S.find_image(image_b, ra, dec, progress)
     if ia is None or ib is None:
         raise JobError("UNKNOWN_IMAGE")
     if ia.image_id == ib.image_id:

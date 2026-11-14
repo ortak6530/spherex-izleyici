@@ -48,6 +48,8 @@ Atıf yapılacak yayınlar:
 Başvurulan belgeler:
 
 - [SPHEREx Explanatory Supplement](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp.pdf)
+- [IRSA SPHEREx Data Explorer](https://irsa.ipac.caltech.edu/applications/spherex/)
+- [SPHEREx Archive User Guide (IRSA)](https://irsa.ipac.caltech.edu/spherex-archive-documentation/)
 - [IRSA: SPHEREx Data Release 1 (DR1) overview and DOIs](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_dr1.html)
 - [IRSA tutorial: Introduction to SPHEREx Spectral Images (Data Overview)](https://caltech-ipac.github.io/irsa-tutorials/spherex-intro/)
 - [IRSA tutorial: SPHEREx Spectral Image Cutouts](https://caltech-ipac.github.io/irsa-tutorials/spherex-cutouts/)

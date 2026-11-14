@@ -137,6 +137,26 @@ def get_image(image_id: str) -> SpherexImage | None:
     return SpherexImage(**d) if d else None
 
 
+async def find_image(
+    image_id: str, ra: float, dec: float, progress: Progress | None = None
+) -> SpherexImage | None:
+    """get_image(), re-indexing once if the image is unknown.
+
+    The index lives in the disk cache, which a Render deploy or restart (or the admin's "clear all")
+    wipes while pages stay open with the old image ids -> "Görüntü bilgisi bulunamadı". Every request
+    that names an image also sends a position inside it, so the coverage query at that position
+    registers all active releases again (DR1 and QR3 of a mixed pair alike) and the lookup is retried.
+    """
+    img = get_image(image_id)
+    if img is None:
+        log.info("image %s not in the index; re-indexing at %.5f %+.5f", image_id, ra, dec)
+        if progress:
+            await progress("reindex", {"image_id": image_id})
+        await coverage(ra, dec, progress)
+        img = get_image(image_id)
+    return img
+
+
 def group_visits(images: list[SpherexImage]) -> list[dict]:
     """Split the time series wherever there is a gap > VISIT_GAP_DAYS (one visit per survey pass)."""
     visits: list[dict] = []

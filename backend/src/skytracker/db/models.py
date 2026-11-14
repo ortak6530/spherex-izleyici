@@ -106,6 +106,17 @@ class Feedback(Base):
     ip_hash: Mapped[str | None] = mapped_column(String(64), nullable=True)
 
 
+class AppState(Base):
+    """Small server values that must survive a deploy (the disk cache does not), e.g. the archive's
+    newest observation read from IRSA TAP (services/freshness.py)."""
+
+    __tablename__ = "app_state"
+
+    key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    value: Mapped[dict] = mapped_column(JSON)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
 class Comparison(Base):
     """A computed comparison (time or object-object). The assistant and Excel export read these values."""
 

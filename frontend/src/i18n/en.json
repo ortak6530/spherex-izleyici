@@ -10,6 +10,10 @@
     "privacyLogin": "If you sign in, your search and list activity can be seen by the site administrator.",
     "privacyGuest": "As a guest, your activity is not linked to personal data such as an e-mail address."
   },
+  "links": {
+    "title": "External links",
+    "note": "IRSA's own SPHEREx tools and documents (open in a new tab). All are also credited on the Sources page."
+  },
   "live": {
     "title": "Where is it now?",
     "loading": "Computing the current position…",
@@ -362,6 +366,8 @@
       "index_start": "Computing the wavelength at the target for D{{detector}} ({{total}} exposures)…",
       "index": "Wavelength: {{done}}/{{total}}",
       "cutouts": "Fetching cutouts from IRSA…",
+      "reindex": "Refreshing the image list (the server may have restarted)…",
+      "research": "Repeating the search; the action will run again shortly…",
       "flux_correction": "Applying the QR2→QR3 flux correction…",
       "analysis": "Aligning and differencing…",
       "cutout_request": "Fetching cutout…"

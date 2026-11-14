@@ -59,3 +59,19 @@ def test_sources_md_is_up_to_date():
 def test_attributions_endpoint_serves_all(client):
     items = client.get("/api/v1/meta/attributions").json()["items"]
     assert {i["key"] for i in items} == set(BY_KEY)
+
+
+def test_links_panel_matches_the_sources_page(client):
+    """Every external link is verified (dated) and also credited on the Sources page; no WiseView link."""
+    links = client.get("/api/v1/meta/links").json()["items"]
+    assert [x["key"] for x in links] == [
+        "spherex_explorer",
+        "spherex_irsa",
+        "spherex_expsupp",
+        "spherex_archive_guide",
+    ]
+    credited = {i["url"] for i in ITEMS} | {r["url"] for i in ITEMS for r in i.get("references", [])}
+    for x in links:
+        assert x["url"].startswith("https://irsa.ipac.caltech.edu/") and x["verified"]
+        assert x["url"] in credited, x["url"]
+    assert not any("wiseview" in x["url"].lower() or "1806.004" in x["url"] for x in links)

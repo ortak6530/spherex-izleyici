@@ -283,3 +283,25 @@ def test_freshness_check_reads_tap_and_keeps_the_newest(monkeypatch):
     assert s["newest"]["release"] == "QR3" and s["newest"]["date_utc"].startswith("2026-10-05")
     assert s["per_release"]["dr1"]["date_utc"].startswith("2026-05-14")
     assert FR.latest() is s
+
+
+def test_freshness_survives_a_deploy_via_the_database(client, monkeypatch):
+    """A deploy wipes memory and the disk cache; the database copy is shown at once at start-up."""
+
+    class R:
+        status_code = 200
+        text = "t_min,obs_id\n61318.001388,2026W40_2B_0001_1"
+
+    async def fake_get(url, params=None, **_):
+        return R()
+
+    monkeypatch.setattr(FR.http, "get", fake_get)
+    monkeypatch.setattr(FR.cache, "put_json", lambda *a, **k: None)
+    asyncio.run(FR.refresh())  # stored in app_state
+    monkeypatch.setattr(FR, "_state", None)  # "new process": memory empty …
+    monkeypatch.setattr(FR.cache, "get_json", lambda *a, **k: None)  # … and disk wiped
+    assert FR.latest() is None
+    saved = asyncio.run(FR.load_saved())
+    assert saved and saved["newest"]["date_utc"].startswith("2026-10-05")
+    assert FR.latest()["checked_at"] == saved["checked_at"]  # shown with when it was checked
+    assert 0 <= FR._age_s(saved) < 60
