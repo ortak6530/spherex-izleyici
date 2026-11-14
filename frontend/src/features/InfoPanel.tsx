@@ -116,7 +116,7 @@ export default function InfoPanel({ target }: { target: Target }) {
             )}
           </dl>
           {info.wikipedia && (
-            <div className="mt-4 rounded-xl border border-white/10 bg-space-950/50 p-3 text-sm">
+            <div className="mt-4 rounded-xl border border-white/10 bg-space-950/35 p-3 text-sm">
               <p className="text-ink-300">{info.wikipedia.extract}</p>
               <a
                 href={info.wikipedia.url}

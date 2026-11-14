@@ -22,7 +22,7 @@ function SourceCard({ a }: { a: Attribution }) {
   const { t } = useTranslation();
   const planned = a.status === "planned";
   return (
-    <li className="rounded-xl border border-white/10 bg-space-950/50 p-4">
+    <li className="rounded-xl border border-white/10 bg-space-950/35 p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="font-display text-lg font-semibold text-ink-100">{a.title}</h3>
         <span

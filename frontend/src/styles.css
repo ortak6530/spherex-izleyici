@@ -54,10 +54,20 @@
 }
 
 @layer components {
-  /* Glass panel readable over the animated galaxy */
+  /* Page panels: the animated galaxy shows through (2026-11-14: was 78 % opaque, blur 14px).
+     58 % keeps ink-100/300 >= 4.5:1 over the galaxy's arms; the text shadow covers the bright core. */
   .glass {
-    background: color-mix(in oklab, var(--color-space-800) 78%, transparent);
-    border: 1px solid color-mix(in oklab, var(--color-ink-100) 12%, transparent);
+    background: color-mix(in oklab, var(--color-space-800) 58%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-ink-100) 16%, transparent);
+    backdrop-filter: blur(8px) saturate(1.15);
+    -webkit-backdrop-filter: blur(8px) saturate(1.15);
+    box-shadow: 0 10px 40px -12px rgb(0 0 0 / 0.5);
+    text-shadow: 0 1px 2px rgb(3 5 15 / 0.6);
+  }
+  /* Overlays above other content (dialogs, dropdowns, assistant drawer, privacy notice): stay solid */
+  .glass-strong {
+    background: color-mix(in oklab, var(--color-space-800) 88%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-ink-100) 14%, transparent);
     backdrop-filter: blur(14px) saturate(1.2);
     -webkit-backdrop-filter: blur(14px) saturate(1.2);
     box-shadow: 0 10px 40px -12px rgb(0 0 0 / 0.6);

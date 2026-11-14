@@ -89,7 +89,7 @@ export default function FeedbackButton({ target }: { target: Target | null }) {
         ref={ref}
         onClose={close}
         aria-labelledby="fb-title"
-        className="glass m-auto w-[min(32rem,calc(100%-2rem))] rounded-2xl p-6 text-ink-300 backdrop:bg-space-950/70"
+        className="glass-strong m-auto w-[min(32rem,calc(100%-2rem))] rounded-2xl p-6 text-ink-300 backdrop:bg-space-950/70"
       >
         <div className="mb-4 flex items-center justify-between">
           <h2 id="fb-title" className="font-display text-xl font-semibold text-ink-100">

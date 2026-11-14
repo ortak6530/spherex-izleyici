@@ -232,7 +232,7 @@ export default function SearchBox({
       </div>
 
       <div
-        className={`glass absolute top-full right-0 left-0 z-40 mt-2 rounded-xl p-1.5 text-sm ${showList ? "" : "hidden"}`}
+        className={`glass-strong absolute top-full right-0 left-0 z-40 mt-2 rounded-xl p-1.5 text-sm ${showList ? "" : "hidden"}`}
       >
         <ul id={listId} role="listbox" aria-label={t("search.suggestLabel")}>
           {items.map((s, i) => (
@@ -280,7 +280,7 @@ export default function SearchBox({
       {(message || candidates.length > 0) && (
         <div
           role="status"
-          className="glass absolute top-full right-0 left-0 z-40 mt-2 rounded-xl p-3 text-sm"
+          className="glass-strong absolute top-full right-0 left-0 z-40 mt-2 rounded-xl p-3 text-sm"
         >
           {message && <p className="text-warn-400">{message}</p>}
           {candidates.length > 0 && (

@@ -44,7 +44,7 @@ function WelcomeScreen({ onGuest }: { onGuest: () => void }) {
             {t("welcome.guest")}
           </button>
         </div>
-        <div className="mt-8 space-y-1.5 rounded-xl border border-white/10 bg-space-950/50 p-4 text-left text-sm text-ink-300">
+        <div className="mt-8 space-y-1.5 rounded-xl border border-white/10 bg-space-950/35 p-4 text-left text-sm text-ink-300">
           <p className="flex items-start gap-2">
             <Info className="mt-0.5 size-4 shrink-0 text-nebula-300" aria-hidden="true" />
             <span>{t("welcome.privacyLogin")}</span>

@@ -9,7 +9,7 @@ function CollectionCard({ onSearch }: { onSearch: (q: string) => void }) {
   const { t } = useTranslation();
   return (
     <article
-      className="mt-6 rounded-xl border border-nebula-400/30 bg-space-950/60 p-4"
+      className="mt-6 rounded-xl border border-nebula-400/30 bg-space-950/40 p-4"
       aria-labelledby="col-3i-title"
     >
       <p className="font-display text-xs tracking-[0.2em] text-nebula-300 uppercase">
@@ -64,7 +64,7 @@ export default function Hero({ onSearch }: { onSearch: (q: string) => void }) {
       <p className="mt-4 max-w-prose text-base text-ink-300">{t("hero.body")}</p>
       <ol className="mt-6 grid gap-3 sm:grid-cols-3">
         {steps.map((s, i) => (
-          <li key={s} className="rounded-xl border border-white/10 bg-space-950/50 p-3 text-sm text-ink-300">
+          <li key={s} className="rounded-xl border border-white/10 bg-space-950/35 p-3 text-sm text-ink-300">
             <span className="font-mono text-star-300">0{i + 1}</span>
             <p className="mt-1 text-ink-100">{s}</p>
           </li>

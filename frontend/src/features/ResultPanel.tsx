@@ -8,7 +8,7 @@ import type { TimeCompareResult } from "./compareTypes";
 
 function Stat({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-white/10 bg-space-950/50 p-3">
+    <div className="rounded-xl border border-white/10 bg-space-950/35 p-3">
       <p className="text-xs text-ink-400">{label}</p>
       <p className="mt-1 font-mono text-sm text-ink-100">{children}</p>
     </div>

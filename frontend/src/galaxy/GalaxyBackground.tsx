@@ -248,9 +248,9 @@ export default function GalaxyBackground() {
       ) : (
         <div ref={hostRef} className="h-full w-full" />
       )}
-      {/* Readability veil: keeps UI text contrast high over the brightest parts of the galaxy */}
-      {/* Slightly darker since GALAXY_ZOOM made the bright core larger (was 0 / 0.35 / 0.8) */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgb(5_8_22/0.12)_0%,rgb(5_8_22/0.45)_55%,rgb(5_8_22/0.85)_100%)]" />
+      {/* Light veil: 18 % evenly (damps the bright core under see-through panels), a soft vignette at
+          the edges. History: 0/0.35/0.8 -> 0.12/0.45/0.85 (zoom) -> 0.18/0.18/0.5 (see-through panels) */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgb(5_8_22/0.18)_0%,rgb(5_8_22/0.18)_55%,rgb(5_8_22/0.5)_100%)]" />
     </div>
   );
 }

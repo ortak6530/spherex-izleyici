@@ -50,7 +50,7 @@ function Dialog({
       ref={ref}
       onClose={onClose}
       aria-labelledby={id}
-      className="glass m-auto max-h-[85vh] w-[min(30rem,calc(100%-2rem))] overflow-y-auto rounded-2xl p-6 text-ink-300 backdrop:bg-space-950/70"
+      className="glass-strong m-auto max-h-[85vh] w-[min(30rem,calc(100%-2rem))] overflow-y-auto rounded-2xl p-6 text-ink-300 backdrop:bg-space-950/70"
     >
       <div className="mb-4 flex items-center justify-between">
         <h2 id={id} className="font-display text-xl font-semibold text-ink-100">

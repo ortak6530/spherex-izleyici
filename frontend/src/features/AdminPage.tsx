@@ -71,7 +71,7 @@ interface ReleasesInfo {
 const when = (iso: string | null | undefined) =>
   iso ? new Date(iso.endsWith("Z") || iso.includes("+") ? iso : iso + "Z").toLocaleString("tr-TR") : "—";
 const mb = (b: number) => (b / 1024 / 1024).toFixed(1) + " MB";
-const card = "rounded-xl border border-white/10 bg-space-950/50 p-4";
+const card = "rounded-xl border border-white/10 bg-space-950/35 p-4";
 const th = "px-2 py-1.5 text-left text-xs font-medium text-ink-400";
 const td = "px-2 py-1.5 align-top text-sm text-ink-100";
 

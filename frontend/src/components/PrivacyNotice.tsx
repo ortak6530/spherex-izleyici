@@ -28,7 +28,7 @@ export default function PrivacyNotice({ forceOpen, onClose }: { forceOpen?: bool
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 24 }}
           transition={{ duration: 0.25 }}
-          className="glass fixed right-3 bottom-3 left-3 z-50 max-w-xl rounded-2xl p-5 sm:left-auto"
+          className="glass-strong fixed right-3 bottom-3 left-3 z-50 max-w-xl rounded-2xl p-5 sm:left-auto"
         >
           <div className="flex items-start gap-3">
             <ShieldCheck className="mt-0.5 size-6 shrink-0 text-ok-400" aria-hidden="true" />
