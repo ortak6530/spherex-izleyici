@@ -15,11 +15,6 @@ concurrency = 4
 simbad_tap_mirrors = ["https://simbad.cds.unistra.fr/simbad/sim-tap", "https://simbad.cfa.harvard.edu/simbad/sim-tap"]
 sesame_url = "https://cds.unistra.fr/cgi-bin/nph-sesame/-oxp/SNV"
 
-[groups.mast]
-hosts = ["mast.stsci.edu"]
-timeout = 90
-concurrency = 2
-
 [groups.jpl]
 hosts = ["ssd-api.jpl.nasa.gov", "ssd.jpl.nasa.gov"]
 timeout = 20

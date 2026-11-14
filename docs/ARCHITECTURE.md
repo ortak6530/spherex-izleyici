@@ -3,6 +3,7 @@
 > **Durum:** v0.2, **onaylandı** (2026-11-12) · Kararlar: [`DECISIONS.md`](DECISIONS.md) · Yayın: [`DEPLOY.md`](DEPLOY.md)
 > Canlı doğrulama bulguları için bkz. [`DATA_SOURCES.md`](DATA_SOURCES.md). Bu belgedeki "⚠" işaretleri o belgedeki bulgulara dayanır.
 > **v0.2 değişiklikleri:** dış yapay zekâ yerine kural tabanlı asistan; WebSocket; Excel dışa aktarma; EmailJS ile hesaplar; Render + Postgres; 32 saatlik takvim (§12).
+> **2026-11-14:** Hubble ↔ Webb (§6.7, `/telescopes`, MAST, `astroquery.mast`) **iptal edildi (kapsam dışı)** — DECISIONS §4g. Aşağıdaki MAST/telescopes satırları yalnızca tarihçe olarak duruyor; kodu yok.
 
 ---
 
@@ -213,7 +214,10 @@ M31 için 57 pozlama 7,1 sn'de indekslendi. Faz 2'de CWAVE haritasıyla karşıl
 - İki görüntü **aynı λ kanalında** (her cisim için en yakın pozlama; Δλ gösterilir), **aynı kesit boyutunda** ve **ortak parlaklık ölçeğinde** gösterilir. Ortak ölçek, iki görüntünün birleşik yüzdeliklerinden hesaplanan tek bir gerdirme aralığıdır. Ölçek bağımsız seçilirse bu belirtilir.
 - Karşılaştırma tablosu: tür, tayf türü, uzaklık (paralakstan; kaynağı yazılır), V/K parlaklığı, öz hareket (SIMBAD) ve varsa SPHEREx ölçümleri (açıklık akısı, λ).
 
-### 6.7 Hubble ↔ Webb
+### 6.7 ~~Hubble ↔ Webb~~ — iptal edildi (kapsam dışı), 2026-11-14
+
+_Aşağıdaki tasarım uygulanmadı ve uygulanmayacak (DECISIONS §4g)._
+
 - HST ve JWST önizlemeleri yan yana, kayıt bilgisiyle (tarih, alet, filtre, MAST bağlantısı). Biri yoksa "Bu cisim için herkese açık Hubble/Webb görüntüsü bulunamadı" gösterilir.
 - Demo cisimlerinin sonuçları ve önizlemeleri başlangıçta arka planda önceden çekilir (`config/demo_targets.toml`).
 - MAST CAOM sorgusu: 2′ yarıçap, `dataproduct_type=image`, `intentType=science`, yalnızca `dataRights=PUBLIC`. Sonuçlar alet ve filtreye göre gruplanır. SPHEREx aralığına (0,75–5 µm) düşen filtreler öne alınır.
@@ -297,8 +301,8 @@ Güneş sistemi cismi seçilirse konum tek değildir. Akış MOST ile "tarih ara
 | POST | `/compare/objects` | {a, b, λ} → yan yana görüntü ve spektrumlar | 4 |
 | GET | `/moving/{designation}/frames?start&end` | MOST kareleri | 4 |
 | GET | `/objects/{key}/info` | Bilgi paneli (kaynak etiketli) | 5 |
-| GET | `/telescopes?ra&dec&radius` | HST/JWST kayıtları | 6 |
-| GET | `/telescopes/preview?uri=` | İzin listeli MAST önizleme vekili | 6 |
+| ~~GET~~ | ~~`/telescopes?ra&dec&radius`~~ | iptal (kapsam dışı) | — |
+| ~~GET~~ | ~~`/telescopes/preview?uri=`~~ | iptal (kapsam dışı) | — |
 | POST | `/assistant/message` | Kural tabanlı asistan (HTTP yedek yolu) | M5 |
 | GET | `/export/object.xlsx?key=…` | Tek cisim (misafir dahil) | M4 |
 | POST | `/export/objects.xlsx` | Kayıtlı listeden birden çok cisim (giriş gerekli) | M6 |
@@ -359,7 +363,7 @@ Hata kodları: `NO_COVERAGE`, `UPSTREAM_UNAVAILABLE`, `UPSTREAM_BUSY`, `NAME_NOT
 | **4** | ~4 sa | Cisim–cisim karşılaştırması (tür önerisi, ortak ölçek, tablo), tek cisim Excel indirme | İki kahverengi cüce yan yana; .xlsx açılıyor |
 | **5** | ~3 sa | Kural tabanlı asistan (`assistant_faq.json`, "Karşılaştırmayı yorumla", WS akışı, "yazıyor…") | Asistan gerçek karşılaştırma değerlerini yorumluyor, değer yoksa uydurmuyor |
 | **6** | ~4 sa | Hesaplar (EmailJS kodu ile giriş), kayıtlı cisimler ve çalışmalar, çoklu Excel, admin paneli (canlı akış) | Kötüye kullanım testleri (yanlış kod, süre, deneme ve gönderim sınırları) geçiyor; olaylar admin panelinde canlı görünüyor |
-| **7** | ~2 sa | Hubble ↔ Webb önizlemeleri, demo cisimleri için ön çekme | M42'de iki teleskop görünüyor, kapsamsız hedefte mesaj çıkıyor |
+| ~~**7**~~ | — | ~~Hubble ↔ Webb önizlemeleri~~ — iptal edildi (kapsam dışı) | — |
 | **8** | ~1–2 sa | Cila, erişilebilirlik, README, `DEMO.md`, son yayın | Demo senaryosu baştan sona çalışıyor |
 
 - **Spektrum grafiği** (kendi açıklık fotometrimiz) kesin kapsam listesinde yok. Faz 8'de zaman kalırsa eklenecek. Cisim tablosundaki "SPHEREx ölçümleri" yalnızca seçili kanaldaki açıklık akısı olacak.
@@ -375,7 +379,7 @@ Hata kodları: `NO_COVERAGE`, `UPSTREAM_UNAVAILABLE`, `UPSTREAM_BUSY`, `NAME_NOT
 | Kesit boyutu (PSF/EPSF nedeniyle 4–5 MB) ve bant genişliği | Yüksek / orta | Spektrum için Range ile satır okuma, kesit boyutu sınırı, disk sınırı |
 | CDS kesintisi | Şu an gerçekleşmiş / orta | Ayna listesi, Sesame yedeği, "kaynak geçici olarak erişilemez" durumu |
 | astropy WCS ve SIP tuzakları, MWIR'de X çevirmesi | Orta / yüksek | Kendi λ fonksiyonumuz, CWAVE ile çapraz doğrulama testi |
-| MAST gecikmesi (84 sn) ve JWST önizlemelerinin seyrekliği | Yüksek / düşük | Eşzamansız sorgu, zaman aşımı, önizleme yoksa zarif kayıt görünümü |
+| ~~MAST gecikmesi ve JWST önizlemelerinin seyrekliği~~ | — | Hubble ↔ Webb iptal edildi; risk ortadan kalktı |
 | Genişletilmiş kaynaklarda arka plan kestirilemiyor (SOURCE %100) | Orta / orta | Daha büyük halka ya da arka plansız mod, açık uyarı |
 | Render ücretsiz planı: 15 dk hareketsizlikten sonra uyku, soğuk başlangıç (~30–60 sn), kalıcı olmayan disk, 512 MB RAM | Yüksek / orta | `docs/DEPLOY.md`: harici ping, Postgres, önbelleği başlangıçta ısıtma, bellek bilinçli işleme |
 | EmailJS ücretsiz plan sınırları (ayda 200, saniyede 1) | Orta / orta | Gönderim hız sınırları, kota dolarsa net hata mesajı |

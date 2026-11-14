@@ -10,12 +10,15 @@ ITEMS = tomllib.loads((ROOT / "config" / "attributions.toml").read_text("utf-8")
 BY_KEY = {i["key"]: i for i in ITEMS}
 
 # Resources the project plan (DECISIONS.md §4e-a) requires on the page
-REQUIRED = {"spherex", "irsa", "cds", "jpl", "wikipedia", "hst", "jwst", "gaia"}
+REQUIRED = {"spherex", "irsa", "cds", "jpl", "wikipedia", "gaia"}
 REQUIRED |= {"cadc_ssois", "neossat", "wiseview"}
+# Hubble <-> Webb was cancelled (2026-11-14, DECISIONS §4g): MAST is not used, so it is not credited
+NOT_USED = {"hst", "jwst"}
 
 
 def test_every_required_source_is_listed():
     assert set(BY_KEY) >= REQUIRED
+    assert not set(BY_KEY) & NOT_USED
     assert len(BY_KEY) == len(ITEMS)  # unique keys
 
 

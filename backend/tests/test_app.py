@@ -39,7 +39,8 @@ def test_releases_endpoint(client):
 def test_attributions_endpoint(client):
     items = client.get("/api/v1/meta/attributions").json()["items"]
     keys = {i["key"] for i in items}
-    assert {"spherex", "irsa", "hst", "jwst", "cds"} <= keys
+    assert {"spherex", "irsa", "cds", "jpl"} <= keys
+    assert not {"hst", "jwst"} & keys  # MAST is not used (Hubble <-> Webb cancelled)
 
 
 def test_events_ingest_filters_unknown_types_and_hashes_ip(client):

@@ -47,13 +47,14 @@ def test_faq_file_is_consistent():
         "Zaman karşılaştırmasını nasıl kullanırım?",
         "Hareketli cisim nedir, 3I/ATLAS neden özel?",
         "Veri nereden geliyor, ne kadar güncel?",
-        "Hubble ve Webb karşılaştırması nedir?",
         "Karşılaştırmayı yorumla",
         "Seçili cisim",
     ]
     # no fixed archive date or invented percentage in the hand-written answers
     raw = (AS.get_settings().config_dir / "assistant_faq.json").read_text("utf-8")
     assert "2026-10" not in raw and "Ekim 2026" not in raw and "%" not in raw
+    # Hubble <-> Webb was cancelled (DECISIONS §4g): no answer may promise it
+    assert "MAST" not in raw and "yan yana görünümü" not in raw and "hubble_webb" not in raw
 
 
 @pytest.mark.parametrize(
@@ -69,7 +70,7 @@ def test_faq_file_is_consistent():
         ("3I/ATLAS neden bu kadar özel", "faq:moving"),
         ("renkler ne demek", "faq:colors"),
         ("veriler ne kadar güncel", "faq:data"),
-        ("webb ile hubble farkı", "faq:hubble_webb"),
+        ("hubble ile webb karşılaştırması", "fallback"),  # cancelled feature -> "Bunu bilmiyorum"
     ],
 )
 def test_free_text_matching(message, entry):
@@ -87,7 +88,6 @@ def test_greeting_fallback_and_suggestions():
         "timecompare",
         "moving",
         "data",
-        "hubble_webb",
     ]
 
 

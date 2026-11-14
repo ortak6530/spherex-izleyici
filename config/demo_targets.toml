@@ -1,4 +1,4 @@
-# Demo objects: caches are pre-warmed for these (SPHEREx coverage, SIMBAD, MAST previews).
+# Demo objects: caches are pre-warmed for these (SPHEREx coverage, SIMBAD).
 # Coordinates are filled by the resolver at runtime; names must resolve via Sesame/SIMBAD/JPL.
 
 [[target]]

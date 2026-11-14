@@ -15,8 +15,6 @@ sağlayıcının sayfasından **aynen** alınmıştır; nereden ve ne zaman alı
 | SIMBAD ve Sesame (CDS, Strasbourg) | Kullanılıyor | Ad çözümleme (Sesame), cisim türü, tayf türü, paralaks, öz hareket ve aynı-tür önerileri (SIMBAD TAP; CDS ve CfA aynası). |
 | JPL Solar System Dynamics (SBDB, Horizons) | Kullanılıyor | Güneş Sistemi cisimlerinin tanımı (SBDB) ve öngörülen konumlar (Horizons; IRSA MOST üzerinden). |
 | Vikipedi / Wikipedia ve Wikidata | Kullanılıyor | Cisim bilgi panelindeki kısa açıklama (önce Türkçe, yoksa İngilizce) ve tanımlayıcılar. |
-| Hubble (MAST / STScI) | Planlandı | Hubble ↔ Webb karşılaştırması: yalnızca herkese açık önizlemeler ve kayıt bilgisi (Aşama 3). |
-| Webb (MAST / STScI) | Planlandı | Hubble ↔ Webb karşılaştırması: yalnızca herkese açık önizlemeler ve kayıt bilgisi (Aşama 3). |
 | Gaia (ESA) | Planlandı | Öz hareket ve paralaks (ESA Gaia TAP, gaiadr3.gaia_source) ve görüntü üstü Gaia kaynak katmanı (Aşama 4). |
 | CADC SSOIS (Solar System Object Image Search) | Planlandı | Güneş Sistemi cisimleri için "bu cismi başka hangi teleskoplar görmüş" listesi; yalnızca bağlantı, dosya indirme yok (Aşama 4). |
 | NEOSSat (CSA / DRDC; veri CADC'de) | Planlandı | Konuma ve tarihe göre NEOSSat görüntüleri (filtresiz optik): yalnızca konum, hareket ve zaman; SPHEREx ile parlaklık karşılaştırması yapılmaz (Aşama 4). |
@@ -117,30 +115,6 @@ Başvurulan belgeler:
 
 > Short descriptions from Wikipedia (CC BY-SA 4.0) and identifiers from Wikidata (CC0).
 
-
-### Hubble (MAST / STScI)
-
-- **Durum:** Planlandı
-- **Kullanım amacı:** Hubble ↔ Webb karşılaştırması: yalnızca herkese açık önizlemeler ve kayıt bilgisi (Aşama 3).
-- **Adres:** <https://archive.stsci.edu/>
-
-> This research is based on observations made with the NASA/ESA Hubble Space Telescope obtained from the Space Telescope Science Institute, which is operated by the Association of Universities for Research in Astronomy, Inc., under NASA contract NAS5–26555. These observations are associated with program(s) __________.
-
-Metnin alındığı yer: https://archive.stsci.edu/publishing/mission-acknowledgements, 2026-11-13 tarihinde doğrulandı.
-
-_Not:_ Program numaraları her önizlemenin kayıt bilgisinde gösterilir.
-
-### Webb (MAST / STScI)
-
-- **Durum:** Planlandı
-- **Kullanım amacı:** Hubble ↔ Webb karşılaştırması: yalnızca herkese açık önizlemeler ve kayıt bilgisi (Aşama 3).
-- **Adres:** <https://archive.stsci.edu/>
-
-> This work is based [in part] on observations made with the NASA/ESA/CSA James Webb Space Telescope. The data were obtained from the Mikulski Archive for Space Telescopes at the Space Telescope Science Institute, which is operated by the Association of Universities for Research in Astronomy, Inc., under NASA contract NAS5-03127 for JWST. These observations are associated with program #____.
-
-Metnin alındığı yer: https://archive.stsci.edu/publishing/mission-acknowledgements, 2026-11-13 tarihinde doğrulandı.
-
-_Not:_ Program numaraları her önizlemenin kayıt bilgisinde gösterilir. MAST, Gaia için yalnızca ikincil kaynaktır.
 
 ### Gaia (ESA)
 

@@ -3,7 +3,7 @@
   "min_score": 2,
   "fallback": "Bunu bilmiyorum. Şu sorulardan birini dene:",
   "greeting": "Merhaba! Bu sitenin yardımcısıyım. Hazır sorulardan birini seçebilir ya da sorunu yazabilirsin; bir karşılaştırma yaptıysan sitenin hesapladığı değerlerle yorumlarım.",
-  "suggest_after_fallback": ["spherex", "colors", "timecompare", "moving", "data", "hubble_webb"],
+  "suggest_after_fallback": ["spherex", "colors", "timecompare", "moving", "data"],
   "entries": [
     {
       "id": "spherex",
@@ -42,13 +42,6 @@
       "keywords": { "nereden": 3, "kaynak": 3, "guncel": 4, "en yeni": 4, "son gozlem": 4, "ne zaman": 2, "tarih": 1, "irsa": 2, "veri": 1 },
       "answer": "SPHEREx görüntüleri NASA/IPAC Kızılötesi Bilim Arşivi'nden (IRSA), cisim bilgileri SIMBAD'dan, Güneş Sistemi cisimleri JPL'den, kısa açıklamalar Vikipedi'den gelir. Her kaynak ve teşekkür metni alt bilgideki \"Kaynaklar\" sayfasındadır.",
       "related": ["releases", "spherex"]
-    },
-    {
-      "id": "hubble_webb",
-      "quick": "Hubble ve Webb karşılaştırması nedir?",
-      "keywords": { "hubble": 4, "webb": 4, "jwst": 4, "hst": 3, "mast": 2 },
-      "answer": "Hubble ve Webb, küçük bir alanı çok keskin gören teleskoplardır; SPHEREx ise tüm gökyüzünü daha kaba piksellerle ama 102 renkte tarar. Bu sitede Hubble ↔ Webb yan yana görünümü henüz yok. Eklendiğinde, MAST arşivindeki herkese açık önizlemeler kayıt bilgileriyle (tarih, alet, süzgeç) gösterilecek; görüntü yoksa bu açıkça yazılacak.",
-      "related": ["pixelated", "spherex"]
     },
     {
       "id": "interpret",
@@ -92,7 +85,7 @@
       "question": "Görüntü neden pikselli?",
       "keywords": { "piksel": 4, "bulanik": 3, "netlik": 2, "cozunurluk": 4, "kalite": 2 },
       "answer": "SPHEREx'in her pikseli gökyüzünde yaklaşık 6,2 yay saniyesi kaplar; bu, Hubble ve Webb'in piksellerinden çok daha büyüktür. SPHEREx keskin portreler için değil, tüm gökyüzünü 102 renkte taramak için tasarlandı. Bu yüzden yıldızlar birkaç piksellik kareler gibi görünür; ölçümler yine bu ham piksellerle yapılır.",
-      "related": ["hubble_webb", "colors"]
+      "related": ["spherex", "colors"]
     },
     {
       "id": "channel",

@@ -48,12 +48,9 @@
    - "Yazıyor…" efekti olur. Panelde şu not yer alır: "Bu asistan hazır cevaplar ve sitenin hesapladığı verilerle çalışır."
    - Modül bir arayüzün arkasında durur. İleride bir dil modeli eklenebilir, ama şimdi eklenmez.
    - Görünüm ve davranış referansı `docs/demo_reference.html` dosyasıdır (yalnızca örnek: verileri benzetimdir, kodu doğrudan kopyalanmaz). ⚠ Dosya 2026-11-12 itibarıyla klasörde **yok**, kullanıcının eklemesi bekleniyor.
-9. **Hubble ↔ Webb (en son sırada):**
-   - MAST'tan herkese açık HST ve JWST önizlemeleri yan yana gösterilir, kayıt bilgisiyle (tarih, alet, filtre, bağlantı). Yarıçap 2′. FITS işlenmez.
-   - Biri yoksa şu mesaj gösterilir: "Bu cisim için herkese açık Hubble/Webb görüntüsü bulunamadı".
-   - MAST sonuçları önbelleğe alınır. Demo cisimlerinin (M31, M42, WISE 0855, Barnard, 3I/ATLAS) önizlemeleri önceden çekilir.
+9. ~~**Hubble ↔ Webb**~~ — **iptal edildi (kapsam dışı), 2026-11-14** (§4g). MAST kullanılmıyor; Kaynaklar'dan da çıkarıldı.
 
-**Kapsam dışı (şimdilik):** dış dil modeli, IRSA PSF fotometrisi, FITS'ten HST/JWST işleme.
+**Kapsam dışı:** dış dil modeli, IRSA PSF fotometrisi, Hubble ↔ Webb karşılaştırması ve her türlü HST/JWST/MAST verisi.
 
 ## 3. Faz 0 sorularının yanıtları
 
@@ -65,7 +62,7 @@
 | S4 | Normalleştirme | Fark görüntüsünde varsayılan açık (göreli). Ölçek çarpanı gösterilir, kapatılabilir. |
 | S5 | Kanal toleransı | \|Δλ\| ≤ 0,5 bant genişliği: eşleşme. 0,5–1: uyarı. > 1: karşılaştırma yapılmaz. |
 | S6 | Kesit boyutu | Varsayılan 0,1°. Seçenekler 0,05 / 0,1 / 0,25 / 0,5°. Üst sınır 0,5°. |
-| S7 | Hubble/Webb | Kayıt + önizleme, 2′, yalnızca PUBLIC (ayrıntı için kapsam madde 9) |
+| S7 | Hubble/Webb | ~~Kayıt + önizleme, 2′, yalnızca PUBLIC~~ — iptal edildi (kapsam dışı), 2026-11-14 |
 | S8 | E-posta | EmailJS REST, sunucu tarafında `accessToken` ile |
 | S9 | Asistan | Dış yapay zekâ yok, kural tabanlı (kapsam madde 8) |
 | S10 | Yayın | Herkese açık, **Render** (WebSocket destekli). Boş site ilk 2 saatte yayına alınır. Ücretsiz planın uyku sorunu ve çözümü `docs/DEPLOY.md` dosyasında. |
@@ -91,13 +88,13 @@
 **B) Takvim**
 - NASA yeni veriyi (büyük olasılıkla DR1'in resmî yayını) **13 → 14 Kasım gecesi** yayınlayacak.
 - Kesin kapsamın tamamı **Cuma (14 Kasım) akşamına kadar** mevcut veriyle (QR2/QR3) bitecek, yayına alınacak ve test edilecek. Cumartesiye yeni özellik bırakılmaz. Teslim: 15 Kasım 16:00.
-- **Öncelik sırası:** cisim–cisim karşılaştırması > arayüzün tamamı > gözlem filtreleri > Excel > WebSocket > hesaplar (EmailJS) > admin paneli > asistan > Hubble↔Webb > DR1 hazırlığı > cilalama.
+- **Öncelik sırası:** cisim–cisim karşılaştırması > arayüzün tamamı > gözlem filtreleri > Excel > WebSocket > hesaplar (EmailJS) > admin paneli > asistan > ~~Hubble↔Webb~~ (iptal, §4g) > DR1 hazırlığı > cilalama.
 
 **C) Yeni veriye hazırlık**
 - DR1, sürüm ayarına `enabled: false` olarak eklenir. S3'teki DR1 dosyalarıyla yalnızca geliştirme ortamında okuma, kesit, bayrak (MSKN/MSKM/MSKD) ve kalibrasyon testleri yapılır. Sitede herkese açık gösterilmez.
 - `docs/NEW_DATA.md`: yeni sürüm (QR/DR) ya da farklı biçimde veri geldiğinde adım adım kılavuz (ayar ekleme, doğrulama, önbellek temizleme, demo testi, yayın).
 - `tools/check_release.py <sürüm>`: TAP koleksiyonunu, S3 klasörünü ve örnek kareyi kontrol eder. Başlık, bayrak ve uzantı biçimini bilinen sürümlerle karşılaştırıp farkları raporlar. Demo cisimlerinde karşılaştırma testi yapıp sonucun beklenenle uyuşup uyuşmadığını yazar (M31: değişim yok; Barnard ve 3I/ATLAS: hareket var).
-- `tools/prewarm.py`: demo cisimlerinin (M31, M42, WISE 0855, Barnard, 3I/ATLAS) görüntülerini, karşılaştırmalarını ve Hubble/Webb önizlemelerini önceden hesaplayıp önbelleğe alır.
+- `tools/prewarm.py`: demo cisimlerinin (M31, M42, WISE 0855, Barnard, 3I/ATLAS) görüntülerini ve karşılaştırmalarını önceden hesaplayıp önbelleğe alır (Hubble/Webb önizlemeleri iptal edildi, §4g).
 - Sürüm açma/kapama ve varsayılan sürüm yalnızca ayardan yapılır. Admin panelinde "veri sürümleri" bölümü ve "önbelleği yenile" düğmesi bulunur.
 - Yeni veri beklenmedik biçimde gelirse sistem çökmez, eski sürümle çalışmaya devam eder.
 
@@ -140,7 +137,7 @@
 7. Asistan
 8. Gözlem filtreleri + veri kalitesi satırı
 9. Canlı konum
-10. Hubble ↔ Webb
+10. ~~Hubble ↔ Webb~~ — iptal edildi (kapsam dışı), §4g
 11. Cilalama
 
 Hesaplar ve admin paneli **Cuma (14 Kasım) öğlene kadar** biter. 8–11. maddeler vakit kalırsa yapılır.
@@ -181,7 +178,7 @@ Hesaplar ve admin paneli **Cuma (14 Kasım) öğlene kadar** biter. 8–11. madd
 **Aşama 1 (13 Kasım gecesi)**
 - a) `docs/SOURCES.md` ve sitede "Kaynaklar" sayfası (alt bilgiden bağlantı). Her dış kaynak için ad, URL, kullanım amacı, lisans/teşekkür; yarışma kuralı gereği kullanılan **her** kaynak anılır.
   - IRSA/SPHEREx zorunlu teşekkür metni `Missions/spherex.html` sayfasından aynen alınır. Atıflar: Bock+2026 (Mission), Akeson+2026 (Pipeline), Crill+2025 (Sky Simulator), Korngut+2026 (Instrument & Calibration). IRSA eğitimleri referans olarak anılır: Data Overview, Spectral Image Cutouts, PSF Models, Source Discovery Tool, Mosaic Cube, HiPS All-Sky Cube.
-  - MAST (Hubble/JWST; Gaia için yalnızca ikincil), Gaia (ESA atıf kılavuzundan), SIMBAD/CDS, JPL Horizons, Wikipedia.
+  - ~~MAST (Hubble/JWST)~~ (iptal, §4g: kullanılmayan kaynak anılmaz), Gaia (ESA atıf kılavuzundan), SIMBAD/CDS, JPL Horizons, Wikipedia.
   - CADC SSOIS: Gwyn, Hill & Kavelaars 2012; CADC teşekkürü SSOIS belge sayfasından.
   - CSA NEOSSat: Open Government Licence – Canada; FITS kılavuzu CSA-NEOSSAT-MAN-0002 v4.00; teşekkür metni CADC NEOSSat sayfasındaki İngilizce kalıptan aynen. CSA tanıtım sayfası ve `asc-csa/NEOSSAT_Tutorial` deposu referans olarak anılır (koddan kopyalama yok).
   - WiseView (Caselden & Westin; ASCL 1806.004): yalnızca bağlantı.
@@ -191,7 +188,7 @@ Hesaplar ve admin paneli **Cuma (14 Kasım) öğlene kadar** biter. 8–11. madd
 
 **Aşama 2 (14 Kasım sabah):** e) hesaplar (EmailJS; EMAILJS_* boşsa geliştirmede kod yalnızca sunucu günlüğüne yazılır, üretimde asla yanıtta dönmez) · f) admin paneli · g) WebSocket (asistan ve admin akışı) · h) Excel.
 
-**Aşama 3 (14 Kasım öğleden sonra):** i) kural tabanlı asistan · j) gözlem filtreleri + veri kalitesi satırı, canlı konum, Hubble↔Webb · k) veri durum çubuğu, spektrum grafiği (102 bant), `NEW_DATA.md`, `tools/prewarm.py`, admin "veri sürümleri" · l) hareket izi katmanı (2010.0, 2016.0 ve iki SPHEREx tarihi; Güneş Sistemi için MOST konumları; not: "Çizgi, bilinen hareketten hesaplanan beklenen konumdur; ölçüm değildir.") · m) cilalama (ePSF ile PSF uydurma vb.).
+**Aşama 3 (14 Kasım öğleden sonra):** i) kural tabanlı asistan · j) gözlem filtreleri + veri kalitesi satırı, canlı konum (~~Hubble↔Webb~~ iptal, §4g) · k) veri durum çubuğu, spektrum grafiği (102 bant), `NEW_DATA.md`, `tools/prewarm.py`, admin "veri sürümleri" · l) hareket izi katmanı (2010.0, 2016.0 ve iki SPHEREx tarihi; Güneş Sistemi için MOST konumları; not: "Çizgi, bilinen hareketten hesaplanan beklenen konumdur; ölçüm değildir.") · m) cilalama (ePSF ile PSF uydurma vb.).
 
 **Aşama 4 (14 Kasım akşam, vakit kalırsa):** n) Gaia (ESA TAP, `gaiadr3.gaia_source`, pyvo) · o) CADC SSOIS (`search=bynameCADC`, BÜYÜK HARF, `format=tsv`; bynameHorizons/MPC kullanılmaz) · p) NEOSSat (CADC CAOM/TAP) · q) dış bağlantılar paneli · r) isteğe bağlı unWISE.
 
@@ -228,6 +225,16 @@ Hesaplar ve admin paneli **Cuma (14 Kasım) öğlene kadar** biter. 8–11. madd
 
 - EmailJS hesabında **Account → Security → "Allow EmailJS API for non-browser applications"** açık olmalı; kapalıysa sunucudan gönderim reddedilir. Hata yalnızca sunucu günlüğüne yazılır, kullanıcı "E-posta gönderilemedi" mesajını görür.
 - `EMAILJS_*` boşken: geliştirmede kod yalnızca sunucu günlüğüne yazılır (e-posta maskeli). Üretimde gönderim `EMAIL_NOT_CONFIGURED` (503) ile reddedilir; site girişsiz çalışmaya devam eder. Kod hiçbir HTTP yanıtında yer almaz.
+
+## 4g. Kapsam değişikliği ve yeni sıra (2026-11-14 sabah; **§4e'deki kalan sıranın yerine geçer**)
+
+- **Hubble ↔ Webb karşılaştırması iptal edildi (kapsam dışı).** Yapılmaz. Sitede, asistanda ve Kaynaklar'da bunu vaat eden metin kalmaz. MAST/HST/JWST kaynak olarak anılmaz, çünkü kullanılmıyor (yalnızca gerçekten kullanılan kaynaklar anılır). `upstreams.toml`'daki `mast.stsci.edu` izni kaldırıldı.
+- **DR1:** yayın tarihi 12 Kasım 2026 (SPHEREx duyurusu). IRSA'nın DR1 sayfası yalnızca "November 2026" diyor; tarih IRSA'ya atfedilmez.
+- **Yeni sıra:**
+  1. Veri durum çubuğu ve spektrum grafiği (§4e k).
+  2. j: gözlem filtreleri (tarih / sürüm / λ; Excel'e de uygulanır), veri kalitesi satırı, canlı konum.
+  3. Hareket izi katmanı (§4e l) ve `docs/NEW_DATA.md`.
+- **Donma:** 21:00'de; sonrası yalnızca hata düzeltme, test ve belge (§4e).
 
 ## 5. Teknik sonuçlar (bu kararlardan çıkan)
 

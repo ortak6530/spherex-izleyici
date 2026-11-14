@@ -1,7 +1,7 @@
 """Single outbound HTTP client.
 
 - Only hosts in config/upstreams.toml are reachable (SSRF protection); every redirect hop is checked.
-- Per-upstream-group concurrency limits (politeness towards IRSA/MAST/CDS).
+- Per-upstream-group concurrency limits (politeness towards IRSA/CDS/JPL).
 - Retries on 429/502/503/504 honouring Retry-After (IRSA answers 503 "Server busy, retry later.").
 - certifi CA bundle (the Windows store lacks the CDS chain; Linux images are fine either way).
 """

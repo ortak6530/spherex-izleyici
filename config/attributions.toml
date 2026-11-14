@@ -101,29 +101,8 @@ url = "https://www.wikipedia.org/"
 text = "Short descriptions from Wikipedia (CC BY-SA 4.0) and identifiers from Wikidata (CC0)."
 license = "Vikipedi metinleri CC BY-SA 4.0; Wikidata CC0."
 
-[[item]]
-key = "hst"
-title = "Hubble (MAST / STScI)"
-group = "data"
-status = "planned"
-purpose = "Hubble ↔ Webb karşılaştırması: yalnızca herkese açık önizlemeler ve kayıt bilgisi (Aşama 3)."
-url = "https://archive.stsci.edu/"
-text = "This research is based on observations made with the NASA/ESA Hubble Space Telescope obtained from the Space Telescope Science Institute, which is operated by the Association of Universities for Research in Astronomy, Inc., under NASA contract NAS5–26555. These observations are associated with program(s) __________."
-text_source = "https://archive.stsci.edu/publishing/mission-acknowledgements"
-verified = "2026-11-13"
-note = "Program numaraları her önizlemenin kayıt bilgisinde gösterilir."
-
-[[item]]
-key = "jwst"
-title = "Webb (MAST / STScI)"
-group = "data"
-status = "planned"
-purpose = "Hubble ↔ Webb karşılaştırması: yalnızca herkese açık önizlemeler ve kayıt bilgisi (Aşama 3)."
-url = "https://archive.stsci.edu/"
-text = "This work is based [in part] on observations made with the NASA/ESA/CSA James Webb Space Telescope. The data were obtained from the Mikulski Archive for Space Telescopes at the Space Telescope Science Institute, which is operated by the Association of Universities for Research in Astronomy, Inc., under NASA contract NAS5-03127 for JWST. These observations are associated with program #____."
-text_source = "https://archive.stsci.edu/publishing/mission-acknowledgements"
-verified = "2026-11-13"
-note = "Program numaraları her önizlemenin kayıt bilgisinde gösterilir. MAST, Gaia için yalnızca ikincil kaynaktır."
+# Hubble (HST) and Webb (JWST) via MAST were removed on 2026-11-14: the Hubble <-> Webb comparison
+# was cancelled (out of scope) and the site uses no MAST data. Re-add only if MAST is really used.
 
 [[item]]
 key = "gaia"
