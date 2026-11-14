@@ -146,6 +146,27 @@ async def spectrum(req: SpectrumRequest, request: Request) -> dict:
     return {"job_id": jobs.start("spectrum", run)}
 
 
+class PositionRequest(BaseModel):
+    ra: float = Field(ge=0, lt=360)
+    dec: float = Field(ge=-90, le=90)
+    object_key: str | None = Field(default=None, max_length=120)
+
+
+@router.post("/neossat")
+async def neossat(req: PositionRequest, request: Request) -> dict:
+    """Start a job: NEOSSat observations containing the position (CADC CAOM TAP; links only)."""
+    _guard(request)
+    log_action(request, "neossat", object_key=req.object_key)
+
+    async def run(progress):
+        from ...providers import neossat as N
+
+        await progress("neossat_query", {})
+        return await N.search(req.ra, req.dec)
+
+    return {"job_id": jobs.start("neossat", run)}
+
+
 class CutoutRequest(BaseModel):
     image_id: str = Field(max_length=80, pattern=r"^[a-z0-9]+:[0-9A-Za-z_]+:D[1-6]$")
     ra: float = Field(ge=0, lt=360)

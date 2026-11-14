@@ -28,7 +28,7 @@ concurrency = 2
 
 [groups.cadc]
 # Canadian Astronomy Data Centre: SSOIS (and NEOSSat, if its endpoint is verified)
-hosts = ["www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca"]
+hosts = ["www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca", "ws.cadc-ccda.hia-iha.nrc-cnrc.gc.ca"]
 timeout = 60
 concurrency = 2
 

@@ -10,6 +10,18 @@
     "privacyLogin": "If you sign in, your search and list activity can be seen by the site administrator.",
     "privacyGuest": "As a guest, your activity is not linked to personal data such as an e-mail address."
   },
+  "neossat": {
+    "title": "NEOSSat frames (CSA, CADC)",
+    "intro": "Lists frames of the Canadian Space Agency's NEOSSat that contain this position, from the CADC archive (previews and links only).",
+    "run": "List",
+    "searching": "Querying the CADC NEOSSat archive…",
+    "none": "No NEOSSat frame contains this position.",
+    "count": "{{n}} NEOSSat observations; the newest {{shown}}:",
+    "countAtLeast": "At least {{n}} NEOSSat observations (query limit); the newest {{shown}}:",
+    "raw": "unprocessed (RAW) — caution",
+    "previewAlt": "NEOSSat preview {{id}}",
+    "source": "Source: {{src}}. Product order CORD > COR > RAW; CLEAN is not used."
+  },
   "ssois": {
     "title": "Other telescopes (CADC SSOIS)",
     "intro": "Lists other telescopes' archive frames where this object's predicted position falls, using CADC SSOIS (links only; nothing is downloaded).",

@@ -26,6 +26,7 @@ import { percentileLimits, type Colormap, type Stretch } from "../render/image";
 import CompareView, { ViewControls } from "./CompareView";
 import type { TimeCompareResult } from "./compareTypes";
 import MovingView from "./MovingView";
+import NeossatPanel from "./NeossatPanel";
 import ObjectCompare from "./ObjectCompare";
 import ResultPanel from "./ResultPanel";
 import SpectrumPanel from "./SpectrumPanel";
@@ -573,6 +574,7 @@ export default function Workspace({ target }: { target: Target }) {
         <SpectrumPanel key={`${target.key}-${visits[visitA].index}`} target={target} visit={visits[visitA]} />
       )}
       {visits.length > 0 && <ObjectCompare target={target} imageA={imgA} size={size} zodi={zodi} />}
+      {target.ra !== undefined && <NeossatPanel key={`neo-${target.key}`} target={target} />}
     </section>
   );
 }

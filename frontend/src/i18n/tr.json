@@ -10,6 +10,18 @@
     "privacyLogin": "Giriş yaparsan arama ve liste etkinliğin site yöneticisi tarafından görülebilir.",
     "privacyGuest": "Misafir olarak devam edersen etkinliğin e-posta gibi kişisel bir veriyle eşleştirilmez."
   },
+  "neossat": {
+    "title": "NEOSSat kareleri (CSA, CADC)",
+    "intro": "Kanada Uzay Ajansı'nın NEOSSat uydusunun bu konumu içeren karelerini CADC arşivinden listeler (yalnızca önizleme ve bağlantı).",
+    "run": "Listele",
+    "searching": "CADC NEOSSat arşivi sorgulanıyor…",
+    "none": "Bu konumu içeren NEOSSat karesi bulunamadı.",
+    "count": "{{n}} NEOSSat gözlemi; en yeni {{shown}} tanesi:",
+    "countAtLeast": "En az {{n}} NEOSSat gözlemi (sorgu sınırı); en yeni {{shown}} tanesi:",
+    "raw": "işlenmemiş (RAW) — dikkat",
+    "previewAlt": "NEOSSat önizlemesi {{id}}",
+    "source": "Kaynak: {{src}}. Ürün sırası CORD > COR > RAW; CLEAN kullanılmaz."
+  },
   "ssois": {
     "title": "Başka teleskoplar (CADC SSOIS)",
     "intro": "Bu cismin öngörülen konumunun düştüğü, başka teleskopların arşiv karelerini CADC SSOIS ile listeler (yalnızca bağlantı; dosya indirilmez).",

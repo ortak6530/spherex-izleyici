@@ -380,9 +380,18 @@ Test: `astroquery.mast.Observations.query_criteria(coordinates=..., radius=2′,
 
 ---
 
-## 12. NEOSSat (planlandı — DECISIONS.md §4e madde p)
+## 12. NEOSSat (DECISIONS.md §4e madde p) — **canlı doğrulandı ve eklendi, 2026-11-14**
 
-**Durum:** Yalnızca belge. Arama uç noktası (CADC CAOM/TAP, koleksiyon `NEOSSAT`) **henüz canlı denenmedi**; kod yok.
+**Durum:** Uç nokta CADC'nin kendi kayıt dosyasından alındı ve canlı denendi; özellik eklendi (`providers/neossat.py`, `POST /sky/neossat`, "NEOSSat kareleri" paneli).
+- **Kayıt dosyası** (`https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/reg/resource-caps`): `ivo://cadc.nrc.ca/argus = https://ws.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/argus/capabilities`. TAP sync: `…/argus/sync`, `LANG=ADQL`, `FORMAT=csv`.
+- **Koleksiyon:** `COUNT(*) FROM caom2.Observation WHERE collection='NEOSSAT'` = **773 583** (2,2 sn). `o.type`: `object` 695 057, `dark` 78 526; karanlık kareler alınmıyor.
+- **Konum sorgusu:** `INTERSECTS(POINT('ICRS', ra, dec), caom2.Plane.position_bounds) = 1`.
+  - Barnard ≥ 400 ürün satırı (sorgu sınırı), 2019-12; M31 223; WISE 0855 0.
+  - Süre 2–20 sn (Polaris 20 sn).
+- **Ürünler:** `cord`, `cor`, `raw`, `clean`. Gözlem başına CORD > COR > RAW seçiliyor; CLEAN hiç kullanılmıyor. Eski kareler çoğunlukla yalnızca `raw`; arayüzde "işlenmemiş (RAW) — dikkat" yazıyor.
+- **Bağlantılar:** `…/caom2ops/datalink?ID=<publisherID>` → VOTable.
+  - `#preview` PNG ve `#this` FITS adresleri `cadc-west-01.canfar.net/raven/files/...` altında; ikisi de 206 ile açıldı.
+  - Sunucu yalnızca en yeni 10 gözlemin datalink'ini okuyor; dosyaları indirmiyor.
 
 **Kaynaklar** (2026-11-13'te okundu):
 - CADC NEOSSat sayfası: <https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/en/neossat/>. Ürün tablosu ve teşekkür metni burada; metin [`SOURCES.md`](SOURCES.md)'de aynen var.

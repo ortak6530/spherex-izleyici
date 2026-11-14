@@ -17,7 +17,7 @@ sağlayıcının sayfasından **aynen** alınmıştır; nereden ve ne zaman alı
 | Vikipedi / Wikipedia ve Wikidata | Kullanılıyor | Cisim bilgi panelindeki kısa açıklama (önce Türkçe, yoksa İngilizce) ve tanımlayıcılar; "Benim gökyüzümde" şehir koordinatları (Wikidata P625, config/cities_tr.json). |
 | Gaia (ESA) | Kullanılıyor | Zaman karşılaştırmasında Gaia DR3 katmanı (ESA Gaia arşivi TAP, gaiadr3.gaia_source, pyvo): hedefin öz hareket + yıllık paralaksla beklenen konumu ve alandaki Gaia kaynakları (aday işaretleri, tesadüfi eşleşme olasılığıyla). |
 | CADC SSOIS (Solar System Object Image Search) | Kullanılıyor | Hareketli cisim görünümünde "başka teleskoplar" listesi: cismin öngörülen konumunun düştüğü arşiv kareleri (bynameCADC, yalnızca asteroitler; kuyruklu yıldızlar kapsam dışı). Yalnızca bağlantı, dosya indirme yok. |
-| NEOSSat (CSA / DRDC; veri CADC'de) | Planlandı | Konuma ve tarihe göre NEOSSat görüntüleri (filtresiz optik): yalnızca konum, hareket ve zaman; SPHEREx ile parlaklık karşılaştırması yapılmaz (Aşama 4). |
+| NEOSSat (CSA / DRDC; veri CADC'de) | Kullanılıyor | Cisim sayfasında "NEOSSat kareleri" listesi: konumu içeren NEOSSat gözlemleri (CADC CAOM TAP, koleksiyon NEOSSAT; ürün sırası CORD > COR > RAW), önizleme ve FITS bağlantısı. Filtresiz optik: yalnızca konum ve zaman; SPHEREx ile parlaklık karşılaştırması yapılmaz. |
 | WiseView (Caselden & Westin) | Planlandı | Yalnızca dış bağlantı: "Bu cismi WISE'ta yıllar boyunca izle" (Aşama 4). Gömme yok. |
 | Astropy | Kullanılıyor | FITS okuma, WCS, VOTable ayrıştırma, zaman dönüşümleri. |
 | Açık kaynak yazılımlar | Kullanılıyor | Sitenin yapımında kullanılan kütüphaneler (sürüm ve lisans, paket bilgisinden). |
@@ -159,8 +159,8 @@ Başvurulan belgeler:
 
 ### NEOSSat (CSA / DRDC; veri CADC'de)
 
-- **Durum:** Planlandı
-- **Kullanım amacı:** Konuma ve tarihe göre NEOSSat görüntüleri (filtresiz optik): yalnızca konum, hareket ve zaman; SPHEREx ile parlaklık karşılaştırması yapılmaz (Aşama 4).
+- **Durum:** Kullanılıyor
+- **Kullanım amacı:** Cisim sayfasında "NEOSSat kareleri" listesi: konumu içeren NEOSSat gözlemleri (CADC CAOM TAP, koleksiyon NEOSSAT; ürün sırası CORD > COR > RAW), önizleme ve FITS bağlantısı. Filtresiz optik: yalnızca konum ve zaman; SPHEREx ile parlaklık karşılaştırması yapılmaz.
 - **Adres:** <https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/en/neossat/>
 - **Lisans / koşullar:** Open Government Licence – Canada (https://open.canada.ca/en/open-government-licence-canada).
 
