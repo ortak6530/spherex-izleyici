@@ -13,8 +13,8 @@ sağlayıcının sayfasından **aynen** alınmıştır; nereden ve ne zaman alı
 | SPHEREx (NASA / JPL / Caltech) | Kullanılıyor | Tüm SPHEREx spektral görüntüleri, kesitler, zaman ve cisim karşılaştırmaları, hareketli cisim kareleri. |
 | NASA/IPAC Infrared Science Archive (IRSA) | Kullanılıyor | SPHEREx verisine erişim: SIA2 kapsam sorgusu, TAP, kesit servisi, IBE dosyaları, MOST (hareketli cisim arama). |
 | SIMBAD ve Sesame (CDS, Strasbourg) | Kullanılıyor | Ad çözümleme (Sesame), cisim türü, tayf türü, paralaks, öz hareket ve aynı-tür önerileri (SIMBAD TAP; CDS ve CfA aynası). |
-| JPL Solar System Dynamics (SBDB, Horizons) | Kullanılıyor | Güneş Sistemi cisimlerinin tanımı (SBDB) ve öngörülen konumlar (Horizons; IRSA MOST üzerinden). |
-| Vikipedi / Wikipedia ve Wikidata | Kullanılıyor | Cisim bilgi panelindeki kısa açıklama (önce Türkçe, yoksa İngilizce) ve tanımlayıcılar. |
+| JPL Solar System Dynamics (SBDB, Horizons) | Kullanılıyor | Güneş Sistemi cisimlerinin tanımı (SBDB), SPHEREx karelerindeki öngörülen konumlar (Horizons; IRSA MOST üzerinden) ve canlı konum paneli (Horizons API: şu anki RA/Dec, seçilen şehirden yükseklik ve yön). |
+| Vikipedi / Wikipedia ve Wikidata | Kullanılıyor | Cisim bilgi panelindeki kısa açıklama (önce Türkçe, yoksa İngilizce) ve tanımlayıcılar; "Benim gökyüzümde" şehir koordinatları (Wikidata P625, config/cities_tr.json). |
 | Gaia (ESA) | Planlandı | Öz hareket ve paralaks (ESA Gaia TAP, gaiadr3.gaia_source) ve görüntü üstü Gaia kaynak katmanı (Aşama 4). |
 | CADC SSOIS (Solar System Object Image Search) | Planlandı | Güneş Sistemi cisimleri için "bu cismi başka hangi teleskoplar görmüş" listesi; yalnızca bağlantı, dosya indirme yok (Aşama 4). |
 | NEOSSat (CSA / DRDC; veri CADC'de) | Planlandı | Konuma ve tarihe göre NEOSSat görüntüleri (filtresiz optik): yalnızca konum, hareket ve zaman; SPHEREx ile parlaklık karşılaştırması yapılmaz (Aşama 4). |
@@ -93,7 +93,7 @@ Başvurulan belgeler:
 ### JPL Solar System Dynamics (SBDB, Horizons)
 
 - **Durum:** Kullanılıyor
-- **Kullanım amacı:** Güneş Sistemi cisimlerinin tanımı (SBDB) ve öngörülen konumlar (Horizons; IRSA MOST üzerinden).
+- **Kullanım amacı:** Güneş Sistemi cisimlerinin tanımı (SBDB), SPHEREx karelerindeki öngörülen konumlar (Horizons; IRSA MOST üzerinden) ve canlı konum paneli (Horizons API: şu anki RA/Dec, seçilen şehirden yükseklik ve yön).
 - **Adres:** <https://ssd.jpl.nasa.gov/>
 
 > Solar system object data from the JPL Small-Body Database and Horizons system, NASA Jet Propulsion Laboratory.
@@ -109,7 +109,7 @@ Başvurulan belgeler:
 ### Vikipedi / Wikipedia ve Wikidata
 
 - **Durum:** Kullanılıyor
-- **Kullanım amacı:** Cisim bilgi panelindeki kısa açıklama (önce Türkçe, yoksa İngilizce) ve tanımlayıcılar.
+- **Kullanım amacı:** Cisim bilgi panelindeki kısa açıklama (önce Türkçe, yoksa İngilizce) ve tanımlayıcılar; "Benim gökyüzümde" şehir koordinatları (Wikidata P625, config/cities_tr.json).
 - **Adres:** <https://www.wikipedia.org/>
 - **Lisans / koşullar:** Vikipedi metinleri CC BY-SA 4.0; Wikidata CC0.
 

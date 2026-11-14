@@ -10,6 +10,7 @@ from . import (
     feedback,
     health,
     jobs_api,
+    live,
     meta,
     moving,
     objects,
@@ -34,3 +35,4 @@ router.include_router(auth.router)
 router.include_router(admin.router)
 router.include_router(export.router)
 router.include_router(assistant.router)
+router.include_router(live.router)

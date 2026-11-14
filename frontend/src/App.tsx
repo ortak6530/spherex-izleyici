@@ -10,6 +10,7 @@ import TopBar from "./components/TopBar";
 import EntryGate from "./components/Welcome";
 import AssistantPanel from "./features/AssistantPanel";
 import InfoPanel from "./features/InfoPanel";
+import LivePanel from "./features/LivePanel";
 import Workspace from "./features/Workspace";
 import type { Target } from "./lib/api";
 import { track } from "./lib/events";
@@ -81,6 +82,7 @@ export default function App() {
             <Workspace key={target.key} target={target} />
             <div className="space-y-4">
               <InfoPanel key={target.key} target={target} />
+              <LivePanel key={`live-${target.key}`} target={target} />
             </div>
           </main>
         ) : (
