@@ -1,6 +1,6 @@
 # İlerleme durumu
 
-> **Son güncelleme:** 2026-11-14 ~13:40 TSİ, bekleniyor. Son kod commit'i `1bb81fb` (push'lu, prewarm yapıldı, health 200). Testler: arka uç 166, ön uç 37, tsc/ruff temiz, ESLint 0 hata (3 uyarı). **Sıradaki iş:** Aşama 3 kesin kapsamı bitti. Aşama 4 (Gaia / SSOIS / NEOSSat) **onay almadan başlanmaz**. **Kural (kullanıcı, 2026-11-14): her push'tan sonra `tools/prewarm.py` cisim cisim çalıştırılır ve `/api/v1/health` denetlenir.**
+> **Son güncelleme:** 2026-11-14 ~14:25 TSİ. Aşama 4'ün istenen üç maddesi bitti (Gaia `5a8362d`, SSOIS `ffb6c9b`, NEOSSat `13e6bdf`); hepsi canlıda doğrulandı, her push'tan sonra prewarm yapıldı, health 200. Testler: arka uç 178, ön uç 43, tsc/ruff temiz, ESLint 0 hata (3 uyarı). **Sıradaki iş:** kullanıcı onayı bekleniyor. Donma 21:00. **Kural (kullanıcı, 2026-11-14): her push'tan sonra `tools/prewarm.py` cisim cisim çalıştırılır ve `/api/v1/health` denetlenir.**
 >
 > **Bu oturumda bitenler (sırayla):** karşılama ekranı · Excel · DR1 duyurusu · Samanyolu yakınlaştırma · yarı saydam paneller · asistan (hazır sorular, canlı güncellik, cisme göre cevap) · Hubble↔Webb iptali · veri durum çubuğu · spektrum · gözlem filtreleri + veri kalitesi · canlı konum · hareket izi · NEW_DATA.md · "Görüntü bilgisi bulunamadı" düzeltmesi · kalıcı arşiv güncelliği · dış bağlantılar paneli. **Yarım kalan:** yok. · Teslim: **15 Kasım 2026, 16:00** · Canlı: https://spherex-izleyici.onrender.com
 > Kararlar ve talimatlar: [`DECISIONS.md`](DECISIONS.md) (**geçerli plan §4e**) · Mimari: [`ARCHITECTURE.md`](ARCHITECTURE.md) · Veri kaynakları: [`DATA_SOURCES.md`](DATA_SOURCES.md) · Kaynaklar/atıflar: [`SOURCES.md`](SOURCES.md) · Yayın: [`DEPLOY.md`](DEPLOY.md)
@@ -36,7 +36,22 @@
 | **Kalıcı arşiv güncelliği** | ✅ `1bb81fb`, canlıda | `app_state` tablosu (Alembic `0005`, `alembic check` temiz). En yeni gözlem veritabanına da yazılır; açılışta oradan anında yüklenir ve 12 saatten yeniyse açılışta IRSA'ya sorulmaz. İki koleksiyon paralel sorgulanır (~2 dk). İlk kez bu yayında yazıldı (2026-10-05 QR3, kontrol 10:35 UTC); sonraki yayınlarda "okunuyor" görünmeyecek. Test: `test_freshness_survives_a_deploy_via_the_database`. |
 | **Dış bağlantılar paneli** | ✅ `1bb81fb`, canlıda | `/meta/links` ← `attributions.toml` `[[link]]`. IRSA SPHEREx Veri Gezgini, IRSA SPHEREx sayfası, Açıklayıcı Ek Belge, SPHEREx Arşiv Kullanım Kılavuzu (hepsi 2026-11-14'te HTTP 200). Sağ sütunda. Her bağlantı Kaynaklar'da da anılıyor (testli). WiseView yok (URL biçimi doğrulanmadı). |
 | **Prewarm (`1bb81fb` sonrası)** | ✅ 0 hata | Barnard 12,50″, WISE 0855 8,52″, Luhman 16 2,90″, 3I/ATLAS 17/17 kesit; health 200. |
-| **Sıradaki iş** | ⏸ bekleniyor | Aşama 3 kesin kapsamı bitti. Aşama 4 (Gaia / CADC SSOIS / NEOSSat / unWISE) **onay almadan başlanmaz**. Donma 21:00. |
+| **n** Gaia DR3 katmanı | ✅ `5a8362d`, canlıda | ESA Gaia arşivi TAP + pyvo (astroquery kullanılmıyor), `gaiadr3.gaia_source`, J2016.0.
+**(A)** Hedefin SPHEREx tarihlerindeki beklenen konumu: öz hareket + yıllık paralaks (Yer'in barisentrik konumu astropy'den; bağımsız vektör hesabıyla < 2 mas testli).
+**(B)** Alandaki Gaia kaynakları A tarihine taşınıp "aday" halkalarıyla işaretleniyor (aç/kapa). Hedef karşılığı Gaia döneminde, 1 SPHEREx pikseli (6,15″) içinde en yakın kaynak; tesadüfi eşleşme olasılığı kesilmeyen `COUNT(*)` yoğunluğundan, hem gözlenen ayrımda hem tüm yarıçapta.
+Eksik öz hareket "veri yok" (0 yapılmaz); eşleşme yoksa "yeni keşif" denmez. Gaia düşerse karşılaştırma bozulmuyor.
+**Canlı:** Barnard'ta aday 4472832130942575872; paralaks düzeltmeli beklenen kayma 11,07″, ölçülen 12,50″, fark 0,23 piksel; tesadüfi olasılık %0,007. Luhman 16'da aday 5353626573555863424, 2 parametreli çözüm → beklenen konum "veri yok".
+Testler: `test_gaia.py` (7), `GaiaLayer.test.tsx` (4). DATA_SOURCES §10c. |
+| **o** CADC SSOIS | ✅ `ffb6c9b`, canlıda | Hareketli cisim görünümünde "Başka teleskoplar". `bynameCADC`, BÜYÜK HARF, `format=tsv`.
+Uç nokta canlıdan bulundu (`ssosclf.pl`; `ssos.pl` 404, `eunits=bary` 500). CADC adla araması yalnızca asteroitleri kapsıyor (MPCORB.DAT); kuyruklu yıldızlar (3I/ATLAS, 1P) sorgulanmıyor, "kapsam dışı" yazıyor. Horizons/MPC araması kullanılmıyor.
+Gösterilenler: özet (toplam, alet dağılımı, tarih aralığı, en yeni 50; bağlantı yalnızca https) ve "öngörülen konum alana düşüyor, görünür olduğu anlamına gelmez" notu.
+**Canlı:** Eros 7 283 kare (2002–2025); 3I/ATLAS kapsam dışı. Testler: `test_ssois.py` (3), `OtherTelescopes.test.tsx` (2). DATA_SOURCES §10d. |
+| **p** NEOSSat | ✅ `13e6bdf`, canlıda | Uç nokta CADC kayıt dosyasından (`ivo://cadc.nrc.ca/argus`) alınıp canlı doğrulandı.
+Cisim sayfasında "NEOSSat kareleri": konumu içeren "object" gözlemleri; karanlık kareler alınmıyor. Gözlem başına CORD > COR > RAW (CLEAN yok, RAW uyarılı); en yeni 10 için datalink'ten önizleme ve FITS bağlantısı, indirme yok. Filtresiz optik ve sınırlı WCS doğruluğu notu.
+**Canlı:** M31 223 gözlem, önizleme geliyor; WISE 0855 0 gözlem. Test: `test_neossat.py` (3). DATA_SOURCES §12. |
+| **r** unWISE (isteğe bağlı) | **yapılmadı** | İstenmedi, kapsam dışı bırakıldı. |
+| AllWISE alan sorgusu + dipol adayı (Aşama 4 eki) | **yapılmadı** | Bu turda istenmedi (yalnızca Gaia / SSOIS / NEOSSat). |
+| **Sıradaki iş** | ⏸ bekleniyor | Kullanıcı onayı. Donma 21:00; sonrasında yalnızca hata düzeltme, test ve belge. |
 
 ## Admin paneli (2f): nerede kaldık — 2026-11-14
 
