@@ -10,6 +10,17 @@
     "privacyLogin": "Giriş yaparsan arama ve liste etkinliğin site yöneticisi tarafından görülebilir.",
     "privacyGuest": "Misafir olarak devam edersen etkinliğin e-posta gibi kişisel bir veriyle eşleştirilmez."
   },
+  "assistant": {
+    "open": "Asistan",
+    "title": "Asistan",
+    "close": "Asistanı kapat",
+    "note": "Bu asistan hazır cevaplar ve sitenin hesapladığı verilerle çalışır.",
+    "intro": "Bir soru yaz ya da aşağıdaki düğmelerden birini seç. Bir karşılaştırma yaptıysan \"Karşılaştırmayı yorumla\" sonucu açıklar.",
+    "typing": "Yazıyor…",
+    "inputLabel": "Asistana mesaj",
+    "placeholder": "Sorunu yaz (ör. Görüntü neden pikselli?)",
+    "send": "Gönder"
+  },
   "export": {
     "button": "Excel olarak indir",
     "listTitle": "Excel'e aktar",

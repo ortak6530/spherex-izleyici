@@ -16,6 +16,7 @@ import {
 import { BANDS } from "../lib/bands";
 import { errorText, fmt, raDecText } from "../lib/format";
 import { runJob, type ProgressStep } from "../lib/jobs";
+import { lastComparison } from "../lib/lastComparison";
 import { percentileLimits, type Colormap, type Stretch } from "../render/image";
 import CompareView, { ViewControls } from "./CompareView";
 import type { TimeCompareResult } from "./compareTypes";
@@ -207,6 +208,7 @@ export default function Workspace({ target }: { target: Target }) {
         (s) => setStep(progressText(s)),
       );
       setResult(r);
+      lastComparison.set(r.id);
     } catch (e) {
       setError(errorText(t, e));
     } finally {

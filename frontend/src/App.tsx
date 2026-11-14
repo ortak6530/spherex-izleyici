@@ -7,10 +7,12 @@ import type { SearchRequest } from "./components/SearchBox";
 import SourcesPage from "./components/SourcesPage";
 import TopBar from "./components/TopBar";
 import EntryGate from "./components/Welcome";
+import AssistantPanel from "./features/AssistantPanel";
 import InfoPanel from "./features/InfoPanel";
 import Workspace from "./features/Workspace";
 import type { Target } from "./lib/api";
 import { track } from "./lib/events";
+import { lastComparison } from "./lib/lastComparison";
 import { realtime } from "./lib/realtime";
 
 // three.js is ~500 kB; load it after the UI so text appears immediately
@@ -51,6 +53,7 @@ export default function App() {
   };
   const pickTarget = (t: Target) => {
     if (pageFromHash()) closePage();
+    if (t.key !== target?.key) lastComparison.set(null); // the assistant must not read another object's result
     setTarget(t);
   };
 
@@ -83,6 +86,7 @@ export default function App() {
             <Hero onSearch={search} />
           </main>
         )}
+        <AssistantPanel target={target} onSearch={search} />
       </EntryGate>
       <Footer onSources={openSources} onPrivacy={() => setPrivacyOpen(true)} />
       <PrivacyNotice forceOpen={privacyOpen} onClose={() => setPrivacyOpen(false)} />

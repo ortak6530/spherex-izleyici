@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from . import (
     admin,
+    assistant,
     auth,
     compare,
     events,
@@ -32,3 +33,4 @@ router.include_router(suggest.router)
 router.include_router(auth.router)
 router.include_router(admin.router)
 router.include_router(export.router)
+router.include_router(assistant.router)

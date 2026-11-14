@@ -8,6 +8,7 @@ import SaveButton from "../components/SaveButton";
 import { apiGet, apiPost, type ResolveResponse, type Target } from "../lib/api";
 import { errorText, fmt, warningText, type Warning } from "../lib/format";
 import { runJob, runMaybeJob } from "../lib/jobs";
+import { lastComparison } from "../lib/lastComparison";
 import { decodeFloat32, type Colormap, type Stretch } from "../render/image";
 import { ViewControls } from "./CompareView";
 
@@ -160,6 +161,7 @@ export default function ObjectCompare({
         (s) => setStep(t(`workspace.progress.${s.step}`, { ...s, defaultValue: s.step })),
       );
       setResult(r);
+      lastComparison.set(r.id);
     } catch (e) {
       setMessage(errorText(t, e));
     } finally {
