@@ -346,7 +346,7 @@ Test: `astroquery.mast.Observations.query_criteria(coordinates=..., radius=2′,
 - CAOM SIA2 (MAST).
 - IRSA Spectrophotometry Tool'un programatik API'si var mı?
 - Kesit servisinde PSF/EPSF'yi dışarıda bırakan bir parametre var mı? Belgelerde yok.
-- ~~DR1'in resmî yayın tarihi, TAP koleksiyon adı ve DOI'si.~~ 2026-11-14: Kasım 2026'da duyuruldu, `spherex_dr1` / `spherex_dr1_deep`, DOI 10.26131/IRSA678 (§4.9). IRSA sayfası gün vermiyor ("November 2026"); 12 Kasım tarihi kullanıcıdan.
+- ~~DR1'in resmî yayın tarihi, TAP koleksiyon adı ve DOI'si.~~ 2026-11-14: Kasım 2026'da duyuruldu, `spherex_dr1` / `spherex_dr1_deep`, DOI 10.26131/IRSA678 (§4.9). IRSA sayfası gün vermiyor ("November 2026"); yayın tarihi 12 Kasım 2026 SPHEREx duyurusundan (IRSA'ya atfedilmez).
 - `CWAVE` haritasıyla WCS-WAVE arasındaki fark ve MWIR'deki X çevirme yönü. Faz 2'de doğrulanacak.
 - Derin alan koleksiyonlarının TAP'ta nasıl göründüğü. Faz 3'te bakılacak.
 

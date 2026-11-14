@@ -88,7 +88,7 @@
       "id": "releases",
       "question": "DR1, QR3 gibi veri sürümleri nedir?",
       "keywords": { "dr1": 3, "qr3": 3, "qr2": 3, "surum": 3, "veri surumu": 4, "release": 2 },
-      "answer": "SPHEREx verisi sürümler halinde yayımlanır. DR1 (Data Release 1, Kasım 2026) görevin ilk yılını (2025 Nisan – 2026 Mayıs) güncel kalibrasyonla yeniden işler. QR3 (Quick Release 3) sonraki ayları kapsar. Eski QR2'nin yerini DR1 aldı; site yeni aramalarda QR2'yi kullanmaz. Farklı kalibrasyon ailelerinden iki görüntü karşılaştırılırsa site uyarı gösterir.",
+      "answer": "SPHEREx verisi sürümler halinde yayımlanır. DR1 (Data Release 1, 12 Kasım 2026) görevin ilk yılını (2025 Nisan – 2026 Mayıs) güncel kalibrasyonla yeniden işler. QR3 (Quick Release 3) sonraki ayları kapsar. Eski QR2'nin yerini DR1 aldı; site yeni aramalarda QR2'yi kullanmaz. Farklı kalibrasyon ailelerinden iki görüntü karşılaştırılırsa site uyarı gösterir.",
       "related": ["spherex"]
     },
     {

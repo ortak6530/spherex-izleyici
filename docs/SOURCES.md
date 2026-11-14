@@ -38,6 +38,8 @@ sağlayıcının sayfasından **aynen** alınmıştır; nereden ve ne zaman alı
 
 Metnin alındığı yer: https://irsa.ipac.caltech.edu/Missions/spherex.html, 2026-11-13 tarihinde doğrulandı.
 
+_Not:_ DR1 yayın tarihi: 12 Kasım 2026 (SPHEREx duyurusu).
+
 Atıf yapılacak yayınlar:
 
 - [Bock et al. (2026) — Mission](https://ui.adsabs.harvard.edu/abs/2026ApJ...999..139B/abstract)

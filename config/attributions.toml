@@ -25,6 +25,7 @@ text = "This publication makes use of data products from the Spectro-Photometer 
 text_source = "https://irsa.ipac.caltech.edu/Missions/spherex.html"
 verified = "2026-11-13"
 license = "IRSA'nın SPHEREx sayfasındaki zorunlu teşekkür metni yayınlarda ve bu sitede yer almalıdır."
+note = "DR1 yayın tarihi: 12 Kasım 2026 (SPHEREx duyurusu)."
 dois = ["10.26131/IRSA678 (DR1 Spectral Images)", "10.26131/IRSA679 (DR1 Spectral All-Sky Cube)", "10.26131/IRSA662 (QR3)", "10.26131/IRSA652 (QR2)"]
 citations = [
   { label = "Bock et al. (2026) — Mission", url = "https://ui.adsabs.harvard.edu/abs/2026ApJ...999..139B/abstract" },

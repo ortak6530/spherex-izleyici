@@ -16,7 +16,8 @@ default_release = "dr1"
 id = "dr1"
 label = "DR1"
 status = "active"
-# Announced by IRSA in November 2026 (overview_dr1.html, checked 2026-11-14). Live 2026-11-14 (TAP obscore):
+# Released 12 November 2026 (SPHEREx announcement; IRSA's overview_dr1.html only says "November 2026",
+# checked 2026-11-14). Live 2026-11-14 (TAP obscore):
 #   945 725 images, 2025-04-24 18:01 -> 2026-05-14 11:47 UTC; QR3 continues from 2026-05-14 12:08.
 announced = true
 calib_family = "R7"
