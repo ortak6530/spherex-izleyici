@@ -3,6 +3,13 @@
     "title": "SPHEREx Sky Tracker",
     "tagline": "See how the sky changes over time"
   },
+  "welcome": {
+    "lead": "Find an object in NASA's SPHEREx infrared sky maps, compare its images from different dates and see how the sky changes.",
+    "login": "Sign in",
+    "guest": "Continue as a guest",
+    "privacyLogin": "If you sign in, your search and list activity can be seen by the site administrator.",
+    "privacyGuest": "As a guest, your activity is not linked to personal data such as an e-mail address."
+  },
   "search": {
     "label": "Object name or coordinates",
     "placeholder": "M31, Betelgeuse, 10.684 41.269, 00h42m44s +41d16m09s…",

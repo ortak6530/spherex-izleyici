@@ -6,6 +6,7 @@ import PrivacyNotice from "./components/PrivacyNotice";
 import type { SearchRequest } from "./components/SearchBox";
 import SourcesPage from "./components/SourcesPage";
 import TopBar from "./components/TopBar";
+import EntryGate from "./components/Welcome";
 import InfoPanel from "./features/InfoPanel";
 import Workspace from "./features/Workspace";
 import type { Target } from "./lib/api";
@@ -58,29 +59,31 @@ export default function App() {
       <Suspense fallback={null}>
         <GalaxyBackground />
       </Suspense>
-      <TopBar onTarget={pickTarget} searchRequest={searchRequest} target={target} />
-      {page === "sources" ? (
-        <main className="flex flex-1 justify-center px-3 py-6 sm:px-6">
-          <SourcesPage onBack={closePage} />
-        </main>
-      ) : page === "admin" ? (
-        <main className="flex flex-1 justify-center px-3 py-6 sm:px-6">
-          <Suspense fallback={null}>
-            <AdminPage onBack={closePage} />
-          </Suspense>
-        </main>
-      ) : target ? (
-        <main className="grid flex-1 gap-4 px-3 py-6 sm:px-4 xl:grid-cols-[minmax(0,1fr)_22rem]">
-          <Workspace key={target.key} target={target} />
-          <div className="space-y-4">
-            <InfoPanel key={target.key} target={target} />
-          </div>
-        </main>
-      ) : (
-        <main className="flex flex-1 items-center justify-center px-3 py-8 sm:px-6 lg:justify-start lg:px-12">
-          <Hero onSearch={search} />
-        </main>
-      )}
+      <EntryGate bypass={page !== null}>
+        <TopBar onTarget={pickTarget} searchRequest={searchRequest} target={target} />
+        {page === "sources" ? (
+          <main className="flex flex-1 justify-center px-3 py-6 sm:px-6">
+            <SourcesPage onBack={closePage} />
+          </main>
+        ) : page === "admin" ? (
+          <main className="flex flex-1 justify-center px-3 py-6 sm:px-6">
+            <Suspense fallback={null}>
+              <AdminPage onBack={closePage} />
+            </Suspense>
+          </main>
+        ) : target ? (
+          <main className="grid flex-1 gap-4 px-3 py-6 sm:px-4 xl:grid-cols-[minmax(0,1fr)_22rem]">
+            <Workspace key={target.key} target={target} />
+            <div className="space-y-4">
+              <InfoPanel key={target.key} target={target} />
+            </div>
+          </main>
+        ) : (
+          <main className="flex flex-1 items-center justify-center px-3 py-8 sm:px-6 lg:justify-start lg:px-12">
+            <Hero onSearch={search} />
+          </main>
+        )}
+      </EntryGate>
       <Footer onSources={openSources} onPrivacy={() => setPrivacyOpen(true)} />
       <PrivacyNotice forceOpen={privacyOpen} onClose={() => setPrivacyOpen(false)} />
     </div>

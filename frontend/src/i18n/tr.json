@@ -3,6 +3,13 @@
     "title": "SPHEREx Gökyüzü İzleyici",
     "tagline": "Gökyüzünün zaman içinde nasıl değiştiğini görün"
   },
+  "welcome": {
+    "lead": "NASA'nın SPHEREx kızılötesi gök haritalarında bir cismi bulun, farklı tarihlerdeki görüntülerini karşılaştırıp gökyüzünün nasıl değiştiğini görün.",
+    "login": "Giriş yap",
+    "guest": "Misafir olarak devam et",
+    "privacyLogin": "Giriş yaparsan arama ve liste etkinliğin site yöneticisi tarafından görülebilir.",
+    "privacyGuest": "Misafir olarak devam edersen etkinliğin e-posta gibi kişisel bir veriyle eşleştirilmez."
+  },
   "search": {
     "label": "Cisim adı veya koordinat",
     "placeholder": "M31, Betelgeuse, 10.684 41.269, 00h42m44s +41d16m09s…",
